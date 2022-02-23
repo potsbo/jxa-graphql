@@ -1,4 +1,4 @@
-import { exec } from "child_process";
+import { execa } from "execa";
 import { promisify } from "util";
 import { parseStringPromise } from "xml2js";
 import { print, lexicographicSortSchema, buildASTSchema, DocumentNode, DefinitionNode } from "graphql";
@@ -11,7 +11,7 @@ import { parseSuites } from "./suite";
 import { readFile } from "fs";
 
 const getBuilders = async (appPath: string) => {
-  const sdefCmdResult = await promisify(exec)(`sdef ${appPath.replace(/ /g, "\\ ")}`);
+  const sdefCmdResult = await execa("sdef", [appPath]);
   const sdef = (await parseStringPromise(sdefCmdResult.stdout)) as Sdef;
   return parseSuites(sdef);
 };
