@@ -1,0 +1,45 @@
+diff --git a/node_modules/graphql/utilities/printSchema.js b/node_modules/graphql/utilities/printSchema.js
+index 0d47611..52ab7c5 100644
+--- a/node_modules/graphql/utilities/printSchema.js
++++ b/node_modules/graphql/utilities/printSchema.js
+@@ -173,11 +173,32 @@ function printImplementedInterfaces(type) {
+     : '';
+ }
+ 
++function printNonStandardDirectives(type) {
++  const directives = type.astNode?.directives;
++  if (directives === undefined) {
++    return "";
++  }
++  const standardDirectives = ["skip", "include", "deprecated", "specifiedBy"];
++  return directives
++    .filter((d) => !standardDirectives.includes(d.name.value))
++    .map((d) => {
++      const args =
++        d.arguments.length > 0
++          ? `(${d.arguments.map((a) => `${a.name.value}: ${JSON.stringify(a.value.value)}`)})`
++          : "";
++      return ` @${d.name.value}${args}`;
++    })
++    .join("");
++}
++
++
++
+ function printObject(type) {
+   return (
+     printDescription(type) +
+     `type ${type.name}` +
+     printImplementedInterfaces(type) +
++    printNonStandardDirectives(type) +
+     printFields(type)
+   );
+ }
+@@ -226,6 +247,7 @@ function printFields(type) {
+       printArgs(f.args, '  ') +
+       ': ' +
+       String(f.type) +
++      printNonStandardDirectives(f) +
+       printDeprecated(f.deprecationReason),
+   );
+   return printBlock(fields);

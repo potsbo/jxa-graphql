@@ -1,0 +1,4068 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`build: calendar.graphql 1`] = `
+directive @extractFromObjectDisplayName on FIELD_DEFINITION
+
+directive @recordType on OBJECT
+
+"""The application's top-level scripting object."""
+type Application {
+  calendars(after: ID, first: Int, whose: Condition): CalendarConnection!
+  documents(after: ID, first: Int, whose: Condition): DocumentConnection!
+
+  """Is this the active application?"""
+  frontmost: Boolean!
+
+  """The name of the application."""
+  name: String!
+
+  """The version number of the application."""
+  version: String!
+  windows(after: ID, first: Int, whose: Condition): WindowConnection!
+}
+
+"""This class represents a attendee."""
+type Attendee {
+  """The first and last name of the attendee."""
+  displayName: String!
+
+  """e-mail of the attendee."""
+  email: String!
+
+  """The invitation status for the attendee."""
+  participationStatus: ParticipationStatus!
+}
+
+type AttendeeConnection {
+  byId(id: ID!): Attendee
+  edges: [AttendeeEdge!]!
+  pageInfo: PageInfo!
+}
+
+type AttendeeEdge {
+  cursor: String!
+  node: Attendee!
+}
+
+"""This class represents a calendar."""
+type Calendar implements Node {
+  """This is the calendar description."""
+  description: String!
+  events(after: ID, first: Int, whose: Condition): EventConnection!
+
+  """An unique calendar key"""
+  id: ID! @extractFromObjectDisplayName
+
+  """This is the calendar title."""
+  name: String!
+
+  """This is the calendar title."""
+  title: String!
+
+  """This is the calendar title."""
+  writable: Boolean!
+}
+
+type CalendarConnection implements Connection {
+  byId(id: ID!): Calendar
+  edges: [CalendarEdge!]!
+  pageInfo: PageInfo!
+}
+
+type CalendarEdge implements Edge {
+  cursor: String!
+  node: Calendar!
+}
+
+interface CalendarInterface implements Node {
+  """This is the calendar description."""
+  description: String!
+  events(after: ID, first: Int, whose: Condition): EventConnection!
+
+  """An unique calendar key"""
+  id: ID! @extractFromObjectDisplayName
+
+  """This is the calendar title."""
+  name: String!
+
+  """This is the calendar title."""
+  title: String!
+
+  """This is the calendar title."""
+  writable: Boolean!
+}
+
+input Condition {
+  enabled: Boolean! = true
+  field: String
+  operands: [Condition!]
+  operator: String! = "="
+  value: String! = "true"
+}
+
+interface Connection {
+  byId(id: ID!): Node
+  edges: [Edge!]!
+  pageInfo: PageInfo!
+}
+
+"""This class represents a message alarm."""
+type DisplayAlarm {
+  """An absolute alarm date."""
+  triggerDate: String!
+
+  """
+  The interval in minutes between the event and the alarm: (positive for alarm that trigger after the event date or negative for alarms that trigger before).
+  """
+  triggerInterval: Int!
+}
+
+type DisplayAlarmConnection {
+  byId(id: ID!): DisplayAlarm
+  edges: [DisplayAlarmEdge!]!
+  pageInfo: PageInfo!
+}
+
+type DisplayAlarmEdge {
+  cursor: String!
+  node: DisplayAlarm!
+}
+
+"""A document."""
+type Document {
+  """Has it been modified since the last save?"""
+  modified: Boolean!
+
+  """Its name."""
+  name: String!
+}
+
+type DocumentConnection {
+  byId(id: ID!): Document
+  edges: [DocumentEdge!]!
+  pageInfo: PageInfo!
+}
+
+type DocumentEdge {
+  cursor: String!
+  node: Document!
+}
+
+interface Edge {
+  cursor: String!
+  node: Node!
+}
+
+"""This class represents an event."""
+type Event implements Node {
+  """True if the event is an all-day event"""
+  alldayEvent: Boolean!
+  attendees(after: ID, first: Int, whose: Condition): AttendeeConnection!
+
+  """The events notes."""
+  description: String!
+  displayAlarms(after: ID, first: Int, whose: Condition): DisplayAlarmConnection!
+
+  """The event end date."""
+  endDate: String!
+
+  """The exception dates."""
+  excludedDates: [String!]!
+
+  """An unique event key."""
+  id: ID! @extractFromObjectDisplayName
+
+  """This is the event location."""
+  location: String!
+  mailAlarms(after: ID, first: Int, whose: Condition): MailAlarmConnection!
+  openFileAlarms(after: ID, first: Int, whose: Condition): OpenFileAlarmConnection!
+
+  """
+  The iCalendar (RFC 2445) string describing the event recurrence, if defined
+  """
+  recurrence: String!
+
+  """The event version."""
+  sequence: Int!
+  soundAlarms(after: ID, first: Int, whose: Condition): SoundAlarmConnection!
+
+  """The event modification date."""
+  stampDate: String!
+
+  """The event start date."""
+  startDate: String!
+
+  """The event status."""
+  status: EventStatus!
+
+  """This is the event summary."""
+  summary: String!
+
+  """The URL associated to the event."""
+  url: String!
+}
+
+type EventConnection implements Connection {
+  byId(id: ID!): Event
+  edges: [EventEdge!]!
+  pageInfo: PageInfo!
+}
+
+type EventEdge implements Edge {
+  cursor: String!
+  node: Event!
+}
+
+interface EventInterface implements Node {
+  """True if the event is an all-day event"""
+  alldayEvent: Boolean!
+  attendees(after: ID, first: Int, whose: Condition): AttendeeConnection!
+
+  """The events notes."""
+  description: String!
+  displayAlarms(after: ID, first: Int, whose: Condition): DisplayAlarmConnection!
+
+  """The event end date."""
+  endDate: String!
+
+  """The exception dates."""
+  excludedDates: [String!]!
+
+  """An unique event key."""
+  id: ID! @extractFromObjectDisplayName
+
+  """This is the event location."""
+  location: String!
+  mailAlarms(after: ID, first: Int, whose: Condition): MailAlarmConnection!
+  openFileAlarms(after: ID, first: Int, whose: Condition): OpenFileAlarmConnection!
+
+  """
+  The iCalendar (RFC 2445) string describing the event recurrence, if defined
+  """
+  recurrence: String!
+
+  """The event version."""
+  sequence: Int!
+  soundAlarms(after: ID, first: Int, whose: Condition): SoundAlarmConnection!
+
+  """The event modification date."""
+  stampDate: String!
+
+  """The event start date."""
+  startDate: String!
+
+  """The event status."""
+  status: EventStatus!
+
+  """This is the event summary."""
+  summary: String!
+
+  """The URL associated to the event."""
+  url: String!
+}
+
+enum EventStatus {
+  """A cancelled event"""
+  CANCELLED
+
+  """A confirmed event"""
+  CONFIRMED
+
+  """An event without status"""
+  NONE
+
+  """A tentative event"""
+  TENTATIVE
+}
+
+"""This class represents a mail alarm."""
+type MailAlarm {
+  """An absolute alarm date."""
+  triggerDate: String!
+
+  """
+  The interval in minutes between the event and the alarm: (positive for alarm that trigger after the event date or negative for alarms that trigger before).
+  """
+  triggerInterval: Int!
+}
+
+type MailAlarmConnection {
+  byId(id: ID!): MailAlarm
+  edges: [MailAlarmEdge!]!
+  pageInfo: PageInfo!
+}
+
+type MailAlarmEdge {
+  cursor: String!
+  node: MailAlarm!
+}
+
+type Mutation {
+  pushApplication: Application!
+  pushAttendee: Attendee!
+  pushCalendar(description: String, name: String, title: String): Calendar!
+  pushDisplayAlarm(triggerDate: String, triggerInterval: Int): DisplayAlarm!
+  pushDocument: Document!
+  pushEvent(alldayEvent: Boolean, description: String, endDate: String, excludedDates: [String!], location: String, recurrence: String, stampDate: String, startDate: String, summary: String, url: String): Event!
+  pushMailAlarm(triggerDate: String, triggerInterval: Int): MailAlarm!
+  pushOpenFileAlarm(filepath: String, triggerDate: String, triggerInterval: Int): OpenFileAlarm!
+  pushSoundAlarm(soundFile: String, soundName: String, triggerDate: String, triggerInterval: Int): SoundAlarm!
+  pushWindow(index: Int, miniaturized: Boolean, visible: Boolean, zoomed: Boolean): Window!
+}
+
+interface Node {
+  id: ID!
+}
+
+"""
+This class represents an 'open file' alarm. Starting with OS X 10.14, it is not possible to create new open file alarms or view URLs for existing open file alarms. Trying to save or modify an open file alarm will result in a save error. Editing other aspects of events or reminders that have existing open file alarms is allowed as long as the alarm isn't modified.
+"""
+type OpenFileAlarm {
+  """The (POSIX) path to be opened by the alarm"""
+  filepath: String!
+
+  """An absolute alarm date."""
+  triggerDate: String!
+
+  """
+  The interval in minutes between the event and the alarm: (positive for alarm that trigger after the event date or negative for alarms that trigger before).
+  """
+  triggerInterval: Int!
+}
+
+type OpenFileAlarmConnection {
+  byId(id: ID!): OpenFileAlarm
+  edges: [OpenFileAlarmEdge!]!
+  pageInfo: PageInfo!
+}
+
+type OpenFileAlarmEdge {
+  cursor: String!
+  node: OpenFileAlarm!
+}
+
+type PageInfo {
+  endCursor: String!
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String!
+}
+
+enum ParticipationStatus {
+  """Invitation has been accepted"""
+  ACCEPTED
+
+  """Invitation has been declined"""
+  DECLINED
+
+  """Invitation has been tentatively accepted"""
+  TENTATIVE
+
+  """No anwser yet"""
+  UNKNOWN
+}
+
+type Query {
+  application: Application!
+}
+
+"""This class represents a sound alarm."""
+type SoundAlarm {
+  """The (POSIX) path to the sound file to be used for the alarm"""
+  soundFile: String!
+
+  """The system sound name to be used for the alarm"""
+  soundName: String!
+
+  """An absolute alarm date."""
+  triggerDate: String!
+
+  """
+  The interval in minutes between the event and the alarm: (positive for alarm that trigger after the event date or negative for alarms that trigger before).
+  """
+  triggerInterval: Int!
+}
+
+type SoundAlarmConnection {
+  byId(id: ID!): SoundAlarm
+  edges: [SoundAlarmEdge!]!
+  pageInfo: PageInfo!
+}
+
+type SoundAlarmEdge {
+  cursor: String!
+  node: SoundAlarm!
+}
+
+"""A window."""
+type Window implements Node {
+  """Does the window have a close button?"""
+  closeable: Boolean!
+
+  """The document whose contents are displayed in the window."""
+  document: Document!
+
+  """The unique identifier of the window."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The index of the window, ordered front to back."""
+  index: Int!
+
+  """Does the window have a minimize button?"""
+  miniaturizable: Boolean!
+
+  """Is the window minimized right now?"""
+  miniaturized: Boolean!
+
+  """The title of the window."""
+  name: String!
+
+  """Can the window be resized?"""
+  resizable: Boolean!
+
+  """Is the window visible right now?"""
+  visible: Boolean!
+
+  """Does the window have a zoom button?"""
+  zoomable: Boolean!
+
+  """Is the window zoomed right now?"""
+  zoomed: Boolean!
+}
+
+type WindowConnection implements Connection {
+  byId(id: ID!): Window
+  edges: [WindowEdge!]!
+  pageInfo: PageInfo!
+}
+
+type WindowEdge implements Edge {
+  cursor: String!
+  node: Window!
+}
+
+interface WindowInterface implements Node {
+  """Does the window have a close button?"""
+  closeable: Boolean!
+
+  """The document whose contents are displayed in the window."""
+  document: Document!
+
+  """The unique identifier of the window."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The index of the window, ordered front to back."""
+  index: Int!
+
+  """Does the window have a minimize button?"""
+  miniaturizable: Boolean!
+
+  """Is the window minimized right now?"""
+  miniaturized: Boolean!
+
+  """The title of the window."""
+  name: String!
+
+  """Can the window be resized?"""
+  resizable: Boolean!
+
+  """Is the window visible right now?"""
+  visible: Boolean!
+
+  """Does the window have a zoom button?"""
+  zoomable: Boolean!
+
+  """Is the window zoomed right now?"""
+  zoomed: Boolean!
+}
+`;
+
+exports[`build: omnifocus.graphql 1`] = `
+directive @extractFromObjectDisplayName on FIELD_DEFINITION
+
+directive @recordType on OBJECT
+
+"""The ancestor trees of this tree."""
+type AncestorTree implements Node & TreeInterface {
+  """The ancestor trees of this tree."""
+  ancestorTrees(after: ID, first: Int, whose: Condition): AncestorTreeConnection!
+
+  """
+  All the descendant trees in the user-specified sort ordering, listing each tree, then its children and so forth.
+  """
+  descendantTrees(after: ID, first: Int, whose: Condition): DescendantTreeConnection!
+
+  """This is true if the node is expanded."""
+  expanded: Boolean!
+
+  """
+  The sibling trees of this tree after it in the user-specified sort ordering.
+  """
+  followingSiblings(after: ID, first: Int, whose: Condition): FollowingSiblingConnection!
+
+  """The identifier of object being represented by this tree."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The descendants of this tree that have no children themselves."""
+  leafs(after: ID, first: Int, whose: Condition): LeafConnection!
+
+  """The name of the object being represented by this tree."""
+  name: String!
+
+  """This is true if the node note is expanded."""
+  noteExpanded: Boolean!
+
+  """
+  The sibling trees of this tree before it in the user-specified sort ordering.
+  """
+  precedingSiblings(after: ID, first: Int, whose: Condition): PrecedingSiblingConnection!
+
+  """
+  This is true if the node is selected.  Note that attempts to set this while the node is not visible (collapsed parent, etc.) will silently do nothing.
+  """
+  selected: Boolean!
+
+  """The trees of this tree that are selected in the user interface."""
+  selectedTrees(after: ID, first: Int, whose: Condition): SelectedTreeConnection!
+
+  """
+  The immediate child trees of this tree in the user-specified sort ordering.
+  """
+  trees(after: ID, first: Int, whose: Condition): TreeConnection!
+}
+
+type AncestorTreeConnection implements Connection {
+  byId(id: ID!): AncestorTree
+  edges: [AncestorTreeEdge!]!
+  pageInfo: PageInfo!
+}
+
+type AncestorTreeEdge implements Edge {
+  cursor: String!
+  node: AncestorTree!
+}
+
+"""The application's top-level scripting object."""
+type Application {
+  """
+  This is the build number of the application, for example 63.1 or 63.  Major and minor versions are separated by a dot.  So 63.10 comes after 63.1.
+  """
+  buildNumber: String!
+
+  """
+  The current time offset from a reference date. Useful for timing scripts.
+  """
+  currentTimeOffset: Float!
+
+  """The user's default document."""
+  defaultDocument: Document!
+  documents(after: ID, first: Int, whose: Condition): DocumentConnection!
+
+  """Is this the active application?"""
+  frontmost: Boolean!
+
+  """The name of the application."""
+  name: String!
+
+  """The names of all available perspectives in the default document."""
+  perspectiveNames: [String!]!
+  perspectives(after: ID, first: Int, whose: Condition): PerspectiveConnection!
+  preferences(after: ID, first: Int, whose: Condition): PreferenceConnection!
+
+  """The Quick Entry panel for the default document."""
+  quickEntry: QuickEntryTree!
+
+  """
+  The date on from which the date collated smart groups are based.  When set, the reference date will be rounded to the first instant of the day of the specified date.
+  """
+  referenceDate: String!
+
+  """The version number of the application."""
+  version: String!
+  windows(after: ID, first: Int, whose: Condition): WindowConnection!
+}
+
+"""Represents an inline text attachment."""
+type Attachment {
+  attachments(after: ID, first: Int, whose: Condition): AttachmentConnection!
+  attributeRuns(after: ID, first: Int, whose: Condition): AttributeRunConnection!
+  characters(after: ID, first: Int, whose: Condition): CharacterConnection!
+  fileAttachments(after: ID, first: Int, whose: Condition): FileAttachmentConnection!
+
+  """The name of the font of the first character."""
+  font: String!
+  paragraphs(after: ID, first: Int, whose: Condition): ParagraphConnection!
+
+  """The size in points of the first character."""
+  size: Int!
+
+  """The style of the text."""
+  style: Style!
+
+  """The plain text contents of the rich text."""
+  text: String!
+  words(after: ID, first: Int, whose: Condition): WordConnection!
+}
+
+type AttachmentConnection {
+  edges: [AttachmentEdge!]!
+  pageInfo: PageInfo!
+}
+
+type AttachmentEdge {
+  cursor: String!
+}
+
+"""An attribute of a style."""
+type Attribute {
+  """
+  The style responsible for the effective value in this attributes's style.  This processes the local values, inherited styles and cascade chain.
+  """
+  definingStyle: Style!
+
+  """
+  If true, the containing style defines a local value for this attribute.
+  """
+  hasLocalValue: Boolean!
+
+  """The name of the attribute."""
+  name: String!
+
+  """The style to which the attribute refers."""
+  style: Style!
+}
+
+type AttributeConnection {
+  byId(id: ID!): Attribute
+  edges: [AttributeEdge!]!
+  pageInfo: PageInfo!
+}
+
+type AttributeEdge {
+  cursor: String!
+  node: Attribute!
+}
+
+"""
+This subdivides the text into chunks that all have the same attributes.
+"""
+type AttributeRun {
+  attachments(after: ID, first: Int, whose: Condition): AttachmentConnection!
+  attributeRuns(after: ID, first: Int, whose: Condition): AttributeRunConnection!
+  characters(after: ID, first: Int, whose: Condition): CharacterConnection!
+  fileAttachments(after: ID, first: Int, whose: Condition): FileAttachmentConnection!
+
+  """The name of the font of the first character."""
+  font: String!
+  paragraphs(after: ID, first: Int, whose: Condition): ParagraphConnection!
+
+  """The size in points of the first character."""
+  size: Int!
+
+  """The style of the text."""
+  style: Style!
+
+  """The plain text contents of the rich text."""
+  text: String!
+  words(after: ID, first: Int, whose: Condition): WordConnection!
+}
+
+type AttributeRunConnection {
+  byId(id: ID!): AttributeRun
+  edges: [AttributeRunEdge!]!
+  pageInfo: PageInfo!
+}
+
+type AttributeRunEdge {
+  cursor: String!
+  node: AttributeRun!
+}
+
+"""
+A task that is available for action.  This is simply a filter on the existing tasks and should be considred a read-only element.  These cannot be created directly; instead create a normal task.
+"""
+type AvailableTask implements Node & TaskInterface {
+  """
+  True if the task has a task that must be completed prior to it being actionable.
+  """
+  blocked: Boolean!
+
+  """
+  True if the task is completed. Use the "mark complete" and "mark incomplete" commands to change a task's status.
+  """
+  completed: Boolean!
+
+  """If true, complete when children are completed."""
+  completedByChildren: Boolean!
+
+  """
+  The task's date of completion. This can only be modified on a completed task to backdate the completion date.
+  """
+  completionDate: String
+
+  """
+  The task's project, up however many levels of parent tasks.  Inbox tasks aren't considered contained by their provisionalliy assigned container, so if the task is actually an inbox task, this will be missing value.
+  """
+  containingProject: Project
+
+  """
+  When the task was created.  This can only be set when the object is still in the inserted state.  For objects created in the document, it can be passed with the creation properties.  For objects in a quick entry tree, it can be set until the quick entry panel is saved.
+  """
+  creationDate: String!
+
+  """When the task should become available for action."""
+  deferDate: String
+
+  """
+  True if the task is dropped. Use the "mark dropped" and "mark incomplete" commands to change a task's status.
+  """
+  dropped: Boolean!
+
+  """
+  The date the task was dropped. This can only be modified on a dropped task to backdate the dropped date.
+  """
+  droppedDate: String
+
+  """When the task must be finished."""
+  dueDate: String
+
+  """
+  When the task should become available for action (including inherited).
+  """
+  effectiveDeferDate: String
+
+  """When the task must be finished (including inherited)."""
+  effectiveDueDate: String
+
+  """
+  True if the task is completed, or any of it's containing tasks or project are completed.
+  """
+  effectivelyCompleted: Boolean!
+
+  """
+  True if the task is dropped, or any of it's containing tasks or project are dropped.
+  """
+  effectivelyDropped: Boolean!
+
+  """
+  The estimated time, in whole minutes, that this task will take to finish.
+  """
+  estimatedMinutes: Int
+
+  """True if flagged"""
+  flagged: Boolean!
+  flattenedTasks(after: ID, first: Int, whose: Condition): FlattenedTaskConnection!
+
+  """The identifier of the task."""
+  id: ID! @extractFromObjectDisplayName
+
+  """
+  Returns true if the task itself is an inbox task or if the task is contained by an inbox task.
+  """
+  inInbox: Boolean!
+
+  """When the task was last modified."""
+  modificationDate: String!
+
+  """The name of the task."""
+  name: String!
+
+  """If the task is the next task of its containing project, next is true."""
+  next: Boolean!
+
+  """
+  The next defer date if this task repeats on a fixed schedule and it has a defer date.
+  """
+  nextDeferDate: String
+
+  """
+  The next due date if this task repeats on a fixed schedule and it has a due date.
+  """
+  nextDueDate: String
+
+  """The note of the task."""
+  note: RichText!
+
+  """The number of available direct children of this task."""
+  numberOfAvailableTasks: Int!
+
+  """The number of completed direct children of this task."""
+  numberOfCompletedTasks: Int!
+
+  """The number of direct children of this task."""
+  numberOfTasks: Int!
+
+  """
+  The task holding this task.  If this is missing value, then this is a top level task -- either the root of a project or an inbox item.
+  """
+  parentTask: Task
+
+  """
+  The task's first tag. Setting this will remove the current first tag on the task, if any and move or add the new tag as the first tag on the task. Setting this to missing value will remove the current first tag and leave any other remaining tags.
+  """
+  primaryTag: Tag
+
+  """
+  The repetition interval of the task, or missing value if it does not repeat. This property is deprecated in favor of “repetition rule” and is here only for backwards compatibility with existing scripts.
+  """
+  repetition: RepetitionInterval
+
+  """
+  The repetition rule for this task, or missing value if it does not repeat.
+  """
+  repetitionRule: RepetitionRule
+
+  """If true, any children are sequentially dependent."""
+  sequential: Boolean!
+
+  """
+  When set, the due date and defer date properties will use floating time zones. (Note: if a Task has no due or defer dates assigned, this property will revert to the database’s default setting.)
+  """
+  shouldUseFloatingTimeZone: Boolean!
+
+  """The tags assigned to this task."""
+  tags(after: ID, first: Int, whose: Condition): TagConnection!
+
+  """The tasks having this task as their container."""
+  tasks(after: ID, first: Int, whose: Condition): TaskConnection!
+}
+
+type AvailableTaskConnection implements Connection {
+  byId(id: ID!): AvailableTask
+  edges: [AvailableTaskEdge!]!
+  pageInfo: PageInfo!
+}
+
+type AvailableTaskEdge implements Edge {
+  cursor: String!
+  node: AvailableTask!
+}
+
+"""A built-in perspective."""
+type BuiltinPerspective implements Node & PerspectiveInterface {
+  """The identifier of the perspective."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The name of the perspective."""
+  name: String!
+}
+
+type BuiltinPerspectiveConnection implements Connection {
+  byId(id: ID!): BuiltinPerspective
+  edges: [BuiltinPerspectiveEdge!]!
+  pageInfo: PageInfo!
+}
+
+type BuiltinPerspectiveEdge implements Edge {
+  cursor: String!
+  node: BuiltinPerspective!
+}
+
+"""This subdivides the text into characters."""
+type Character {
+  attachments(after: ID, first: Int, whose: Condition): AttachmentConnection!
+  attributeRuns(after: ID, first: Int, whose: Condition): AttributeRunConnection!
+  characters(after: ID, first: Int, whose: Condition): CharacterConnection!
+  fileAttachments(after: ID, first: Int, whose: Condition): FileAttachmentConnection!
+
+  """The name of the font of the first character."""
+  font: String!
+  paragraphs(after: ID, first: Int, whose: Condition): ParagraphConnection!
+
+  """The size in points of the first character."""
+  size: Int!
+
+  """The style of the text."""
+  style: Style!
+
+  """The plain text contents of the rich text."""
+  text: String!
+  words(after: ID, first: Int, whose: Condition): WordConnection!
+}
+
+type CharacterConnection {
+  byId(id: ID!): Character
+  edges: [CharacterEdge!]!
+  pageInfo: PageInfo!
+}
+
+type CharacterEdge {
+  cursor: String!
+  node: Character!
+}
+
+input Condition {
+  enabled: Boolean! = true
+  field: String
+  operands: [Condition!]
+  operator: String! = "="
+  value: String! = "true"
+}
+
+interface Connection {
+  byId(id: ID!): Node
+  edges: [Edge!]!
+  pageInfo: PageInfo!
+}
+
+"""The tree of objects in the main window content."""
+type ContentTree implements Node & TreeInterface {
+  """The ancestor trees of this tree."""
+  ancestorTrees(after: ID, first: Int, whose: Condition): AncestorTreeConnection!
+
+  """
+  The list of possible identifiers that can be set as the selected grouping identifier.
+  """
+  availableGroupingIdentifiers: [String!]!
+
+  """
+  The list of possible identifiers that can be set as the selected sorting identifier.
+  """
+  availableSortingIdentifiers: [String!]!
+
+  """
+  The list of possible identifiers that can be set as the selected task duration filter identifier.
+  """
+  availableTaskDurationFilterIdentifiers: [String!]!
+
+  """
+  The list of possible identifiers that can be set as the selected task flagged filter identifier.
+  """
+  availableTaskFlaggedFilterIdentifiers: [String!]!
+
+  """
+  The list of possible identifiers that can be set as the selected task state filter identifier.
+  """
+  availableTaskStateFilterIdentifiers: [String!]!
+
+  """
+  All the descendant trees in the user-specified sort ordering, listing each tree, then its children and so forth.
+  """
+  descendantTrees(after: ID, first: Int, whose: Condition): DescendantTreeConnection!
+
+  """This is true if the node is expanded."""
+  expanded: Boolean!
+
+  """
+  The sibling trees of this tree after it in the user-specified sort ordering.
+  """
+  followingSiblings(after: ID, first: Int, whose: Condition): FollowingSiblingConnection!
+
+  """The identifier of object being represented by this tree."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The descendants of this tree that have no children themselves."""
+  leafs(after: ID, first: Int, whose: Condition): LeafConnection!
+
+  """The name of the object being represented by this tree."""
+  name: String!
+
+  """This is true if the node note is expanded."""
+  noteExpanded: Boolean!
+
+  """
+  The sibling trees of this tree before it in the user-specified sort ordering.
+  """
+  precedingSiblings(after: ID, first: Int, whose: Condition): PrecedingSiblingConnection!
+
+  """
+  This is true if the node is selected.  Note that attempts to set this while the node is not visible (collapsed parent, etc.) will silently do nothing.
+  """
+  selected: Boolean!
+
+  """
+  The currently selected grouping identifier, controlling how the results shown in the content area are grouped.
+  """
+  selectedGroupingIdentifier: String!
+
+  """
+  The currently selected sorting identifier, controlling how the results shown in the content area are ordered.
+  """
+  selectedSortingIdentifier: String!
+
+  """The currently selected task duration filter identifier."""
+  selectedTaskDurationFilterIdentifier: String!
+
+  """The currently selected task flagged filter identifier."""
+  selectedTaskFlaggedFilterIdentifier: String!
+
+  """The currently selected task state filter identifier."""
+  selectedTaskStateFilterIdentifier: String!
+
+  """The trees of this tree that are selected in the user interface."""
+  selectedTrees(after: ID, first: Int, whose: Condition): SelectedTreeConnection!
+
+  """
+  The immediate child trees of this tree in the user-specified sort ordering.
+  """
+  trees(after: ID, first: Int, whose: Condition): TreeConnection!
+}
+
+type ContentTreeConnection implements Connection {
+  byId(id: ID!): ContentTree
+  edges: [ContentTreeEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ContentTreeEdge implements Edge {
+  cursor: String!
+  node: ContentTree!
+}
+
+"""A user created perspective."""
+type CustomPerspective implements Node & PerspectiveInterface {
+  """The identifier of the perspective."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The name of the perspective."""
+  name: String!
+}
+
+type CustomPerspectiveConnection implements Connection {
+  byId(id: ID!): CustomPerspective
+  edges: [CustomPerspectiveEdge!]!
+  pageInfo: PageInfo!
+}
+
+type CustomPerspectiveEdge implements Edge {
+  cursor: String!
+  node: CustomPerspective!
+}
+
+"""
+Deprecated. Where you would look up a "context" by name, id, or index before, you can now use the term "tag". Where you would get or set the "context" property of a task before, you can now use "primary tag". You may also use the "add", "remove", and "move" commands to manage multiple ordered tags on a task now.
+"""
+type DeprecatedContext implements Node & TagInterface {
+  """
+  If false, tasks associated with this tag will be skipped when determining the next action for a project.
+  """
+  allowsNextAction: Boolean!
+
+  """
+  A count of the number of unblocked and incomplete tasks of this tag and all its active descendent tags.
+  """
+  availableTaskCount: Int!
+  availableTasks(after: ID, first: Int, whose: Condition): AvailableTaskConnection!
+
+  """The containing tag."""
+  container: Tag!
+
+  """Deprecated; use tags."""
+  deprecatedContexts(after: ID, first: Int, whose: Condition): DeprecatedContextConnection!
+
+  """
+  Set if the tag is currently hidden or any of its container tags are hidden.
+  """
+  effectivelyHidden: Boolean!
+  flattenedTags(after: ID, first: Int, whose: Condition): FlattenedTagConnection!
+
+  """Set if the tag is currently hidden."""
+  hidden: Boolean!
+
+  """The identifier of the tag."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The physical location associated with the tag."""
+  location: LocationInformation
+
+  """The name of the tag."""
+  name: String!
+
+  """The note of the tag."""
+  note: RichText!
+
+  """
+  A count of the number of incomplete tasks of this tag and all its active descendent tags.
+  """
+  remainingTaskCount: Int!
+  remainingTasks(after: ID, first: Int, whose: Condition): RemainingTaskConnection!
+
+  """The tags having this tag as their container."""
+  tags(after: ID, first: Int, whose: Condition): TagConnection!
+
+  """The tasks having this tag."""
+  tasks(after: ID, first: Int, whose: Condition): TaskConnection!
+}
+
+type DeprecatedContextConnection implements Connection {
+  byId(id: ID!): DeprecatedContext
+  edges: [DeprecatedContextEdge!]!
+  pageInfo: PageInfo!
+}
+
+type DeprecatedContextEdge implements Edge {
+  cursor: String!
+  node: DeprecatedContext!
+}
+
+"""
+All the descendant trees in the user-specified sort ordering, listing each tree, then its children and so forth.
+"""
+type DescendantTree implements Node & TreeInterface {
+  """The ancestor trees of this tree."""
+  ancestorTrees(after: ID, first: Int, whose: Condition): AncestorTreeConnection!
+
+  """
+  All the descendant trees in the user-specified sort ordering, listing each tree, then its children and so forth.
+  """
+  descendantTrees(after: ID, first: Int, whose: Condition): DescendantTreeConnection!
+
+  """This is true if the node is expanded."""
+  expanded: Boolean!
+
+  """
+  The sibling trees of this tree after it in the user-specified sort ordering.
+  """
+  followingSiblings(after: ID, first: Int, whose: Condition): FollowingSiblingConnection!
+
+  """The identifier of object being represented by this tree."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The descendants of this tree that have no children themselves."""
+  leafs(after: ID, first: Int, whose: Condition): LeafConnection!
+
+  """The name of the object being represented by this tree."""
+  name: String!
+
+  """This is true if the node note is expanded."""
+  noteExpanded: Boolean!
+
+  """
+  The sibling trees of this tree before it in the user-specified sort ordering.
+  """
+  precedingSiblings(after: ID, first: Int, whose: Condition): PrecedingSiblingConnection!
+
+  """
+  This is true if the node is selected.  Note that attempts to set this while the node is not visible (collapsed parent, etc.) will silently do nothing.
+  """
+  selected: Boolean!
+
+  """The trees of this tree that are selected in the user interface."""
+  selectedTrees(after: ID, first: Int, whose: Condition): SelectedTreeConnection!
+
+  """
+  The immediate child trees of this tree in the user-specified sort ordering.
+  """
+  trees(after: ID, first: Int, whose: Condition): TreeConnection!
+}
+
+type DescendantTreeConnection implements Connection {
+  byId(id: ID!): DescendantTree
+  edges: [DescendantTreeEdge!]!
+  pageInfo: PageInfo!
+}
+
+type DescendantTreeEdge implements Edge {
+  cursor: String!
+  node: DescendantTree!
+}
+
+"""A document."""
+type Document {
+  """Whether the document can redo the most recently undone command."""
+  canRedo: Boolean!
+
+  """Whether the document can undo the most recent command."""
+  canUndo: Boolean!
+
+  """
+  Whether the document will write compressed transactions to disk; defaults to true.
+  """
+  compressesTransactions: Boolean!
+
+  """Deprecated; use tags."""
+  deprecatedContexts(after: ID, first: Int, whose: Condition): DeprecatedContextConnection!
+
+  """If set, automatic cleanup of inbox items won't happen."""
+  disableAutomaticInboxCleanup: Boolean!
+
+  """The windows of this document."""
+  documentWindows(after: ID, first: Int, whose: Condition): DocumentWindowConnection!
+  flattenedFolders(after: ID, first: Int, whose: Condition): FlattenedFolderConnection!
+  flattenedProjects(after: ID, first: Int, whose: Condition): FlattenedProjectConnection!
+  flattenedTags(after: ID, first: Int, whose: Condition): FlattenedTagConnection!
+  flattenedTasks(after: ID, first: Int, whose: Condition): FlattenedTaskConnection!
+
+  """
+  The subset of the sections that are folders; folders having this folder as their container.
+  """
+  folders(after: ID, first: Int, whose: Condition): FolderConnection!
+
+  """The document's unique identifier."""
+  id: ID! @extractFromObjectDisplayName
+  inboxTasks(after: ID, first: Int, whose: Condition): InboxTaskConnection!
+
+  """
+  Whether the document will write computed summary information when writing transactions.
+  """
+  includesSummaries: Boolean!
+
+  """Date of the last sync."""
+  lastSyncDate: String!
+
+  """Error message (if any) for the last sync."""
+  lastSyncError: String!
+
+  """Has it been modified since the last save?"""
+  modified: Boolean!
+
+  """Its name."""
+  name: String!
+
+  """The document's path on disk."""
+  path: String!
+
+  """The names of all available perspectives in this document."""
+  perspectiveNames: [String!]!
+  perspectives(after: ID, first: Int, whose: Condition): PerspectiveConnection!
+
+  """
+  The subset of the sections that are projects; projects having this folder as their container.
+  """
+  projects(after: ID, first: Int, whose: Condition): ProjectConnection!
+
+  """The Quick Entry panel for the document."""
+  quickEntry: QuickEntryTree!
+
+  """The projects and folders contained by no folder."""
+  sections(after: ID, first: Int, whose: Condition): SectionConnection!
+  settings(after: ID, first: Int, whose: Condition): SettingConnection!
+
+  """True if the document is currently syncing, false otherwise."""
+  syncing: Boolean!
+
+  """The top-level tags of the document."""
+  tags(after: ID, first: Int, whose: Condition): TagConnection!
+  tasks(after: ID, first: Int, whose: Condition): TaskConnection!
+
+  """Whether the document will autosave."""
+  willAutosave: Boolean!
+}
+
+type DocumentConnection {
+  byId(id: ID!): Document
+  edges: [DocumentEdge!]!
+  pageInfo: PageInfo!
+}
+
+type DocumentEdge {
+  cursor: String!
+  node: Document!
+}
+
+"""A window of an OmniFocus document."""
+type DocumentWindow implements Node & WindowInterface {
+  """Does the window have a close button?"""
+  closeable: Boolean!
+
+  """The tree of objects in the main window content."""
+  content: ContentTree!
+
+  """The document whose contents are displayed in the window."""
+  document: Document!
+
+  """The unique identifier of the window."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The index of the window, ordered front to back."""
+  index: Int!
+
+  """Does the window have a minimize button?"""
+  miniaturizable: Boolean!
+
+  """Is the window minimized right now?"""
+  miniaturized: Boolean!
+
+  """The title of the window."""
+  name: String!
+
+  """The name of a perspective."""
+  perspectiveName: String!
+
+  """Can the window be resized?"""
+  resizable: Boolean!
+
+  """
+  The search term in the toolbar.  If there is no search toolbar item, this will return missing value instead of an empty string and setting it will cause an error.
+  """
+  searchTerm: String!
+
+  """Is the window visible right now?"""
+  visible: Boolean!
+
+  """Does the window have a zoom button?"""
+  zoomable: Boolean!
+
+  """Is the window zoomed right now?"""
+  zoomed: Boolean!
+}
+
+type DocumentWindowConnection implements Connection {
+  byId(id: ID!): DocumentWindow
+  edges: [DocumentWindowEdge!]!
+  pageInfo: PageInfo!
+}
+
+type DocumentWindowEdge implements Edge {
+  cursor: String!
+  node: DocumentWindow!
+}
+
+interface Edge {
+  cursor: String!
+  node: Node!
+}
+
+"""A text attachment refering to a plain file."""
+type FileAttachment {
+  """
+  If true, the attached file will reside inside the document on the next save.
+  """
+  embedded: Boolean!
+}
+
+type FileAttachmentConnection {
+  byId(id: ID!): FileAttachment
+  edges: [FileAttachmentEdge!]!
+  pageInfo: PageInfo!
+}
+
+type FileAttachmentEdge {
+  cursor: String!
+  node: FileAttachment!
+}
+
+"""A flattened list of folders in a document."""
+type FlattenedFolder implements FolderInterface & Node {
+  """When the folder was created."""
+  creationDate: String!
+
+  """
+  Set if the folder is currently hidden or any of its container folders are hidden.
+  """
+  effectivelyHidden: Boolean!
+  flattenedFolders(after: ID, first: Int, whose: Condition): FlattenedFolderConnection!
+  flattenedProjects(after: ID, first: Int, whose: Condition): FlattenedProjectConnection!
+
+  """
+  The subset of the sections that are folders; folders having this folder as their container.
+  """
+  folders(after: ID, first: Int, whose: Condition): FolderConnection!
+
+  """Set if the folder is currently hidden."""
+  hidden: Boolean!
+
+  """The identifier of the folder."""
+  id: ID! @extractFromObjectDisplayName
+
+  """When the folder was last modified."""
+  modificationDate: String!
+
+  """The name of the folder."""
+  name: String!
+
+  """The note of the folder."""
+  note: RichText!
+
+  """
+  The subset of the sections that are projects; projects having this folder as their container.
+  """
+  projects(after: ID, first: Int, whose: Condition): ProjectConnection!
+
+  """The projects and folders having this folder as their container."""
+  sections(after: ID, first: Int, whose: Condition): SectionConnection!
+}
+
+type FlattenedFolderConnection implements Connection {
+  byId(id: ID!): FlattenedFolder
+  edges: [FlattenedFolderEdge!]!
+  pageInfo: PageInfo!
+}
+
+type FlattenedFolderEdge implements Edge {
+  cursor: String!
+  node: FlattenedFolder!
+}
+
+"""A flattened list of projects under a folder or document."""
+type FlattenedProject implements Node & ProjectInterface {
+  """
+  True if the project has a project that must be completed prior to it being actionable.
+  """
+  blocked: Boolean!
+
+  """
+  True if the project is completed. Use the "mark complete" and "mark incomplete" commands to change a project's status.
+  """
+  completed: Boolean!
+
+  """If true, complete when children are completed."""
+  completedByChildren: Boolean!
+
+  """
+  The project's date of completion. This can only be modified on a completed project to backdate the completion date.
+  """
+  completionDate: String
+
+  """
+  When the project was created.  This can only be set when the object is still in the inserted state.  For objects created in the document, it can be passed with the creation properties.  For objects in a quick entry tree, it can be set until the quick entry panel is saved.
+  """
+  creationDate: String!
+
+  """
+  True if the project is the default holder of sington actions.  Only one project can have this flag set; setting it on a project will clear it on any other project having it.  Setting this to true will set 'singleton action holder' to true if not already so set.
+  """
+  defaultSingletonActionHolder: Boolean!
+
+  """When the project should become available for action."""
+  deferDate: String
+
+  """
+  True if the project is dropped. Use the "mark dropped" and "mark incomplete" commands to change a project's status.
+  """
+  dropped: Boolean!
+
+  """
+  The date the project was dropped. This can only be modified on a dropped project to backdate the dropped date.
+  """
+  droppedDate: String
+
+  """When the project must be finished."""
+  dueDate: String
+
+  """
+  When the project should become available for action (including inherited).
+  """
+  effectiveDeferDate: String
+
+  """When the project must be finished (including inherited)."""
+  effectiveDueDate: String
+
+  """The effective status of the project."""
+  effectiveStatus: ProjectStatus!
+
+  """True if the project is completed"""
+  effectivelyCompleted: Boolean!
+
+  """True if the project is dropped"""
+  effectivelyDropped: Boolean!
+
+  """
+  The estimated time, in whole minutes, that this project will take to finish.
+  """
+  estimatedMinutes: Int
+
+  """True if flagged"""
+  flagged: Boolean!
+
+  """
+  The folder of the project, or missing value if it is contained directly by the document.
+  """
+  folder: Folder
+
+  """The identifier of the project."""
+  id: ID! @extractFromObjectDisplayName
+
+  """When the project was last reviewed."""
+  lastReviewDate: String!
+
+  """When the project was last modified."""
+  modificationDate: String!
+
+  """The name of the project."""
+  name: String!
+
+  """
+  The next defer date if this project repeats on a fixed schedule and it has a defer date.
+  """
+  nextDeferDate: String
+
+  """
+  The next due date if this project repeats on a fixed schedule and it has a due date.
+  """
+  nextDueDate: String
+
+  """
+  When the project should next be reviewed. Setting this to missing value will set the review date based off the last review date and review interval.
+  """
+  nextReviewDate: String
+
+  """The next actionable child of this project."""
+  nextTask: Task
+
+  """The note of the project."""
+  note: RichText!
+
+  """The number of available direct children of this project."""
+  numberOfAvailableTasks: Int!
+
+  """The number of completed direct children of this project."""
+  numberOfCompletedTasks: Int!
+
+  """The number of direct children of this project."""
+  numberOfTasks: Int!
+
+  """
+  The project's first tag. Setting this will remove the current first tag on the project, if any and move or add the new tag as the first tag on the project. Setting this to missing value will remove the current first tag and leave any other remaining tags.
+  """
+  primaryTag: Tag
+
+  """
+  The repetition interval of the project, or missing value if it does not repeat. This property is deprecated in favor of “repetition rule” and is here only for backwards compatibility with existing scripts.
+  """
+  repetition: RepetitionInterval
+
+  """
+  The repetition rule for this project, or missing value if it does not repeat.
+  """
+  repetitionRule: RepetitionRule
+
+  """The review interval for the project."""
+  reviewInterval: RepetitionInterval!
+
+  """
+  The root task of this project, holding the project's name, note, dates and child tasks.
+  """
+  rootTask: Task!
+
+  """If true, any children are sequentially dependent."""
+  sequential: Boolean!
+
+  """
+  When set, the due date and defer date properties will use floating time zones. (Note: if a Task has no due or defer dates assigned, this property will revert to the database’s default setting.)
+  """
+  shouldUseFloatingTimeZone: Boolean!
+
+  """True if the project contains singleton actions."""
+  singletonActionHolder: Boolean!
+
+  """The status of the project."""
+  status: ProjectStatus!
+}
+
+type FlattenedProjectConnection implements Connection {
+  byId(id: ID!): FlattenedProject
+  edges: [FlattenedProjectEdge!]!
+  pageInfo: PageInfo!
+}
+
+type FlattenedProjectEdge implements Edge {
+  cursor: String!
+  node: FlattenedProject!
+}
+
+"""A flattened list of tags in a document."""
+type FlattenedTag implements Node & TagInterface {
+  """
+  If false, tasks associated with this tag will be skipped when determining the next action for a project.
+  """
+  allowsNextAction: Boolean!
+
+  """
+  A count of the number of unblocked and incomplete tasks of this tag and all its active descendent tags.
+  """
+  availableTaskCount: Int!
+  availableTasks(after: ID, first: Int, whose: Condition): AvailableTaskConnection!
+
+  """The containing tag."""
+  container: Tag!
+
+  """Deprecated; use tags."""
+  deprecatedContexts(after: ID, first: Int, whose: Condition): DeprecatedContextConnection!
+
+  """
+  Set if the tag is currently hidden or any of its container tags are hidden.
+  """
+  effectivelyHidden: Boolean!
+  flattenedTags(after: ID, first: Int, whose: Condition): FlattenedTagConnection!
+
+  """Set if the tag is currently hidden."""
+  hidden: Boolean!
+
+  """The identifier of the tag."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The physical location associated with the tag."""
+  location: LocationInformation
+
+  """The name of the tag."""
+  name: String!
+
+  """The note of the tag."""
+  note: RichText!
+
+  """
+  A count of the number of incomplete tasks of this tag and all its active descendent tags.
+  """
+  remainingTaskCount: Int!
+  remainingTasks(after: ID, first: Int, whose: Condition): RemainingTaskConnection!
+
+  """The tags having this tag as their container."""
+  tags(after: ID, first: Int, whose: Condition): TagConnection!
+
+  """The tasks having this tag."""
+  tasks(after: ID, first: Int, whose: Condition): TaskConnection!
+}
+
+type FlattenedTagConnection implements Connection {
+  byId(id: ID!): FlattenedTag
+  edges: [FlattenedTagEdge!]!
+  pageInfo: PageInfo!
+}
+
+type FlattenedTagEdge implements Edge {
+  cursor: String!
+  node: FlattenedTag!
+}
+
+"""A flattened list of tasks under a task or document."""
+type FlattenedTask implements Node & TaskInterface {
+  """
+  True if the task has a task that must be completed prior to it being actionable.
+  """
+  blocked: Boolean!
+
+  """
+  True if the task is completed. Use the "mark complete" and "mark incomplete" commands to change a task's status.
+  """
+  completed: Boolean!
+
+  """If true, complete when children are completed."""
+  completedByChildren: Boolean!
+
+  """
+  The task's date of completion. This can only be modified on a completed task to backdate the completion date.
+  """
+  completionDate: String
+
+  """
+  The task's project, up however many levels of parent tasks.  Inbox tasks aren't considered contained by their provisionalliy assigned container, so if the task is actually an inbox task, this will be missing value.
+  """
+  containingProject: Project
+
+  """
+  When the task was created.  This can only be set when the object is still in the inserted state.  For objects created in the document, it can be passed with the creation properties.  For objects in a quick entry tree, it can be set until the quick entry panel is saved.
+  """
+  creationDate: String!
+
+  """When the task should become available for action."""
+  deferDate: String
+
+  """
+  True if the task is dropped. Use the "mark dropped" and "mark incomplete" commands to change a task's status.
+  """
+  dropped: Boolean!
+
+  """
+  The date the task was dropped. This can only be modified on a dropped task to backdate the dropped date.
+  """
+  droppedDate: String
+
+  """When the task must be finished."""
+  dueDate: String
+
+  """
+  When the task should become available for action (including inherited).
+  """
+  effectiveDeferDate: String
+
+  """When the task must be finished (including inherited)."""
+  effectiveDueDate: String
+
+  """
+  True if the task is completed, or any of it's containing tasks or project are completed.
+  """
+  effectivelyCompleted: Boolean!
+
+  """
+  True if the task is dropped, or any of it's containing tasks or project are dropped.
+  """
+  effectivelyDropped: Boolean!
+
+  """
+  The estimated time, in whole minutes, that this task will take to finish.
+  """
+  estimatedMinutes: Int
+
+  """True if flagged"""
+  flagged: Boolean!
+  flattenedTasks(after: ID, first: Int, whose: Condition): FlattenedTaskConnection!
+
+  """The identifier of the task."""
+  id: ID! @extractFromObjectDisplayName
+
+  """
+  Returns true if the task itself is an inbox task or if the task is contained by an inbox task.
+  """
+  inInbox: Boolean!
+
+  """When the task was last modified."""
+  modificationDate: String!
+
+  """The name of the task."""
+  name: String!
+
+  """If the task is the next task of its containing project, next is true."""
+  next: Boolean!
+
+  """
+  The next defer date if this task repeats on a fixed schedule and it has a defer date.
+  """
+  nextDeferDate: String
+
+  """
+  The next due date if this task repeats on a fixed schedule and it has a due date.
+  """
+  nextDueDate: String
+
+  """The note of the task."""
+  note: RichText!
+
+  """The number of available direct children of this task."""
+  numberOfAvailableTasks: Int!
+
+  """The number of completed direct children of this task."""
+  numberOfCompletedTasks: Int!
+
+  """The number of direct children of this task."""
+  numberOfTasks: Int!
+
+  """
+  The task holding this task.  If this is missing value, then this is a top level task -- either the root of a project or an inbox item.
+  """
+  parentTask: Task
+
+  """
+  The task's first tag. Setting this will remove the current first tag on the task, if any and move or add the new tag as the first tag on the task. Setting this to missing value will remove the current first tag and leave any other remaining tags.
+  """
+  primaryTag: Tag
+
+  """
+  The repetition interval of the task, or missing value if it does not repeat. This property is deprecated in favor of “repetition rule” and is here only for backwards compatibility with existing scripts.
+  """
+  repetition: RepetitionInterval
+
+  """
+  The repetition rule for this task, or missing value if it does not repeat.
+  """
+  repetitionRule: RepetitionRule
+
+  """If true, any children are sequentially dependent."""
+  sequential: Boolean!
+
+  """
+  When set, the due date and defer date properties will use floating time zones. (Note: if a Task has no due or defer dates assigned, this property will revert to the database’s default setting.)
+  """
+  shouldUseFloatingTimeZone: Boolean!
+
+  """The tags assigned to this task."""
+  tags(after: ID, first: Int, whose: Condition): TagConnection!
+
+  """The tasks having this task as their container."""
+  tasks(after: ID, first: Int, whose: Condition): TaskConnection!
+}
+
+type FlattenedTaskConnection implements Connection {
+  byId(id: ID!): FlattenedTask
+  edges: [FlattenedTaskEdge!]!
+  pageInfo: PageInfo!
+}
+
+type FlattenedTaskEdge implements Edge {
+  cursor: String!
+  node: FlattenedTask!
+}
+
+"""
+A group of projects and sub-folders representing an area of responsibility.
+"""
+type Folder implements FolderInterface & Node & SectionInterface {
+  """When the folder was created."""
+  creationDate: String!
+
+  """
+  Set if the folder is currently hidden or any of its container folders are hidden.
+  """
+  effectivelyHidden: Boolean!
+  flattenedFolders(after: ID, first: Int, whose: Condition): FlattenedFolderConnection!
+  flattenedProjects(after: ID, first: Int, whose: Condition): FlattenedProjectConnection!
+
+  """
+  The subset of the sections that are folders; folders having this folder as their container.
+  """
+  folders(after: ID, first: Int, whose: Condition): FolderConnection!
+
+  """Set if the folder is currently hidden."""
+  hidden: Boolean!
+
+  """The identifier of the folder."""
+  id: ID! @extractFromObjectDisplayName
+
+  """When the folder was last modified."""
+  modificationDate: String!
+
+  """The name of the folder."""
+  name: String!
+
+  """The note of the folder."""
+  note: RichText!
+
+  """
+  The subset of the sections that are projects; projects having this folder as their container.
+  """
+  projects(after: ID, first: Int, whose: Condition): ProjectConnection!
+
+  """The projects and folders having this folder as their container."""
+  sections(after: ID, first: Int, whose: Condition): SectionConnection!
+}
+
+type FolderConnection implements Connection {
+  byId(id: ID!): FolderInterface
+  edges: [FolderEdge!]!
+  pageInfo: PageInfo!
+}
+
+type FolderEdge implements Edge {
+  cursor: String!
+  node: FolderInterface!
+}
+
+interface FolderInterface implements Node {
+  """When the folder was created."""
+  creationDate: String!
+
+  """
+  Set if the folder is currently hidden or any of its container folders are hidden.
+  """
+  effectivelyHidden: Boolean!
+  flattenedFolders(after: ID, first: Int, whose: Condition): FlattenedFolderConnection!
+  flattenedProjects(after: ID, first: Int, whose: Condition): FlattenedProjectConnection!
+
+  """
+  The subset of the sections that are folders; folders having this folder as their container.
+  """
+  folders(after: ID, first: Int, whose: Condition): FolderConnection!
+
+  """Set if the folder is currently hidden."""
+  hidden: Boolean!
+
+  """The identifier of the folder."""
+  id: ID! @extractFromObjectDisplayName
+
+  """When the folder was last modified."""
+  modificationDate: String!
+
+  """The name of the folder."""
+  name: String!
+
+  """The note of the folder."""
+  note: RichText!
+
+  """
+  The subset of the sections that are projects; projects having this folder as their container.
+  """
+  projects(after: ID, first: Int, whose: Condition): ProjectConnection!
+
+  """The projects and folders having this folder as their container."""
+  sections(after: ID, first: Int, whose: Condition): SectionConnection!
+}
+
+"""
+The sibling trees of this tree after it in the user-specified sort ordering.
+"""
+type FollowingSibling implements Node & TreeInterface {
+  """The ancestor trees of this tree."""
+  ancestorTrees(after: ID, first: Int, whose: Condition): AncestorTreeConnection!
+
+  """
+  All the descendant trees in the user-specified sort ordering, listing each tree, then its children and so forth.
+  """
+  descendantTrees(after: ID, first: Int, whose: Condition): DescendantTreeConnection!
+
+  """This is true if the node is expanded."""
+  expanded: Boolean!
+
+  """
+  The sibling trees of this tree after it in the user-specified sort ordering.
+  """
+  followingSiblings(after: ID, first: Int, whose: Condition): FollowingSiblingConnection!
+
+  """The identifier of object being represented by this tree."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The descendants of this tree that have no children themselves."""
+  leafs(after: ID, first: Int, whose: Condition): LeafConnection!
+
+  """The name of the object being represented by this tree."""
+  name: String!
+
+  """This is true if the node note is expanded."""
+  noteExpanded: Boolean!
+
+  """
+  The sibling trees of this tree before it in the user-specified sort ordering.
+  """
+  precedingSiblings(after: ID, first: Int, whose: Condition): PrecedingSiblingConnection!
+
+  """
+  This is true if the node is selected.  Note that attempts to set this while the node is not visible (collapsed parent, etc.) will silently do nothing.
+  """
+  selected: Boolean!
+
+  """The trees of this tree that are selected in the user interface."""
+  selectedTrees(after: ID, first: Int, whose: Condition): SelectedTreeConnection!
+
+  """
+  The immediate child trees of this tree in the user-specified sort ordering.
+  """
+  trees(after: ID, first: Int, whose: Condition): TreeConnection!
+}
+
+type FollowingSiblingConnection implements Connection {
+  byId(id: ID!): FollowingSibling
+  edges: [FollowingSiblingEdge!]!
+  pageInfo: PageInfo!
+}
+
+type FollowingSiblingEdge implements Edge {
+  cursor: String!
+  node: FollowingSibling!
+}
+
+"""A day in the forecast sidebar tree."""
+type ForecastDay implements Node {
+  """
+  The count shown in the sidebar for this forecast day, or zero if there is no count shown.
+  """
+  badgeCount: Int!
+
+  """
+  True if the forecast day has no content at all. Note that some content will not cause a badge to be shown in the sidebar, and some content is controlled by user preferences.
+  """
+  empty: Boolean!
+
+  """The identifier of the task."""
+  id: ID! @extractFromObjectDisplayName
+
+  """A display name for the forecast day."""
+  name: String!
+}
+
+type ForecastDayConnection implements Connection {
+  byId(id: ID!): ForecastDay
+  edges: [ForecastDayEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ForecastDayEdge implements Edge {
+  cursor: String!
+  node: ForecastDay!
+}
+
+interface ForecastDayInterface implements Node {
+  """
+  The count shown in the sidebar for this forecast day, or zero if there is no count shown.
+  """
+  badgeCount: Int!
+
+  """
+  True if the forecast day has no content at all. Note that some content will not cause a badge to be shown in the sidebar, and some content is controlled by user preferences.
+  """
+  empty: Boolean!
+
+  """The identifier of the task."""
+  id: ID! @extractFromObjectDisplayName
+
+  """A display name for the forecast day."""
+  name: String!
+}
+
+"""
+The sidebar tree used when the window's sidebar tab property is set to forecast tab.
+"""
+type ForecastSidebarTree implements SidebarTreeInterface {
+  """
+  The list of possible smart group identifiers that can be set as the selected smart group identifier.
+  """
+  availableSmartGroupIdentifiers: [String!]!
+  forecastDays(after: ID, first: Int, whose: Condition): ForecastDayConnection!
+
+  """The currently selected smart group identifier."""
+  selectedSmartGroupIdentifier: String
+}
+
+"""A task that is in the document's inbox"""
+type InboxTask implements Node & TaskInterface {
+  """
+  True if the task has a task that must be completed prior to it being actionable.
+  """
+  blocked: Boolean!
+
+  """
+  True if the task is completed. Use the "mark complete" and "mark incomplete" commands to change a task's status.
+  """
+  completed: Boolean!
+
+  """If true, complete when children are completed."""
+  completedByChildren: Boolean!
+
+  """
+  The task's date of completion. This can only be modified on a completed task to backdate the completion date.
+  """
+  completionDate: String
+
+  """
+  The task's project, up however many levels of parent tasks.  Inbox tasks aren't considered contained by their provisionalliy assigned container, so if the task is actually an inbox task, this will be missing value.
+  """
+  containingProject: Project
+
+  """
+  When the task was created.  This can only be set when the object is still in the inserted state.  For objects created in the document, it can be passed with the creation properties.  For objects in a quick entry tree, it can be set until the quick entry panel is saved.
+  """
+  creationDate: String!
+
+  """When the task should become available for action."""
+  deferDate: String
+
+  """
+  True if the task is dropped. Use the "mark dropped" and "mark incomplete" commands to change a task's status.
+  """
+  dropped: Boolean!
+
+  """
+  The date the task was dropped. This can only be modified on a dropped task to backdate the dropped date.
+  """
+  droppedDate: String
+
+  """When the task must be finished."""
+  dueDate: String
+
+  """
+  When the task should become available for action (including inherited).
+  """
+  effectiveDeferDate: String
+
+  """When the task must be finished (including inherited)."""
+  effectiveDueDate: String
+
+  """
+  True if the task is completed, or any of it's containing tasks or project are completed.
+  """
+  effectivelyCompleted: Boolean!
+
+  """
+  True if the task is dropped, or any of it's containing tasks or project are dropped.
+  """
+  effectivelyDropped: Boolean!
+
+  """
+  The estimated time, in whole minutes, that this task will take to finish.
+  """
+  estimatedMinutes: Int
+
+  """True if flagged"""
+  flagged: Boolean!
+  flattenedTasks(after: ID, first: Int, whose: Condition): FlattenedTaskConnection!
+
+  """The identifier of the task."""
+  id: ID! @extractFromObjectDisplayName
+
+  """
+  Returns true if the task itself is an inbox task or if the task is contained by an inbox task.
+  """
+  inInbox: Boolean!
+
+  """When the task was last modified."""
+  modificationDate: String!
+
+  """The name of the task."""
+  name: String!
+
+  """If the task is the next task of its containing project, next is true."""
+  next: Boolean!
+
+  """
+  The next defer date if this task repeats on a fixed schedule and it has a defer date.
+  """
+  nextDeferDate: String
+
+  """
+  The next due date if this task repeats on a fixed schedule and it has a due date.
+  """
+  nextDueDate: String
+
+  """The note of the task."""
+  note: RichText!
+
+  """The number of available direct children of this task."""
+  numberOfAvailableTasks: Int!
+
+  """The number of completed direct children of this task."""
+  numberOfCompletedTasks: Int!
+
+  """The number of direct children of this task."""
+  numberOfTasks: Int!
+
+  """
+  The task holding this task.  If this is missing value, then this is a top level task -- either the root of a project or an inbox item.
+  """
+  parentTask: Task
+
+  """
+  The task's first tag. Setting this will remove the current first tag on the task, if any and move or add the new tag as the first tag on the task. Setting this to missing value will remove the current first tag and leave any other remaining tags.
+  """
+  primaryTag: Tag
+
+  """
+  The repetition interval of the task, or missing value if it does not repeat. This property is deprecated in favor of “repetition rule” and is here only for backwards compatibility with existing scripts.
+  """
+  repetition: RepetitionInterval
+
+  """
+  The repetition rule for this task, or missing value if it does not repeat.
+  """
+  repetitionRule: RepetitionRule
+
+  """If true, any children are sequentially dependent."""
+  sequential: Boolean!
+
+  """
+  When set, the due date and defer date properties will use floating time zones. (Note: if a Task has no due or defer dates assigned, this property will revert to the database’s default setting.)
+  """
+  shouldUseFloatingTimeZone: Boolean!
+
+  """The tags assigned to this task."""
+  tags(after: ID, first: Int, whose: Condition): TagConnection!
+
+  """The tasks having this task as their container."""
+  tasks(after: ID, first: Int, whose: Condition): TaskConnection!
+}
+
+type InboxTaskConnection implements Connection {
+  byId(id: ID!): InboxTask
+  edges: [InboxTaskEdge!]!
+  pageInfo: PageInfo!
+}
+
+type InboxTaskEdge implements Edge {
+  cursor: String!
+  node: InboxTask!
+}
+
+"""The tree in the sidebar representing the Inbox."""
+type InboxTree implements Node & TreeInterface {
+  """The ancestor trees of this tree."""
+  ancestorTrees(after: ID, first: Int, whose: Condition): AncestorTreeConnection!
+
+  """
+  All the descendant trees in the user-specified sort ordering, listing each tree, then its children and so forth.
+  """
+  descendantTrees(after: ID, first: Int, whose: Condition): DescendantTreeConnection!
+
+  """This is true if the node is expanded."""
+  expanded: Boolean!
+
+  """
+  The sibling trees of this tree after it in the user-specified sort ordering.
+  """
+  followingSiblings(after: ID, first: Int, whose: Condition): FollowingSiblingConnection!
+
+  """The identifier of object being represented by this tree."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The descendants of this tree that have no children themselves."""
+  leafs(after: ID, first: Int, whose: Condition): LeafConnection!
+
+  """The name of the object being represented by this tree."""
+  name: String!
+
+  """This is true if the node note is expanded."""
+  noteExpanded: Boolean!
+
+  """
+  The sibling trees of this tree before it in the user-specified sort ordering.
+  """
+  precedingSiblings(after: ID, first: Int, whose: Condition): PrecedingSiblingConnection!
+
+  """
+  This is true if the node is selected.  Note that attempts to set this while the node is not visible (collapsed parent, etc.) will silently do nothing.
+  """
+  selected: Boolean!
+
+  """The trees of this tree that are selected in the user interface."""
+  selectedTrees(after: ID, first: Int, whose: Condition): SelectedTreeConnection!
+
+  """
+  The immediate child trees of this tree in the user-specified sort ordering.
+  """
+  trees(after: ID, first: Int, whose: Condition): TreeConnection!
+}
+
+type InboxTreeConnection implements Connection {
+  byId(id: ID!): InboxTree
+  edges: [InboxTreeEdge!]!
+  pageInfo: PageInfo!
+}
+
+type InboxTreeEdge implements Edge {
+  cursor: String!
+  node: InboxTree!
+}
+
+enum IntervalUnit {
+  """Days"""
+  DAY
+
+  """Hours"""
+  HOUR
+
+  """Minutes"""
+  MINUTE
+
+  """Months"""
+  MONTH
+
+  """Weeks"""
+  WEEK
+
+  """Years"""
+  YEAR
+}
+
+"""The descendants of a tree that have no children themselves."""
+type Leaf implements Node & TreeInterface {
+  """The ancestor trees of this tree."""
+  ancestorTrees(after: ID, first: Int, whose: Condition): AncestorTreeConnection!
+
+  """
+  All the descendant trees in the user-specified sort ordering, listing each tree, then its children and so forth.
+  """
+  descendantTrees(after: ID, first: Int, whose: Condition): DescendantTreeConnection!
+
+  """This is true if the node is expanded."""
+  expanded: Boolean!
+
+  """
+  The sibling trees of this tree after it in the user-specified sort ordering.
+  """
+  followingSiblings(after: ID, first: Int, whose: Condition): FollowingSiblingConnection!
+
+  """The identifier of object being represented by this tree."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The descendants of this tree that have no children themselves."""
+  leafs(after: ID, first: Int, whose: Condition): LeafConnection!
+
+  """The name of the object being represented by this tree."""
+  name: String!
+
+  """This is true if the node note is expanded."""
+  noteExpanded: Boolean!
+
+  """
+  The sibling trees of this tree before it in the user-specified sort ordering.
+  """
+  precedingSiblings(after: ID, first: Int, whose: Condition): PrecedingSiblingConnection!
+
+  """
+  This is true if the node is selected.  Note that attempts to set this while the node is not visible (collapsed parent, etc.) will silently do nothing.
+  """
+  selected: Boolean!
+
+  """The trees of this tree that are selected in the user interface."""
+  selectedTrees(after: ID, first: Int, whose: Condition): SelectedTreeConnection!
+
+  """
+  The immediate child trees of this tree in the user-specified sort ordering.
+  """
+  trees(after: ID, first: Int, whose: Condition): TreeConnection!
+}
+
+type LeafConnection implements Connection {
+  byId(id: ID!): Leaf
+  edges: [LeafEdge!]!
+  pageInfo: PageInfo!
+}
+
+type LeafEdge implements Edge {
+  cursor: String!
+  node: Leaf!
+}
+
+"""The tree in the sidebar representing the top level library of objects."""
+type LibraryTree implements Node & TreeInterface {
+  """The ancestor trees of this tree."""
+  ancestorTrees(after: ID, first: Int, whose: Condition): AncestorTreeConnection!
+
+  """
+  All the descendant trees in the user-specified sort ordering, listing each tree, then its children and so forth.
+  """
+  descendantTrees(after: ID, first: Int, whose: Condition): DescendantTreeConnection!
+
+  """This is true if the node is expanded."""
+  expanded: Boolean!
+
+  """
+  The sibling trees of this tree after it in the user-specified sort ordering.
+  """
+  followingSiblings(after: ID, first: Int, whose: Condition): FollowingSiblingConnection!
+
+  """The identifier of object being represented by this tree."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The descendants of this tree that have no children themselves."""
+  leafs(after: ID, first: Int, whose: Condition): LeafConnection!
+
+  """The name of the object being represented by this tree."""
+  name: String!
+
+  """This is true if the node note is expanded."""
+  noteExpanded: Boolean!
+
+  """
+  The sibling trees of this tree before it in the user-specified sort ordering.
+  """
+  precedingSiblings(after: ID, first: Int, whose: Condition): PrecedingSiblingConnection!
+
+  """
+  This is true if the node is selected.  Note that attempts to set this while the node is not visible (collapsed parent, etc.) will silently do nothing.
+  """
+  selected: Boolean!
+
+  """The trees of this tree that are selected in the user interface."""
+  selectedTrees(after: ID, first: Int, whose: Condition): SelectedTreeConnection!
+
+  """
+  The immediate child trees of this tree in the user-specified sort ordering.
+  """
+  trees(after: ID, first: Int, whose: Condition): TreeConnection!
+}
+
+type LibraryTreeConnection implements Connection {
+  byId(id: ID!): LibraryTree
+  edges: [LibraryTreeEdge!]!
+  pageInfo: PageInfo!
+}
+
+type LibraryTreeEdge implements Edge {
+  cursor: String!
+  node: LibraryTree!
+}
+
+type LocationInformation @recordType {
+  """Altitude in meters from sea level."""
+  altitude: Float!
+
+  """Latitude in degrees from -90 to +90."""
+  latitude: Float!
+
+  """Longitude in degrees from -180 to +180."""
+  longitude: Float!
+
+  """A display name for the location."""
+  name: String!
+
+  """Radius of accuracy in kilometers, from 0.1km to 10km."""
+  radius: Float!
+
+  """Location notification trigger."""
+  trigger: LocationTrigger!
+}
+
+enum LocationTrigger {
+  """notify when arriving at this location"""
+  NOTIFY_WHEN_ARRIVING
+
+  """notify when leaving this location"""
+  NOTIFY_WHEN_LEAVING
+}
+
+type Mutation {
+  pushAncestorTree(expanded: Boolean, noteExpanded: Boolean, selected: Boolean): AncestorTree!
+  pushApplication: Application!
+  pushAttachment(font: String, size: Int, text: String): Attachment!
+  pushAttribute: Attribute!
+  pushAttributeRun(font: String, size: Int, text: String): AttributeRun!
+  pushAvailableTask(completedByChildren: Boolean, completionDate: String, creationDate: String, deferDate: String, droppedDate: String, dueDate: String, estimatedMinutes: Int, flagged: Boolean, id: String, name: String, sequential: Boolean, shouldUseFloatingTimeZone: Boolean): AvailableTask!
+  pushBuiltinPerspective(id: String, name: String): BuiltinPerspective!
+  pushCharacter(font: String, size: Int, text: String): Character!
+  pushContentTree(expanded: Boolean, noteExpanded: Boolean, selected: Boolean, selectedGroupingIdentifier: String, selectedSortingIdentifier: String, selectedTaskDurationFilterIdentifier: String, selectedTaskFlaggedFilterIdentifier: String, selectedTaskStateFilterIdentifier: String): ContentTree!
+  pushCustomPerspective(id: String, name: String): CustomPerspective!
+  pushDeprecatedContext(allowsNextAction: Boolean, hidden: Boolean, id: String, name: String): DeprecatedContext!
+  pushDescendantTree(expanded: Boolean, noteExpanded: Boolean, selected: Boolean): DescendantTree!
+  pushDocument: Document!
+  pushDocumentWindow(index: Int, miniaturized: Boolean, perspectiveName: String, searchTerm: String, visible: Boolean, zoomed: Boolean): DocumentWindow!
+  pushFileAttachment: FileAttachment!
+  pushFlattenedFolder(hidden: Boolean, name: String): FlattenedFolder!
+  pushFlattenedProject(completedByChildren: Boolean, completionDate: String, creationDate: String, defaultSingletonActionHolder: Boolean, deferDate: String, droppedDate: String, dueDate: String, estimatedMinutes: Int, flagged: Boolean, id: String, lastReviewDate: String, name: String, nextReviewDate: String, sequential: Boolean, shouldUseFloatingTimeZone: Boolean, singletonActionHolder: Boolean): FlattenedProject!
+  pushFlattenedTag(allowsNextAction: Boolean, hidden: Boolean, id: String, name: String): FlattenedTag!
+  pushFlattenedTask(completedByChildren: Boolean, completionDate: String, creationDate: String, deferDate: String, droppedDate: String, dueDate: String, estimatedMinutes: Int, flagged: Boolean, id: String, name: String, sequential: Boolean, shouldUseFloatingTimeZone: Boolean): FlattenedTask!
+  pushFolder(hidden: Boolean, name: String): Folder!
+  pushFollowingSibling(expanded: Boolean, noteExpanded: Boolean, selected: Boolean): FollowingSibling!
+  pushForecastDay(badgeCount: Int, empty: Boolean, id: String, name: String): ForecastDay!
+  pushForecastSidebarTree(selectedSmartGroupIdentifier: String): ForecastSidebarTree!
+  pushInboxTask(completedByChildren: Boolean, completionDate: String, creationDate: String, deferDate: String, droppedDate: String, dueDate: String, estimatedMinutes: Int, flagged: Boolean, id: String, name: String, sequential: Boolean, shouldUseFloatingTimeZone: Boolean): InboxTask!
+  pushInboxTree(expanded: Boolean, noteExpanded: Boolean, selected: Boolean): InboxTree!
+  pushLeaf(expanded: Boolean, noteExpanded: Boolean, selected: Boolean): Leaf!
+  pushLibraryTree(expanded: Boolean, noteExpanded: Boolean, selected: Boolean): LibraryTree!
+  pushNamedStyle(font: String, name: String): NamedStyle!
+  pushParagraph(font: String, size: Int, text: String): Paragraph!
+  pushPerspective(id: String, name: String): Perspective!
+  pushPrecedingSibling(expanded: Boolean, noteExpanded: Boolean, selected: Boolean): PrecedingSibling!
+  pushPreference: Preference!
+  pushProject(completedByChildren: Boolean, completionDate: String, creationDate: String, defaultSingletonActionHolder: Boolean, deferDate: String, droppedDate: String, dueDate: String, estimatedMinutes: Int, flagged: Boolean, id: String, lastReviewDate: String, name: String, nextReviewDate: String, sequential: Boolean, shouldUseFloatingTimeZone: Boolean, singletonActionHolder: Boolean): Project!
+  pushQuickEntryTree(expanded: Boolean, noteExpanded: Boolean, selected: Boolean): QuickEntryTree!
+  pushRemainingTask(completedByChildren: Boolean, completionDate: String, creationDate: String, deferDate: String, droppedDate: String, dueDate: String, estimatedMinutes: Int, flagged: Boolean, id: String, name: String, sequential: Boolean, shouldUseFloatingTimeZone: Boolean): RemainingTask!
+  pushSection(name: String): Section!
+  pushSelectedTree(expanded: Boolean, noteExpanded: Boolean, selected: Boolean): SelectedTree!
+  pushSetting: Setting!
+  pushSidebarTree(expanded: Boolean, noteExpanded: Boolean, selected: Boolean, selectedSmartGroupIdentifier: String): SidebarTree!
+  pushStyle(font: String): Style!
+  pushTag(allowsNextAction: Boolean, hidden: Boolean, id: String, name: String): Tag!
+  pushTask(completedByChildren: Boolean, completionDate: String, creationDate: String, deferDate: String, droppedDate: String, dueDate: String, estimatedMinutes: Int, flagged: Boolean, id: String, name: String, sequential: Boolean, shouldUseFloatingTimeZone: Boolean): Task!
+  pushTree(expanded: Boolean, noteExpanded: Boolean, selected: Boolean): Tree!
+  pushWindow(index: Int, miniaturized: Boolean, visible: Boolean, zoomed: Boolean): Window!
+  pushWord(font: String, size: Int, text: String): Word!
+}
+
+"""A named style object."""
+type NamedStyle implements Node & StyleInterface {
+  attributes(after: ID, first: Int, whose: Condition): AttributeConnection!
+
+  """The name of the font of the style."""
+  font: String!
+
+  """
+  An identifier for the named style that is unique within its document.  Currently this identifier is not persistent between two different sessions of editing the document.
+  """
+  id: ID! @extractFromObjectDisplayName
+
+  """The name of the style.  Must be unique within the containing document."""
+  name: String!
+  namedStyles(after: ID, first: Int, whose: Condition): NamedStyleConnection!
+}
+
+type NamedStyleConnection implements Connection {
+  byId(id: ID!): NamedStyle
+  edges: [NamedStyleEdge!]!
+  pageInfo: PageInfo!
+}
+
+type NamedStyleEdge implements Edge {
+  cursor: String!
+  node: NamedStyle!
+}
+
+interface NamedStyleInterface implements Node {
+  """
+  An identifier for the named style that is unique within its document.  Currently this identifier is not persistent between two different sessions of editing the document.
+  """
+  id: ID! @extractFromObjectDisplayName
+
+  """The name of the style.  Must be unique within the containing document."""
+  name: String!
+}
+
+interface Node {
+  id: ID!
+}
+
+type PageInfo {
+  endCursor: String!
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String!
+}
+
+"""This subdivides the text into paragraphs."""
+type Paragraph {
+  attachments(after: ID, first: Int, whose: Condition): AttachmentConnection!
+  attributeRuns(after: ID, first: Int, whose: Condition): AttributeRunConnection!
+  characters(after: ID, first: Int, whose: Condition): CharacterConnection!
+  fileAttachments(after: ID, first: Int, whose: Condition): FileAttachmentConnection!
+
+  """The name of the font of the first character."""
+  font: String!
+  paragraphs(after: ID, first: Int, whose: Condition): ParagraphConnection!
+
+  """The size in points of the first character."""
+  size: Int!
+
+  """The style of the text."""
+  style: Style!
+
+  """The plain text contents of the rich text."""
+  text: String!
+  words(after: ID, first: Int, whose: Condition): WordConnection!
+}
+
+type ParagraphConnection {
+  byId(id: ID!): Paragraph
+  edges: [ParagraphEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ParagraphEdge {
+  cursor: String!
+  node: Paragraph!
+}
+
+"""A perspective."""
+type Perspective implements Node & PerspectiveInterface {
+  """The identifier of the perspective."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The name of the perspective."""
+  name: String!
+}
+
+type PerspectiveConnection implements Connection {
+  byId(id: ID!): PerspectiveInterface
+  edges: [PerspectiveEdge!]!
+  pageInfo: PageInfo!
+}
+
+type PerspectiveEdge implements Edge {
+  cursor: String!
+  node: PerspectiveInterface!
+}
+
+interface PerspectiveInterface implements Node {
+  """The identifier of the perspective."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The name of the perspective."""
+  name: String!
+}
+
+"""
+The sibling trees of this tree before it in the user-specified sort ordering.
+"""
+type PrecedingSibling implements Node & TreeInterface {
+  """The ancestor trees of this tree."""
+  ancestorTrees(after: ID, first: Int, whose: Condition): AncestorTreeConnection!
+
+  """
+  All the descendant trees in the user-specified sort ordering, listing each tree, then its children and so forth.
+  """
+  descendantTrees(after: ID, first: Int, whose: Condition): DescendantTreeConnection!
+
+  """This is true if the node is expanded."""
+  expanded: Boolean!
+
+  """
+  The sibling trees of this tree after it in the user-specified sort ordering.
+  """
+  followingSiblings(after: ID, first: Int, whose: Condition): FollowingSiblingConnection!
+
+  """The identifier of object being represented by this tree."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The descendants of this tree that have no children themselves."""
+  leafs(after: ID, first: Int, whose: Condition): LeafConnection!
+
+  """The name of the object being represented by this tree."""
+  name: String!
+
+  """This is true if the node note is expanded."""
+  noteExpanded: Boolean!
+
+  """
+  The sibling trees of this tree before it in the user-specified sort ordering.
+  """
+  precedingSiblings(after: ID, first: Int, whose: Condition): PrecedingSiblingConnection!
+
+  """
+  This is true if the node is selected.  Note that attempts to set this while the node is not visible (collapsed parent, etc.) will silently do nothing.
+  """
+  selected: Boolean!
+
+  """The trees of this tree that are selected in the user interface."""
+  selectedTrees(after: ID, first: Int, whose: Condition): SelectedTreeConnection!
+
+  """
+  The immediate child trees of this tree in the user-specified sort ordering.
+  """
+  trees(after: ID, first: Int, whose: Condition): TreeConnection!
+}
+
+type PrecedingSiblingConnection implements Connection {
+  byId(id: ID!): PrecedingSibling
+  edges: [PrecedingSiblingEdge!]!
+  pageInfo: PageInfo!
+}
+
+type PrecedingSiblingEdge implements Edge {
+  cursor: String!
+  node: PrecedingSibling!
+}
+
+"""Application preference"""
+type Preference implements Node {
+  """The identifier of the preference."""
+  id: ID! @extractFromObjectDisplayName
+}
+
+type PreferenceConnection implements Connection {
+  byId(id: ID!): Preference
+  edges: [PreferenceEdge!]!
+  pageInfo: PageInfo!
+}
+
+type PreferenceEdge implements Edge {
+  cursor: String!
+  node: Preference!
+}
+
+interface PreferenceInterface implements Node {
+  """The identifier of the preference."""
+  id: ID! @extractFromObjectDisplayName
+}
+
+"""A project."""
+type Project implements Node & ProjectInterface & SectionInterface {
+  """
+  True if the project has a project that must be completed prior to it being actionable.
+  """
+  blocked: Boolean!
+
+  """
+  True if the project is completed. Use the "mark complete" and "mark incomplete" commands to change a project's status.
+  """
+  completed: Boolean!
+
+  """If true, complete when children are completed."""
+  completedByChildren: Boolean!
+
+  """
+  The project's date of completion. This can only be modified on a completed project to backdate the completion date.
+  """
+  completionDate: String
+
+  """
+  When the project was created.  This can only be set when the object is still in the inserted state.  For objects created in the document, it can be passed with the creation properties.  For objects in a quick entry tree, it can be set until the quick entry panel is saved.
+  """
+  creationDate: String!
+
+  """
+  True if the project is the default holder of sington actions.  Only one project can have this flag set; setting it on a project will clear it on any other project having it.  Setting this to true will set 'singleton action holder' to true if not already so set.
+  """
+  defaultSingletonActionHolder: Boolean!
+
+  """When the project should become available for action."""
+  deferDate: String
+
+  """
+  True if the project is dropped. Use the "mark dropped" and "mark incomplete" commands to change a project's status.
+  """
+  dropped: Boolean!
+
+  """
+  The date the project was dropped. This can only be modified on a dropped project to backdate the dropped date.
+  """
+  droppedDate: String
+
+  """When the project must be finished."""
+  dueDate: String
+
+  """
+  When the project should become available for action (including inherited).
+  """
+  effectiveDeferDate: String
+
+  """When the project must be finished (including inherited)."""
+  effectiveDueDate: String
+
+  """The effective status of the project."""
+  effectiveStatus: ProjectStatus!
+
+  """True if the project is completed"""
+  effectivelyCompleted: Boolean!
+
+  """True if the project is dropped"""
+  effectivelyDropped: Boolean!
+
+  """
+  The estimated time, in whole minutes, that this project will take to finish.
+  """
+  estimatedMinutes: Int
+
+  """True if flagged"""
+  flagged: Boolean!
+
+  """
+  The folder of the project, or missing value if it is contained directly by the document.
+  """
+  folder: Folder
+
+  """The identifier of the project."""
+  id: ID! @extractFromObjectDisplayName
+
+  """When the project was last reviewed."""
+  lastReviewDate: String!
+
+  """When the project was last modified."""
+  modificationDate: String!
+
+  """The name of the project."""
+  name: String!
+
+  """
+  The next defer date if this project repeats on a fixed schedule and it has a defer date.
+  """
+  nextDeferDate: String
+
+  """
+  The next due date if this project repeats on a fixed schedule and it has a due date.
+  """
+  nextDueDate: String
+
+  """
+  When the project should next be reviewed. Setting this to missing value will set the review date based off the last review date and review interval.
+  """
+  nextReviewDate: String
+
+  """The next actionable child of this project."""
+  nextTask: Task
+
+  """The note of the project."""
+  note: RichText!
+
+  """The number of available direct children of this project."""
+  numberOfAvailableTasks: Int!
+
+  """The number of completed direct children of this project."""
+  numberOfCompletedTasks: Int!
+
+  """The number of direct children of this project."""
+  numberOfTasks: Int!
+
+  """
+  The project's first tag. Setting this will remove the current first tag on the project, if any and move or add the new tag as the first tag on the project. Setting this to missing value will remove the current first tag and leave any other remaining tags.
+  """
+  primaryTag: Tag
+
+  """
+  The repetition interval of the project, or missing value if it does not repeat. This property is deprecated in favor of “repetition rule” and is here only for backwards compatibility with existing scripts.
+  """
+  repetition: RepetitionInterval
+
+  """
+  The repetition rule for this project, or missing value if it does not repeat.
+  """
+  repetitionRule: RepetitionRule
+
+  """The review interval for the project."""
+  reviewInterval: RepetitionInterval!
+
+  """
+  The root task of this project, holding the project's name, note, dates and child tasks.
+  """
+  rootTask: Task!
+
+  """If true, any children are sequentially dependent."""
+  sequential: Boolean!
+
+  """
+  When set, the due date and defer date properties will use floating time zones. (Note: if a Task has no due or defer dates assigned, this property will revert to the database’s default setting.)
+  """
+  shouldUseFloatingTimeZone: Boolean!
+
+  """True if the project contains singleton actions."""
+  singletonActionHolder: Boolean!
+
+  """The status of the project."""
+  status: ProjectStatus!
+}
+
+type ProjectConnection implements Connection {
+  byId(id: ID!): ProjectInterface
+  edges: [ProjectEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ProjectEdge implements Edge {
+  cursor: String!
+  node: ProjectInterface!
+}
+
+interface ProjectInterface implements Node {
+  """
+  True if the project has a project that must be completed prior to it being actionable.
+  """
+  blocked: Boolean!
+
+  """
+  True if the project is completed. Use the "mark complete" and "mark incomplete" commands to change a project's status.
+  """
+  completed: Boolean!
+
+  """If true, complete when children are completed."""
+  completedByChildren: Boolean!
+
+  """
+  The project's date of completion. This can only be modified on a completed project to backdate the completion date.
+  """
+  completionDate: String
+
+  """
+  When the project was created.  This can only be set when the object is still in the inserted state.  For objects created in the document, it can be passed with the creation properties.  For objects in a quick entry tree, it can be set until the quick entry panel is saved.
+  """
+  creationDate: String!
+
+  """
+  True if the project is the default holder of sington actions.  Only one project can have this flag set; setting it on a project will clear it on any other project having it.  Setting this to true will set 'singleton action holder' to true if not already so set.
+  """
+  defaultSingletonActionHolder: Boolean!
+
+  """When the project should become available for action."""
+  deferDate: String
+
+  """
+  True if the project is dropped. Use the "mark dropped" and "mark incomplete" commands to change a project's status.
+  """
+  dropped: Boolean!
+
+  """
+  The date the project was dropped. This can only be modified on a dropped project to backdate the dropped date.
+  """
+  droppedDate: String
+
+  """When the project must be finished."""
+  dueDate: String
+
+  """
+  When the project should become available for action (including inherited).
+  """
+  effectiveDeferDate: String
+
+  """When the project must be finished (including inherited)."""
+  effectiveDueDate: String
+
+  """The effective status of the project."""
+  effectiveStatus: ProjectStatus!
+
+  """True if the project is completed"""
+  effectivelyCompleted: Boolean!
+
+  """True if the project is dropped"""
+  effectivelyDropped: Boolean!
+
+  """
+  The estimated time, in whole minutes, that this project will take to finish.
+  """
+  estimatedMinutes: Int
+
+  """True if flagged"""
+  flagged: Boolean!
+
+  """
+  The folder of the project, or missing value if it is contained directly by the document.
+  """
+  folder: Folder
+
+  """The identifier of the project."""
+  id: ID! @extractFromObjectDisplayName
+
+  """When the project was last reviewed."""
+  lastReviewDate: String!
+
+  """When the project was last modified."""
+  modificationDate: String!
+
+  """The name of the project."""
+  name: String!
+
+  """
+  The next defer date if this project repeats on a fixed schedule and it has a defer date.
+  """
+  nextDeferDate: String
+
+  """
+  The next due date if this project repeats on a fixed schedule and it has a due date.
+  """
+  nextDueDate: String
+
+  """
+  When the project should next be reviewed. Setting this to missing value will set the review date based off the last review date and review interval.
+  """
+  nextReviewDate: String
+
+  """The next actionable child of this project."""
+  nextTask: Task
+
+  """The note of the project."""
+  note: RichText!
+
+  """The number of available direct children of this project."""
+  numberOfAvailableTasks: Int!
+
+  """The number of completed direct children of this project."""
+  numberOfCompletedTasks: Int!
+
+  """The number of direct children of this project."""
+  numberOfTasks: Int!
+
+  """
+  The project's first tag. Setting this will remove the current first tag on the project, if any and move or add the new tag as the first tag on the project. Setting this to missing value will remove the current first tag and leave any other remaining tags.
+  """
+  primaryTag: Tag
+
+  """
+  The repetition interval of the project, or missing value if it does not repeat. This property is deprecated in favor of “repetition rule” and is here only for backwards compatibility with existing scripts.
+  """
+  repetition: RepetitionInterval
+
+  """
+  The repetition rule for this project, or missing value if it does not repeat.
+  """
+  repetitionRule: RepetitionRule
+
+  """The review interval for the project."""
+  reviewInterval: RepetitionInterval!
+
+  """
+  The root task of this project, holding the project's name, note, dates and child tasks.
+  """
+  rootTask: Task!
+
+  """If true, any children are sequentially dependent."""
+  sequential: Boolean!
+
+  """
+  When set, the due date and defer date properties will use floating time zones. (Note: if a Task has no due or defer dates assigned, this property will revert to the database’s default setting.)
+  """
+  shouldUseFloatingTimeZone: Boolean!
+
+  """True if the project contains singleton actions."""
+  singletonActionHolder: Boolean!
+
+  """The status of the project."""
+  status: ProjectStatus!
+}
+
+enum ProjectStatus {
+  """Active"""
+  ACTIVE_STATUS
+
+  """Done"""
+  DONE_STATUS
+
+  """Dropped"""
+  DROPPED_STATUS
+
+  """On Hold"""
+  ON_HOLD_STATUS
+}
+
+type Query {
+  application: Application!
+}
+
+"""The Quick Entry panel."""
+type QuickEntryTree implements Node & TreeInterface {
+  """The ancestor trees of this tree."""
+  ancestorTrees(after: ID, first: Int, whose: Condition): AncestorTreeConnection!
+
+  """Deprecated; use tags."""
+  deprecatedContexts(after: ID, first: Int, whose: Condition): DeprecatedContextConnection!
+
+  """
+  All the descendant trees in the user-specified sort ordering, listing each tree, then its children and so forth.
+  """
+  descendantTrees(after: ID, first: Int, whose: Condition): DescendantTreeConnection!
+
+  """This is true if the node is expanded."""
+  expanded: Boolean!
+  folders(after: ID, first: Int, whose: Condition): FolderConnection!
+
+  """
+  The sibling trees of this tree after it in the user-specified sort ordering.
+  """
+  followingSiblings(after: ID, first: Int, whose: Condition): FollowingSiblingConnection!
+
+  """The identifier of object being represented by this tree."""
+  id: ID! @extractFromObjectDisplayName
+  inboxTasks(after: ID, first: Int, whose: Condition): InboxTaskConnection!
+
+  """The descendants of this tree that have no children themselves."""
+  leafs(after: ID, first: Int, whose: Condition): LeafConnection!
+
+  """The name of the object being represented by this tree."""
+  name: String!
+
+  """This is true if the node note is expanded."""
+  noteExpanded: Boolean!
+
+  """
+  The sibling trees of this tree before it in the user-specified sort ordering.
+  """
+  precedingSiblings(after: ID, first: Int, whose: Condition): PrecedingSiblingConnection!
+  projects(after: ID, first: Int, whose: Condition): ProjectConnection!
+
+  """
+  This is true if the node is selected.  Note that attempts to set this while the node is not visible (collapsed parent, etc.) will silently do nothing.
+  """
+  selected: Boolean!
+
+  """The trees of this tree that are selected in the user interface."""
+  selectedTrees(after: ID, first: Int, whose: Condition): SelectedTreeConnection!
+  tags(after: ID, first: Int, whose: Condition): TagConnection!
+
+  """
+  The immediate child trees of this tree in the user-specified sort ordering.
+  """
+  trees(after: ID, first: Int, whose: Condition): TreeConnection!
+
+  """Whether the quick entry panel is currently visible."""
+  visible: Boolean!
+}
+
+type QuickEntryTreeConnection implements Connection {
+  byId(id: ID!): QuickEntryTree
+  edges: [QuickEntryTreeEdge!]!
+  pageInfo: PageInfo!
+}
+
+type QuickEntryTreeEdge implements Edge {
+  cursor: String!
+  node: QuickEntryTree!
+}
+
+"""
+A task that is not complete, though it may be blocked.  This is simply a filter on the existing tasks and should be considred a read-only element.  These cannot be created directly; instead create a normal task.
+"""
+type RemainingTask implements Node & TaskInterface {
+  """
+  True if the task has a task that must be completed prior to it being actionable.
+  """
+  blocked: Boolean!
+
+  """
+  True if the task is completed. Use the "mark complete" and "mark incomplete" commands to change a task's status.
+  """
+  completed: Boolean!
+
+  """If true, complete when children are completed."""
+  completedByChildren: Boolean!
+
+  """
+  The task's date of completion. This can only be modified on a completed task to backdate the completion date.
+  """
+  completionDate: String
+
+  """
+  The task's project, up however many levels of parent tasks.  Inbox tasks aren't considered contained by their provisionalliy assigned container, so if the task is actually an inbox task, this will be missing value.
+  """
+  containingProject: Project
+
+  """
+  When the task was created.  This can only be set when the object is still in the inserted state.  For objects created in the document, it can be passed with the creation properties.  For objects in a quick entry tree, it can be set until the quick entry panel is saved.
+  """
+  creationDate: String!
+
+  """When the task should become available for action."""
+  deferDate: String
+
+  """
+  True if the task is dropped. Use the "mark dropped" and "mark incomplete" commands to change a task's status.
+  """
+  dropped: Boolean!
+
+  """
+  The date the task was dropped. This can only be modified on a dropped task to backdate the dropped date.
+  """
+  droppedDate: String
+
+  """When the task must be finished."""
+  dueDate: String
+
+  """
+  When the task should become available for action (including inherited).
+  """
+  effectiveDeferDate: String
+
+  """When the task must be finished (including inherited)."""
+  effectiveDueDate: String
+
+  """
+  True if the task is completed, or any of it's containing tasks or project are completed.
+  """
+  effectivelyCompleted: Boolean!
+
+  """
+  True if the task is dropped, or any of it's containing tasks or project are dropped.
+  """
+  effectivelyDropped: Boolean!
+
+  """
+  The estimated time, in whole minutes, that this task will take to finish.
+  """
+  estimatedMinutes: Int
+
+  """True if flagged"""
+  flagged: Boolean!
+  flattenedTasks(after: ID, first: Int, whose: Condition): FlattenedTaskConnection!
+
+  """The identifier of the task."""
+  id: ID! @extractFromObjectDisplayName
+
+  """
+  Returns true if the task itself is an inbox task or if the task is contained by an inbox task.
+  """
+  inInbox: Boolean!
+
+  """When the task was last modified."""
+  modificationDate: String!
+
+  """The name of the task."""
+  name: String!
+
+  """If the task is the next task of its containing project, next is true."""
+  next: Boolean!
+
+  """
+  The next defer date if this task repeats on a fixed schedule and it has a defer date.
+  """
+  nextDeferDate: String
+
+  """
+  The next due date if this task repeats on a fixed schedule and it has a due date.
+  """
+  nextDueDate: String
+
+  """The note of the task."""
+  note: RichText!
+
+  """The number of available direct children of this task."""
+  numberOfAvailableTasks: Int!
+
+  """The number of completed direct children of this task."""
+  numberOfCompletedTasks: Int!
+
+  """The number of direct children of this task."""
+  numberOfTasks: Int!
+
+  """
+  The task holding this task.  If this is missing value, then this is a top level task -- either the root of a project or an inbox item.
+  """
+  parentTask: Task
+
+  """
+  The task's first tag. Setting this will remove the current first tag on the task, if any and move or add the new tag as the first tag on the task. Setting this to missing value will remove the current first tag and leave any other remaining tags.
+  """
+  primaryTag: Tag
+
+  """
+  The repetition interval of the task, or missing value if it does not repeat. This property is deprecated in favor of “repetition rule” and is here only for backwards compatibility with existing scripts.
+  """
+  repetition: RepetitionInterval
+
+  """
+  The repetition rule for this task, or missing value if it does not repeat.
+  """
+  repetitionRule: RepetitionRule
+
+  """If true, any children are sequentially dependent."""
+  sequential: Boolean!
+
+  """
+  When set, the due date and defer date properties will use floating time zones. (Note: if a Task has no due or defer dates assigned, this property will revert to the database’s default setting.)
+  """
+  shouldUseFloatingTimeZone: Boolean!
+
+  """The tags assigned to this task."""
+  tags(after: ID, first: Int, whose: Condition): TagConnection!
+
+  """The tasks having this task as their container."""
+  tasks(after: ID, first: Int, whose: Condition): TaskConnection!
+}
+
+type RemainingTaskConnection implements Connection {
+  byId(id: ID!): RemainingTask
+  edges: [RemainingTaskEdge!]!
+  pageInfo: PageInfo!
+}
+
+type RemainingTaskEdge implements Edge {
+  cursor: String!
+  node: RemainingTask!
+}
+
+type RepetitionInterval @recordType {
+  """
+  If fixed, the next repetition will be relative to a fixed calendar.  If sliding, the next repetition will be calculated when needed.
+  """
+  fixed: Boolean!
+
+  """The count of the repetition interval."""
+  steps: Int!
+
+  """The units of the repetition interval."""
+  unit: IntervalUnit!
+}
+
+enum RepetitionMethod {
+  """Due again after completion."""
+  DUE_AFTER_COMPLETION
+
+  """Repeat on a fixed schedule."""
+  FIXED_REPETITION
+
+  """Start again after completion."""
+  START_AFTER_COMPLETION
+}
+
+type RepetitionRule @recordType {
+  """The iCalendar (RFC 2445) string describing the recurrence."""
+  recurrence: String!
+
+  """
+  The repetition method. If fixed, the next repetition will be relative to a fixed calendar.  If sliding, the next repetition will be calculated when the action or inbox item is resolved.
+  """
+  repetitionMethod: RepetitionMethod!
+}
+
+scalar RichText
+
+"""A portion of a folder or document; either a project or a folder."""
+type Section implements Node & SectionInterface {
+  """The identifier of the project or folder."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The name of the project or folder."""
+  name: String!
+}
+
+type SectionConnection implements Connection {
+  byId(id: ID!): SectionInterface
+  edges: [SectionEdge!]!
+  pageInfo: PageInfo!
+}
+
+type SectionEdge implements Edge {
+  cursor: String!
+  node: SectionInterface!
+}
+
+interface SectionInterface implements Node {
+  """The identifier of the project or folder."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The name of the project or folder."""
+  name: String!
+}
+
+"""
+The trees of this tree that are selected in the user interface, possibly including this tree.
+"""
+type SelectedTree implements Node & TreeInterface {
+  """The ancestor trees of this tree."""
+  ancestorTrees(after: ID, first: Int, whose: Condition): AncestorTreeConnection!
+
+  """
+  All the descendant trees in the user-specified sort ordering, listing each tree, then its children and so forth.
+  """
+  descendantTrees(after: ID, first: Int, whose: Condition): DescendantTreeConnection!
+
+  """This is true if the node is expanded."""
+  expanded: Boolean!
+
+  """
+  The sibling trees of this tree after it in the user-specified sort ordering.
+  """
+  followingSiblings(after: ID, first: Int, whose: Condition): FollowingSiblingConnection!
+
+  """The identifier of object being represented by this tree."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The descendants of this tree that have no children themselves."""
+  leafs(after: ID, first: Int, whose: Condition): LeafConnection!
+
+  """The name of the object being represented by this tree."""
+  name: String!
+
+  """This is true if the node note is expanded."""
+  noteExpanded: Boolean!
+
+  """
+  The sibling trees of this tree before it in the user-specified sort ordering.
+  """
+  precedingSiblings(after: ID, first: Int, whose: Condition): PrecedingSiblingConnection!
+
+  """
+  This is true if the node is selected.  Note that attempts to set this while the node is not visible (collapsed parent, etc.) will silently do nothing.
+  """
+  selected: Boolean!
+
+  """The trees of this tree that are selected in the user interface."""
+  selectedTrees(after: ID, first: Int, whose: Condition): SelectedTreeConnection!
+
+  """
+  The immediate child trees of this tree in the user-specified sort ordering.
+  """
+  trees(after: ID, first: Int, whose: Condition): TreeConnection!
+}
+
+type SelectedTreeConnection implements Connection {
+  byId(id: ID!): SelectedTree
+  edges: [SelectedTreeEdge!]!
+  pageInfo: PageInfo!
+}
+
+type SelectedTreeEdge implements Edge {
+  cursor: String!
+  node: SelectedTree!
+}
+
+"""Document setting"""
+type Setting implements Node {
+  """The identifier of the setting."""
+  id: ID! @extractFromObjectDisplayName
+}
+
+type SettingConnection implements Connection {
+  byId(id: ID!): Setting
+  edges: [SettingEdge!]!
+  pageInfo: PageInfo!
+}
+
+type SettingEdge implements Edge {
+  cursor: String!
+  node: Setting!
+}
+
+interface SettingInterface implements Node {
+  """The identifier of the setting."""
+  id: ID! @extractFromObjectDisplayName
+}
+
+"""The tree of objects in the window sidebar."""
+type SidebarTree implements Node & SidebarTreeInterface & TreeInterface {
+  """The ancestor trees of this tree."""
+  ancestorTrees(after: ID, first: Int, whose: Condition): AncestorTreeConnection!
+
+  """
+  The list of possible smart group identifiers that can be set as the selected smart group identifier.
+  """
+  availableSmartGroupIdentifiers: [String!]!
+
+  """
+  All the descendant trees in the user-specified sort ordering, listing each tree, then its children and so forth.
+  """
+  descendantTrees(after: ID, first: Int, whose: Condition): DescendantTreeConnection!
+
+  """This is true if the node is expanded."""
+  expanded: Boolean!
+
+  """
+  The sibling trees of this tree after it in the user-specified sort ordering.
+  """
+  followingSiblings(after: ID, first: Int, whose: Condition): FollowingSiblingConnection!
+
+  """The identifier of object being represented by this tree."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The descendants of this tree that have no children themselves."""
+  leafs(after: ID, first: Int, whose: Condition): LeafConnection!
+
+  """The name of the object being represented by this tree."""
+  name: String!
+
+  """This is true if the node note is expanded."""
+  noteExpanded: Boolean!
+
+  """
+  The sibling trees of this tree before it in the user-specified sort ordering.
+  """
+  precedingSiblings(after: ID, first: Int, whose: Condition): PrecedingSiblingConnection!
+
+  """
+  This is true if the node is selected.  Note that attempts to set this while the node is not visible (collapsed parent, etc.) will silently do nothing.
+  """
+  selected: Boolean!
+
+  """The currently selected smart group identifier."""
+  selectedSmartGroupIdentifier: String
+
+  """The trees of this tree that are selected in the user interface."""
+  selectedTrees(after: ID, first: Int, whose: Condition): SelectedTreeConnection!
+
+  """
+  The immediate child trees of this tree in the user-specified sort ordering.
+  """
+  trees(after: ID, first: Int, whose: Condition): TreeConnection!
+}
+
+interface SidebarTreeInterface {
+  """
+  The list of possible smart group identifiers that can be set as the selected smart group identifier.
+  """
+  availableSmartGroupIdentifiers: [String!]!
+
+  """The currently selected smart group identifier."""
+  selectedSmartGroupIdentifier: String
+}
+
+"""A style object."""
+type Style implements StyleInterface {
+  attributes(after: ID, first: Int, whose: Condition): AttributeConnection!
+
+  """The name of the font of the style."""
+  font: String!
+  namedStyles(after: ID, first: Int, whose: Condition): NamedStyleConnection!
+}
+
+interface StyleInterface {
+  attributes(after: ID, first: Int, whose: Condition): AttributeConnection!
+
+  """The name of the font of the style."""
+  font: String!
+  namedStyles(after: ID, first: Int, whose: Condition): NamedStyleConnection!
+}
+
+"""A tag."""
+type Tag implements Node & TagInterface {
+  """
+  If false, tasks associated with this tag will be skipped when determining the next action for a project.
+  """
+  allowsNextAction: Boolean!
+
+  """
+  A count of the number of unblocked and incomplete tasks of this tag and all its active descendent tags.
+  """
+  availableTaskCount: Int!
+  availableTasks(after: ID, first: Int, whose: Condition): AvailableTaskConnection!
+
+  """The containing tag."""
+  container: Tag!
+
+  """Deprecated; use tags."""
+  deprecatedContexts(after: ID, first: Int, whose: Condition): DeprecatedContextConnection!
+
+  """
+  Set if the tag is currently hidden or any of its container tags are hidden.
+  """
+  effectivelyHidden: Boolean!
+  flattenedTags(after: ID, first: Int, whose: Condition): FlattenedTagConnection!
+
+  """Set if the tag is currently hidden."""
+  hidden: Boolean!
+
+  """The identifier of the tag."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The physical location associated with the tag."""
+  location: LocationInformation
+
+  """The name of the tag."""
+  name: String!
+
+  """The note of the tag."""
+  note: RichText!
+
+  """
+  A count of the number of incomplete tasks of this tag and all its active descendent tags.
+  """
+  remainingTaskCount: Int!
+  remainingTasks(after: ID, first: Int, whose: Condition): RemainingTaskConnection!
+
+  """The tags having this tag as their container."""
+  tags(after: ID, first: Int, whose: Condition): TagConnection!
+
+  """The tasks having this tag."""
+  tasks(after: ID, first: Int, whose: Condition): TaskConnection!
+}
+
+type TagConnection implements Connection {
+  byId(id: ID!): TagInterface
+  edges: [TagEdge!]!
+  pageInfo: PageInfo!
+}
+
+type TagEdge implements Edge {
+  cursor: String!
+  node: TagInterface!
+}
+
+interface TagInterface implements Node {
+  """
+  If false, tasks associated with this tag will be skipped when determining the next action for a project.
+  """
+  allowsNextAction: Boolean!
+
+  """
+  A count of the number of unblocked and incomplete tasks of this tag and all its active descendent tags.
+  """
+  availableTaskCount: Int!
+  availableTasks(after: ID, first: Int, whose: Condition): AvailableTaskConnection!
+
+  """The containing tag."""
+  container: Tag!
+
+  """Deprecated; use tags."""
+  deprecatedContexts(after: ID, first: Int, whose: Condition): DeprecatedContextConnection!
+
+  """
+  Set if the tag is currently hidden or any of its container tags are hidden.
+  """
+  effectivelyHidden: Boolean!
+  flattenedTags(after: ID, first: Int, whose: Condition): FlattenedTagConnection!
+
+  """Set if the tag is currently hidden."""
+  hidden: Boolean!
+
+  """The identifier of the tag."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The physical location associated with the tag."""
+  location: LocationInformation
+
+  """The name of the tag."""
+  name: String!
+
+  """The note of the tag."""
+  note: RichText!
+
+  """
+  A count of the number of incomplete tasks of this tag and all its active descendent tags.
+  """
+  remainingTaskCount: Int!
+  remainingTasks(after: ID, first: Int, whose: Condition): RemainingTaskConnection!
+
+  """The tags having this tag as their container."""
+  tags(after: ID, first: Int, whose: Condition): TagConnection!
+
+  """The tasks having this tag."""
+  tasks(after: ID, first: Int, whose: Condition): TaskConnection!
+}
+
+"""
+A task. This might represent the root of a project, an action within a project or other action or an inbox item.
+"""
+type Task implements Node & TaskInterface {
+  """
+  True if the task has a task that must be completed prior to it being actionable.
+  """
+  blocked: Boolean!
+
+  """
+  True if the task is completed. Use the "mark complete" and "mark incomplete" commands to change a task's status.
+  """
+  completed: Boolean!
+
+  """If true, complete when children are completed."""
+  completedByChildren: Boolean!
+
+  """
+  The task's date of completion. This can only be modified on a completed task to backdate the completion date.
+  """
+  completionDate: String
+
+  """
+  The task's project, up however many levels of parent tasks.  Inbox tasks aren't considered contained by their provisionalliy assigned container, so if the task is actually an inbox task, this will be missing value.
+  """
+  containingProject: Project
+
+  """
+  When the task was created.  This can only be set when the object is still in the inserted state.  For objects created in the document, it can be passed with the creation properties.  For objects in a quick entry tree, it can be set until the quick entry panel is saved.
+  """
+  creationDate: String!
+
+  """When the task should become available for action."""
+  deferDate: String
+
+  """
+  True if the task is dropped. Use the "mark dropped" and "mark incomplete" commands to change a task's status.
+  """
+  dropped: Boolean!
+
+  """
+  The date the task was dropped. This can only be modified on a dropped task to backdate the dropped date.
+  """
+  droppedDate: String
+
+  """When the task must be finished."""
+  dueDate: String
+
+  """
+  When the task should become available for action (including inherited).
+  """
+  effectiveDeferDate: String
+
+  """When the task must be finished (including inherited)."""
+  effectiveDueDate: String
+
+  """
+  True if the task is completed, or any of it's containing tasks or project are completed.
+  """
+  effectivelyCompleted: Boolean!
+
+  """
+  True if the task is dropped, or any of it's containing tasks or project are dropped.
+  """
+  effectivelyDropped: Boolean!
+
+  """
+  The estimated time, in whole minutes, that this task will take to finish.
+  """
+  estimatedMinutes: Int
+
+  """True if flagged"""
+  flagged: Boolean!
+  flattenedTasks(after: ID, first: Int, whose: Condition): FlattenedTaskConnection!
+
+  """The identifier of the task."""
+  id: ID! @extractFromObjectDisplayName
+
+  """
+  Returns true if the task itself is an inbox task or if the task is contained by an inbox task.
+  """
+  inInbox: Boolean!
+
+  """When the task was last modified."""
+  modificationDate: String!
+
+  """The name of the task."""
+  name: String!
+
+  """If the task is the next task of its containing project, next is true."""
+  next: Boolean!
+
+  """
+  The next defer date if this task repeats on a fixed schedule and it has a defer date.
+  """
+  nextDeferDate: String
+
+  """
+  The next due date if this task repeats on a fixed schedule and it has a due date.
+  """
+  nextDueDate: String
+
+  """The note of the task."""
+  note: RichText!
+
+  """The number of available direct children of this task."""
+  numberOfAvailableTasks: Int!
+
+  """The number of completed direct children of this task."""
+  numberOfCompletedTasks: Int!
+
+  """The number of direct children of this task."""
+  numberOfTasks: Int!
+
+  """
+  The task holding this task.  If this is missing value, then this is a top level task -- either the root of a project or an inbox item.
+  """
+  parentTask: Task
+
+  """
+  The task's first tag. Setting this will remove the current first tag on the task, if any and move or add the new tag as the first tag on the task. Setting this to missing value will remove the current first tag and leave any other remaining tags.
+  """
+  primaryTag: Tag
+
+  """
+  The repetition interval of the task, or missing value if it does not repeat. This property is deprecated in favor of “repetition rule” and is here only for backwards compatibility with existing scripts.
+  """
+  repetition: RepetitionInterval
+
+  """
+  The repetition rule for this task, or missing value if it does not repeat.
+  """
+  repetitionRule: RepetitionRule
+
+  """If true, any children are sequentially dependent."""
+  sequential: Boolean!
+
+  """
+  When set, the due date and defer date properties will use floating time zones. (Note: if a Task has no due or defer dates assigned, this property will revert to the database’s default setting.)
+  """
+  shouldUseFloatingTimeZone: Boolean!
+
+  """The tags assigned to this task."""
+  tags(after: ID, first: Int, whose: Condition): TagConnection!
+
+  """The tasks having this task as their container."""
+  tasks(after: ID, first: Int, whose: Condition): TaskConnection!
+}
+
+type TaskConnection implements Connection {
+  byId(id: ID!): TaskInterface
+  edges: [TaskEdge!]!
+  pageInfo: PageInfo!
+}
+
+type TaskEdge implements Edge {
+  cursor: String!
+  node: TaskInterface!
+}
+
+interface TaskInterface implements Node {
+  """
+  True if the task has a task that must be completed prior to it being actionable.
+  """
+  blocked: Boolean!
+
+  """
+  True if the task is completed. Use the "mark complete" and "mark incomplete" commands to change a task's status.
+  """
+  completed: Boolean!
+
+  """If true, complete when children are completed."""
+  completedByChildren: Boolean!
+
+  """
+  The task's date of completion. This can only be modified on a completed task to backdate the completion date.
+  """
+  completionDate: String
+
+  """
+  The task's project, up however many levels of parent tasks.  Inbox tasks aren't considered contained by their provisionalliy assigned container, so if the task is actually an inbox task, this will be missing value.
+  """
+  containingProject: Project
+
+  """
+  When the task was created.  This can only be set when the object is still in the inserted state.  For objects created in the document, it can be passed with the creation properties.  For objects in a quick entry tree, it can be set until the quick entry panel is saved.
+  """
+  creationDate: String!
+
+  """When the task should become available for action."""
+  deferDate: String
+
+  """
+  True if the task is dropped. Use the "mark dropped" and "mark incomplete" commands to change a task's status.
+  """
+  dropped: Boolean!
+
+  """
+  The date the task was dropped. This can only be modified on a dropped task to backdate the dropped date.
+  """
+  droppedDate: String
+
+  """When the task must be finished."""
+  dueDate: String
+
+  """
+  When the task should become available for action (including inherited).
+  """
+  effectiveDeferDate: String
+
+  """When the task must be finished (including inherited)."""
+  effectiveDueDate: String
+
+  """
+  True if the task is completed, or any of it's containing tasks or project are completed.
+  """
+  effectivelyCompleted: Boolean!
+
+  """
+  True if the task is dropped, or any of it's containing tasks or project are dropped.
+  """
+  effectivelyDropped: Boolean!
+
+  """
+  The estimated time, in whole minutes, that this task will take to finish.
+  """
+  estimatedMinutes: Int
+
+  """True if flagged"""
+  flagged: Boolean!
+  flattenedTasks(after: ID, first: Int, whose: Condition): FlattenedTaskConnection!
+
+  """The identifier of the task."""
+  id: ID! @extractFromObjectDisplayName
+
+  """
+  Returns true if the task itself is an inbox task or if the task is contained by an inbox task.
+  """
+  inInbox: Boolean!
+
+  """When the task was last modified."""
+  modificationDate: String!
+
+  """The name of the task."""
+  name: String!
+
+  """If the task is the next task of its containing project, next is true."""
+  next: Boolean!
+
+  """
+  The next defer date if this task repeats on a fixed schedule and it has a defer date.
+  """
+  nextDeferDate: String
+
+  """
+  The next due date if this task repeats on a fixed schedule and it has a due date.
+  """
+  nextDueDate: String
+
+  """The note of the task."""
+  note: RichText!
+
+  """The number of available direct children of this task."""
+  numberOfAvailableTasks: Int!
+
+  """The number of completed direct children of this task."""
+  numberOfCompletedTasks: Int!
+
+  """The number of direct children of this task."""
+  numberOfTasks: Int!
+
+  """
+  The task holding this task.  If this is missing value, then this is a top level task -- either the root of a project or an inbox item.
+  """
+  parentTask: Task
+
+  """
+  The task's first tag. Setting this will remove the current first tag on the task, if any and move or add the new tag as the first tag on the task. Setting this to missing value will remove the current first tag and leave any other remaining tags.
+  """
+  primaryTag: Tag
+
+  """
+  The repetition interval of the task, or missing value if it does not repeat. This property is deprecated in favor of “repetition rule” and is here only for backwards compatibility with existing scripts.
+  """
+  repetition: RepetitionInterval
+
+  """
+  The repetition rule for this task, or missing value if it does not repeat.
+  """
+  repetitionRule: RepetitionRule
+
+  """If true, any children are sequentially dependent."""
+  sequential: Boolean!
+
+  """
+  When set, the due date and defer date properties will use floating time zones. (Note: if a Task has no due or defer dates assigned, this property will revert to the database’s default setting.)
+  """
+  shouldUseFloatingTimeZone: Boolean!
+
+  """The tags assigned to this task."""
+  tags(after: ID, first: Int, whose: Condition): TagConnection!
+
+  """The tasks having this task as their container."""
+  tasks(after: ID, first: Int, whose: Condition): TaskConnection!
+}
+
+"""A tree representing an object, along with its sub-trees."""
+type Tree implements Node & TreeInterface {
+  """The ancestor trees of this tree."""
+  ancestorTrees(after: ID, first: Int, whose: Condition): AncestorTreeConnection!
+
+  """
+  All the descendant trees in the user-specified sort ordering, listing each tree, then its children and so forth.
+  """
+  descendantTrees(after: ID, first: Int, whose: Condition): DescendantTreeConnection!
+
+  """This is true if the node is expanded."""
+  expanded: Boolean!
+
+  """
+  The sibling trees of this tree after it in the user-specified sort ordering.
+  """
+  followingSiblings(after: ID, first: Int, whose: Condition): FollowingSiblingConnection!
+
+  """The identifier of object being represented by this tree."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The descendants of this tree that have no children themselves."""
+  leafs(after: ID, first: Int, whose: Condition): LeafConnection!
+
+  """The name of the object being represented by this tree."""
+  name: String!
+
+  """This is true if the node note is expanded."""
+  noteExpanded: Boolean!
+
+  """
+  The sibling trees of this tree before it in the user-specified sort ordering.
+  """
+  precedingSiblings(after: ID, first: Int, whose: Condition): PrecedingSiblingConnection!
+
+  """
+  This is true if the node is selected.  Note that attempts to set this while the node is not visible (collapsed parent, etc.) will silently do nothing.
+  """
+  selected: Boolean!
+
+  """The trees of this tree that are selected in the user interface."""
+  selectedTrees(after: ID, first: Int, whose: Condition): SelectedTreeConnection!
+
+  """
+  The immediate child trees of this tree in the user-specified sort ordering.
+  """
+  trees(after: ID, first: Int, whose: Condition): TreeConnection!
+}
+
+type TreeConnection implements Connection {
+  byId(id: ID!): TreeInterface
+  edges: [TreeEdge!]!
+  pageInfo: PageInfo!
+}
+
+type TreeEdge implements Edge {
+  cursor: String!
+  node: TreeInterface!
+}
+
+interface TreeInterface implements Node {
+  """The ancestor trees of this tree."""
+  ancestorTrees(after: ID, first: Int, whose: Condition): AncestorTreeConnection!
+
+  """
+  All the descendant trees in the user-specified sort ordering, listing each tree, then its children and so forth.
+  """
+  descendantTrees(after: ID, first: Int, whose: Condition): DescendantTreeConnection!
+
+  """This is true if the node is expanded."""
+  expanded: Boolean!
+
+  """
+  The sibling trees of this tree after it in the user-specified sort ordering.
+  """
+  followingSiblings(after: ID, first: Int, whose: Condition): FollowingSiblingConnection!
+
+  """The identifier of object being represented by this tree."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The descendants of this tree that have no children themselves."""
+  leafs(after: ID, first: Int, whose: Condition): LeafConnection!
+
+  """The name of the object being represented by this tree."""
+  name: String!
+
+  """This is true if the node note is expanded."""
+  noteExpanded: Boolean!
+
+  """
+  The sibling trees of this tree before it in the user-specified sort ordering.
+  """
+  precedingSiblings(after: ID, first: Int, whose: Condition): PrecedingSiblingConnection!
+
+  """
+  This is true if the node is selected.  Note that attempts to set this while the node is not visible (collapsed parent, etc.) will silently do nothing.
+  """
+  selected: Boolean!
+
+  """The trees of this tree that are selected in the user interface."""
+  selectedTrees(after: ID, first: Int, whose: Condition): SelectedTreeConnection!
+
+  """
+  The immediate child trees of this tree in the user-specified sort ordering.
+  """
+  trees(after: ID, first: Int, whose: Condition): TreeConnection!
+}
+
+"""A window."""
+type Window implements Node & WindowInterface {
+  """Does the window have a close button?"""
+  closeable: Boolean!
+
+  """The document whose contents are displayed in the window."""
+  document: Document!
+
+  """The unique identifier of the window."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The index of the window, ordered front to back."""
+  index: Int!
+
+  """Does the window have a minimize button?"""
+  miniaturizable: Boolean!
+
+  """Is the window minimized right now?"""
+  miniaturized: Boolean!
+
+  """The title of the window."""
+  name: String!
+
+  """Can the window be resized?"""
+  resizable: Boolean!
+
+  """Is the window visible right now?"""
+  visible: Boolean!
+
+  """Does the window have a zoom button?"""
+  zoomable: Boolean!
+
+  """Is the window zoomed right now?"""
+  zoomed: Boolean!
+}
+
+type WindowConnection implements Connection {
+  byId(id: ID!): WindowInterface
+  edges: [WindowEdge!]!
+  pageInfo: PageInfo!
+}
+
+type WindowEdge implements Edge {
+  cursor: String!
+  node: WindowInterface!
+}
+
+interface WindowInterface implements Node {
+  """Does the window have a close button?"""
+  closeable: Boolean!
+
+  """The document whose contents are displayed in the window."""
+  document: Document!
+
+  """The unique identifier of the window."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The index of the window, ordered front to back."""
+  index: Int!
+
+  """Does the window have a minimize button?"""
+  miniaturizable: Boolean!
+
+  """Is the window minimized right now?"""
+  miniaturized: Boolean!
+
+  """The title of the window."""
+  name: String!
+
+  """Can the window be resized?"""
+  resizable: Boolean!
+
+  """Is the window visible right now?"""
+  visible: Boolean!
+
+  """Does the window have a zoom button?"""
+  zoomable: Boolean!
+
+  """Is the window zoomed right now?"""
+  zoomed: Boolean!
+}
+
+"""This subdivides the text into words."""
+type Word {
+  attachments(after: ID, first: Int, whose: Condition): AttachmentConnection!
+  attributeRuns(after: ID, first: Int, whose: Condition): AttributeRunConnection!
+  characters(after: ID, first: Int, whose: Condition): CharacterConnection!
+  fileAttachments(after: ID, first: Int, whose: Condition): FileAttachmentConnection!
+
+  """The name of the font of the first character."""
+  font: String!
+  paragraphs(after: ID, first: Int, whose: Condition): ParagraphConnection!
+
+  """The size in points of the first character."""
+  size: Int!
+
+  """The style of the text."""
+  style: Style!
+
+  """The plain text contents of the rich text."""
+  text: String!
+  words(after: ID, first: Int, whose: Condition): WordConnection!
+}
+
+type WordConnection {
+  byId(id: ID!): Word
+  edges: [WordEdge!]!
+  pageInfo: PageInfo!
+}
+
+type WordEdge {
+  cursor: String!
+  node: Word!
+}
+`;
