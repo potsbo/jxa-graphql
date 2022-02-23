@@ -10,7 +10,7 @@ export const objectType = (
     interfaces?: string[];
     description?: string;
     directives?: string[];
-  } = {}
+  }
 ): ObjectTypeDefinitionNode => {
   return {
     kind: Kind.OBJECT_TYPE_DEFINITION,
