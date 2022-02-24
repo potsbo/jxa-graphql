@@ -84,14 +84,14 @@ test("variable type mismatch - string", () => {
 });
 
 test("variable type mismatch", () => {
-    const q = gql`
-      query {
-        someField(whose: { field: "some", enabled: $enabled })
-      }
-    `;
-    const f = (q.definitions[0] as OperationDefinitionNode).selectionSet.selections[0] as FieldNode;
-    expect(() => buildWhoseFilter({ variableValues: { enabled: 1 } }, f)).toThrowError();
-  });
+  const q = gql`
+    query {
+      someField(whose: { field: "some", enabled: $enabled })
+    }
+  `;
+  const f = (q.definitions[0] as OperationDefinitionNode).selectionSet.selections[0] as FieldNode;
+  expect(() => buildWhoseFilter({ variableValues: { enabled: 1 } }, f)).toThrowError();
+});
 
 test("normal field", () => {
   const q = gql`
@@ -124,7 +124,7 @@ test("normal field", () => {
     { variableValues: { onlyFlagged: false, onlyAvailable: false, withEffectiveDueDate: false } },
     f
   );
-  expect(format("_" + filter)).toMatchInlineSnapshot(`
+  expect(format("_" + filter, { parser: "babel" })).toMatchInlineSnapshot(`
     "_.whose({ effectivelyCompleted: { _equals: false } });
     "
   `);
@@ -168,7 +168,7 @@ test("nesting deep", () => {
   `;
   const f = (q.definitions[0] as OperationDefinitionNode).selectionSet.selections[0] as FieldNode;
   const filter = buildWhoseFilter({ variableValues: { defaultStringValue: "someString" } }, f);
-  expect(format("_" + filter)).toMatchInlineSnapshot(`
+  expect(format("_" + filter, { parser: "babel" })).toMatchInlineSnapshot(`
     "_.whose({
       _and: [
         {
@@ -220,7 +220,7 @@ test("real use case", () => {
     { variableValues: { onlyFlagged: true, withEffectiveDueDate: true, onlyAvailable: true } },
     f
   );
-  expect(format("_" + filter)).toMatchInlineSnapshot(`
+  expect(format("_" + filter, { parser: "babel" })).toMatchInlineSnapshot(`
     "_.whose({
       _and: [
         { effectivelyCompleted: { _equals: false } },
