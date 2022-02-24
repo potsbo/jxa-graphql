@@ -53,6 +53,7 @@ export class ClassBuilder {
     const classBuilders = builders.filter((b): b is ClassBuilder => b instanceof ClassBuilder);
     const parent = classBuilders.find((t) => t.getClassName() === inherits);
     if (inherits !== undefined && parent === undefined) {
+      /* istanbul ignore next */
       throw new Error("parent not found");
     }
     const inherited = classBuilders.map((c) => c.getInherits()).some((c): c is string => c === this.getClassName());

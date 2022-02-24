@@ -1,0 +1,429 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`query for Connection 1`] = `
+"function pascalCase(s) {
+  return (s.match(/[a-zA-Z0-9]+/g) || [])
+    .map((w) => \`\${w[0].toUpperCase()}\${w.slice(1)}\`)
+    .join(\\"\\");
+}
+function extractId(obj) {
+  const spec = Automation.getDisplayString(obj);
+  return (
+    spec
+      ?.split(\\"byId\\")
+      .reverse()[0]
+      .match(/^\\\\(\\"(.+)\\"\\\\)$/)
+      ?.reverse()[0] ?? null
+  );
+}
+function pagenate(nodes, { first, after }, getId) {
+  const afterIndex =
+    after === undefined
+      ? undefined
+      : nodes.findIndex((n) => getId(n) === after);
+  if (afterIndex === -1) {
+    return [];
+  }
+  const start = afterIndex === undefined ? 0 : afterIndex + 1;
+  const end = first !== undefined ? start + first : undefined;
+  return nodes.slice(start, end);
+}
+const _parent = Application(\\"OmniFocus\\");
+JSON.stringify({
+  result: {
+    defaultDocument: {
+      projects: (() => {
+        const allNodes = _parent.defaultDocument().projects();
+        const nodes = allNodes;
+        return {
+          edges: nodes.map((elm) => {
+            return {
+              cursor: extractId(elm),
+              node: {
+                __typename: pascalCase(elm.properties().pcls),
+                name: elm.name(),
+              },
+            };
+          }),
+          pageInfo: {
+            hasNextPage:
+              extractId(nodes[nodes.length - 1]) !==
+              extractId(allNodes[allNodes.length - 1]),
+          },
+        };
+      })(),
+    },
+  },
+});
+"
+`;
+
+exports[`query with fragment 1`] = `
+"function pascalCase(s) {
+  return (s.match(/[a-zA-Z0-9]+/g) || [])
+    .map((w) => \`\${w[0].toUpperCase()}\${w.slice(1)}\`)
+    .join(\\"\\");
+}
+function extractId(obj) {
+  const spec = Automation.getDisplayString(obj);
+  return (
+    spec
+      ?.split(\\"byId\\")
+      .reverse()[0]
+      .match(/^\\\\(\\"(.+)\\"\\\\)$/)
+      ?.reverse()[0] ?? null
+  );
+}
+function pagenate(nodes, { first, after }, getId) {
+  const afterIndex =
+    after === undefined
+      ? undefined
+      : nodes.findIndex((n) => getId(n) === after);
+  if (afterIndex === -1) {
+    return [];
+  }
+  const start = afterIndex === undefined ? 0 : afterIndex + 1;
+  const end = first !== undefined ? start + first : undefined;
+  return nodes.slice(start, end);
+}
+const projectId = \\"foobar\\";
+const _parent = Application(\\"OmniFocus\\");
+JSON.stringify({
+  result: {
+    defaultDocument: {
+      projects: (() => {
+        const allNodes = _parent.defaultDocument().projects();
+        const nodes = allNodes;
+        return {
+          byId: _parent.defaultDocument().projects.byId(projectId)
+            ? {
+                __typename: pascalCase(
+                  _parent
+                    .defaultDocument()
+                    .projects.byId(projectId)
+                    .properties().pcls
+                ),
+                rootTask: {
+                  tasks: (() => {
+                    const allNodes = _parent
+                      .defaultDocument()
+                      .projects.byId(projectId)
+                      .rootTask()
+                      .tasks();
+                    const nodes = allNodes;
+                    return {
+                      edges: nodes.map((elm) => {
+                        return {
+                          node: {
+                            __typename: pascalCase(elm.properties().pcls),
+                            completed: elm.completed(),
+                            containingProject: elm.containingProject()
+                              ? {
+                                  id: extractId(elm.containingProject()),
+                                  name: elm.containingProject().name(),
+                                }
+                              : undefined,
+                            effectiveDueDate: elm.effectiveDueDate(),
+                            effectivelyCompleted: elm.effectivelyCompleted(),
+                            flagged: elm.flagged(),
+                            id: extractId(elm),
+                            name: elm.name(),
+                            repetition: elm.repetition()
+                              ? {
+                                  unit: elm
+                                    .repetition()
+                                    .unit()
+                                    ?.toUpperCase()
+                                    .replaceAll(\\" \\", \\"_\\"),
+                                }
+                              : undefined,
+                          },
+                        };
+                      }),
+                    };
+                  })(),
+                },
+              }
+            : undefined,
+        };
+      })(),
+    },
+  },
+});
+"
+`;
+
+exports[`query with inline fragment 1`] = `
+"function pascalCase(s) {
+  return (s.match(/[a-zA-Z0-9]+/g) || [])
+    .map((w) => \`\${w[0].toUpperCase()}\${w.slice(1)}\`)
+    .join(\\"\\");
+}
+function extractId(obj) {
+  const spec = Automation.getDisplayString(obj);
+  return (
+    spec
+      ?.split(\\"byId\\")
+      .reverse()[0]
+      .match(/^\\\\(\\"(.+)\\"\\\\)$/)
+      ?.reverse()[0] ?? null
+  );
+}
+function pagenate(nodes, { first, after }, getId) {
+  const afterIndex =
+    after === undefined
+      ? undefined
+      : nodes.findIndex((n) => getId(n) === after);
+  if (afterIndex === -1) {
+    return [];
+  }
+  const start = afterIndex === undefined ? 0 : afterIndex + 1;
+  const end = first !== undefined ? start + first : undefined;
+  return nodes.slice(start, end);
+}
+const _parent = Application(\\"OmniFocus\\");
+JSON.stringify({
+  result: {
+    defaultDocument: {
+      folders: (() => {
+        const allNodes = _parent.defaultDocument().folders();
+        const nodes = allNodes;
+        return {
+          edges: nodes.map((elm) => {
+            return {
+              node: {
+                __typename: pascalCase(elm.properties().pcls),
+                name: elm.name(),
+                sections: (() => {
+                  const allNodes = elm.sections();
+                  const nodes = allNodes;
+                  return {
+                    edges: nodes.map((elm) => {
+                      return {
+                        node: {
+                          ...(() => {
+                            return elm.properties().pcls.toLowerCase() ===
+                              \\"Folder\\".toLowerCase()
+                              ? {
+                                  name: elm.name(),
+                                  __typename: \\"Folder\\",
+                                }
+                              : {};
+                          })(),
+                          ...(() => {
+                            return elm.properties().pcls.toLowerCase() ===
+                              \\"Project\\".toLowerCase()
+                              ? {
+                                  completed: elm.completed(),
+                                  __typename: \\"Project\\",
+                                }
+                              : {};
+                          })(),
+                          __typename: pascalCase(elm.properties().pcls),
+                        },
+                      };
+                    }),
+                  };
+                })(),
+              },
+            };
+          }),
+        };
+      })(),
+    },
+  },
+});
+"
+`;
+
+exports[`query with pageInfo 1`] = `
+"function pascalCase(s) {
+  return (s.match(/[a-zA-Z0-9]+/g) || [])
+    .map((w) => \`\${w[0].toUpperCase()}\${w.slice(1)}\`)
+    .join(\\"\\");
+}
+function extractId(obj) {
+  const spec = Automation.getDisplayString(obj);
+  return (
+    spec
+      ?.split(\\"byId\\")
+      .reverse()[0]
+      .match(/^\\\\(\\"(.+)\\"\\\\)$/)
+      ?.reverse()[0] ?? null
+  );
+}
+function pagenate(nodes, { first, after }, getId) {
+  const afterIndex =
+    after === undefined
+      ? undefined
+      : nodes.findIndex((n) => getId(n) === after);
+  if (afterIndex === -1) {
+    return [];
+  }
+  const start = afterIndex === undefined ? 0 : afterIndex + 1;
+  const end = first !== undefined ? start + first : undefined;
+  return nodes.slice(start, end);
+}
+const _parent = Application(\\"OmniFocus\\");
+JSON.stringify({
+  result: {
+    defaultDocument: {
+      projects: (() => {
+        const allNodes = _parent.defaultDocument().projects();
+        const nodes = pagenate(
+          allNodes,
+          { first: 10, after: \\"SOME-ID\\" },
+          extractId
+        );
+        return {
+          pageInfo: {
+            endCursor: extractId(nodes[nodes.length - 1]),
+            hasNextPage:
+              extractId(nodes[nodes.length - 1]) !==
+              extractId(allNodes[allNodes.length - 1]),
+            hasPreviousPage: extractId(nodes[0]) !== extractId(allNodes[0]),
+            startCursor: extractId(nodes[0]),
+          },
+        };
+      })(),
+    },
+  },
+});
+"
+`;
+
+exports[`query with project interface 1`] = `
+"function pascalCase(s) {
+  return (s.match(/[a-zA-Z0-9]+/g) || [])
+    .map((w) => \`\${w[0].toUpperCase()}\${w.slice(1)}\`)
+    .join(\\"\\");
+}
+function extractId(obj) {
+  const spec = Automation.getDisplayString(obj);
+  return (
+    spec
+      ?.split(\\"byId\\")
+      .reverse()[0]
+      .match(/^\\\\(\\"(.+)\\"\\\\)$/)
+      ?.reverse()[0] ?? null
+  );
+}
+function pagenate(nodes, { first, after }, getId) {
+  const afterIndex =
+    after === undefined
+      ? undefined
+      : nodes.findIndex((n) => getId(n) === after);
+  if (afterIndex === -1) {
+    return [];
+  }
+  const start = afterIndex === undefined ? 0 : afterIndex + 1;
+  const end = first !== undefined ? start + first : undefined;
+  return nodes.slice(start, end);
+}
+const _parent = Application(\\"OmniFocus\\");
+JSON.stringify({
+  result: {
+    defaultDocument: {
+      projects: (() => {
+        const allNodes = _parent.defaultDocument().projects();
+        const nodes = allNodes;
+        return {
+          byId: _parent.defaultDocument().projects.byId(\\"hZoaSakOnG4\\")
+            ? {
+                __typename: pascalCase(
+                  _parent
+                    .defaultDocument()
+                    .projects.byId(\\"hZoaSakOnG4\\")
+                    .properties().pcls
+                ),
+                rootTask: {
+                  id: extractId(
+                    _parent
+                      .defaultDocument()
+                      .projects.byId(\\"hZoaSakOnG4\\")
+                      .rootTask()
+                  ),
+                },
+              }
+            : undefined,
+        };
+      })(),
+    },
+  },
+});
+"
+`;
+
+exports[`typename 1`] = `
+"function pascalCase(s) {
+  return (s.match(/[a-zA-Z0-9]+/g) || [])
+    .map((w) => \`\${w[0].toUpperCase()}\${w.slice(1)}\`)
+    .join(\\"\\");
+}
+function extractId(obj) {
+  const spec = Automation.getDisplayString(obj);
+  return (
+    spec
+      ?.split(\\"byId\\")
+      .reverse()[0]
+      .match(/^\\\\(\\"(.+)\\"\\\\)$/)
+      ?.reverse()[0] ?? null
+  );
+}
+function pagenate(nodes, { first, after }, getId) {
+  const afterIndex =
+    after === undefined
+      ? undefined
+      : nodes.findIndex((n) => getId(n) === after);
+  if (afterIndex === -1) {
+    return [];
+  }
+  const start = afterIndex === undefined ? 0 : afterIndex + 1;
+  const end = first !== undefined ? start + first : undefined;
+  return nodes.slice(start, end);
+}
+const _parent = Application(\\"OmniFocus\\");
+JSON.stringify({
+  result: {
+    defaultDocument: {
+      sections: (() => {
+        const allNodes = _parent.defaultDocument().sections();
+        const nodes = allNodes;
+        return {
+          edges: nodes.map((elm) => {
+            return {
+              node: {
+                ...(() => {
+                  return elm.properties().pcls.toLowerCase() ===
+                    \\"Folder\\".toLowerCase()
+                    ? {
+                        name: elm.name(),
+                        __typename: \\"Folder\\",
+                      }
+                    : {};
+                })(),
+                ...(() => {
+                  return elm.properties().pcls.toLowerCase() ===
+                    \\"Project\\".toLowerCase()
+                    ? {
+                        effectiveStatus: elm
+                          .effectiveStatus()
+                          ?.toUpperCase()
+                          .replaceAll(\\" \\", \\"_\\"),
+                        name: elm.name(),
+                        __typename: \\"Project\\",
+                      }
+                    : {};
+                })(),
+                __typename: pascalCase(elm.properties().pcls),
+              },
+            };
+          }),
+        };
+      })(),
+    },
+    perspectiveNames: _parent.perspectiveNames(),
+  },
+});
+"
+`;

@@ -26,6 +26,7 @@ export const parseSuites = (
       s["xi:include"].forEach((i) => {
         const prefix = "file://";
         if (!i.$.href.startsWith(prefix)) {
+          /* istanbul ignore next */
           throw new Error(`Unsupported include found ${i.$.href}`);
         }
         const path = i.$.href.slice(prefix.length);

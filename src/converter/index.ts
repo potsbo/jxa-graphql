@@ -1,5 +1,4 @@
 import execa from "execa";
-import { promisify } from "util";
 import { parseStringPromise } from "xml2js";
 import { print, lexicographicSortSchema, buildASTSchema, DocumentNode, DefinitionNode } from "graphql";
 import { pruneSchema } from "@graphql-tools/utils";
@@ -8,7 +7,6 @@ import { ConnectionInterface, EdgeInterface, NodeInterface } from "./constants";
 import gql from "graphql-tag";
 import { normalize } from "../normalize";
 import { parseSuites } from "./suite";
-import { readFile } from "fs";
 
 const getBuilders = async (appPath: string) => {
   const sdefCmdResult = await execa("sdef", [appPath]);
