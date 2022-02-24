@@ -1,4 +1,4 @@
-import { execa } from "execa";
+import execa from "execa";
 import { promisify } from "util";
 import { parseStringPromise } from "xml2js";
 import { print, lexicographicSortSchema, buildASTSchema, DocumentNode, DefinitionNode } from "graphql";
@@ -17,8 +17,8 @@ const getBuilders = async (appPath: string) => {
 };
 
 const getBuildersFromFile = async (filepath: string) => {
-  const content = await promisify(readFile)(filepath);
-  const sdef = (await parseStringPromise(content.toString())) as Sdef;
+  const content = await execa("cat", [filepath]);
+  const sdef = (await parseStringPromise(content.stdout)) as Sdef;
   return parseSuites(sdef);
 };
 
