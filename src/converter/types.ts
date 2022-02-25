@@ -44,13 +44,6 @@ export const nonNull = (child: ListTypeNode | NamedTypeNode | string): NonNullTy
   };
 };
 
-export const nullable = (type: TypeNode): ListTypeNode | NamedTypeNode => {
-  if (type.kind === Kind.NON_NULL_TYPE) {
-    return type.type;
-  }
-  return type;
-};
-
 export const getGraphQLType = (t: PropertyDefinition): TypeNode => {
   if ("type" in t) {
     const types = t.type.map((t) => t.$);
