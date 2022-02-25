@@ -1,16 +1,9 @@
-import {
-  DefinitionNode,
-  FieldDefinitionNode,
-  InterfaceTypeDefinitionNode,
-  Kind,
-  ObjectTypeExtensionNode,
-} from "graphql";
+import { DefinitionNode, FieldDefinitionNode, InterfaceTypeDefinitionNode, Kind } from "graphql";
 import camelCase from "camelcase";
 import { collectFieldsDefinitions, field } from "./field";
 import { ClassDefinition, Environment } from "./sdef";
 import { named as named, nonNull, list } from "./types";
 import { EDGE_TYPE_NAME, CONNECTION_TYPE_NAME, NodeInterface } from "./constants";
-import { collectMutationArgs } from "./mutation";
 import { name } from "./name";
 import { objectType } from "./object";
 
