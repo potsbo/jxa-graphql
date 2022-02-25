@@ -20,6 +20,9 @@ import { unwrapType } from "../graphql-utils";
 import { library } from "./jxalib";
 import { buildWhoseFilter } from "./whose";
 
+const NODES_VAR_NAME = "nodes";
+const ALL_NODES_VAR_NAME = "allNodes";
+
 type CurrentContext = Pick<GraphQLResolveInfo, "fragments" | "schema" | "variableValues">;
 
 type RenderableObject<T extends TypeNode = TypeNode> = {
@@ -73,16 +76,16 @@ const renderField = (
     return `cursor: extractId(${f.parentName}),`;
   }
   if (name === "hasPreviousPage") {
-    return "hasPreviousPage: extractId(nodes[0]) !== extractId(allNodes[0]),";
+    return `hasPreviousPage: extractId(${NODES_VAR_NAME}[0]) !== extractId(${ALL_NODES_VAR_NAME}[0]),`;
   }
   if (name === "hasNextPage") {
-    return "hasNextPage: extractId(nodes[nodes.length - 1]) !== extractId(allNodes[allNodes.length - 1]),";
+    return `hasNextPage: extractId(${NODES_VAR_NAME}[${NODES_VAR_NAME}.length - 1]) !== extractId(${ALL_NODES_VAR_NAME}[${ALL_NODES_VAR_NAME}.length - 1]),`;
   }
   if (name === "startCursor") {
-    return "startCursor: extractId(nodes[0]),";
+    return `startCursor: extractId(${NODES_VAR_NAME}[0]),`;
   }
   if (name === "endCursor") {
-    return "endCursor: extractId(nodes[nodes.length - 1]),";
+    return `endCursor: extractId(${NODES_VAR_NAME}[${NODES_VAR_NAME}.length - 1]),`;
   }
 
   if (f.field.selectionSet) {
@@ -92,11 +95,11 @@ const renderField = (
     };
 
     if (hasInterface(ctx, f.definition, "Node") && name === "node") {
-      return `node: ${renderObject(ctx, { ...renderableObject, parentName: f.parentName })},`;
+      return `${name}: ${renderObject(ctx, { ...renderableObject, parentName: f.parentName })},`;
     }
 
     if (hasInterface(ctx, f.definition, "Edge")) {
-      return `${name}: ${renderEdges(ctx, renderableObject)}`;
+      return `${name}: ${renderObject(ctx, { ...renderableObject, parentName: NODES_VAR_NAME })},`;
     }
 
     if (hasInterface(ctx, f.definition, "Connection")) {
@@ -166,31 +169,21 @@ const renderObject = (ctx: CurrentContext, object: RenderableObject): string => 
   return `${object.parentName} ? ${renderNonNullObject(ctx, { ...object, typeNode: object.typeNode })}: undefined`;
 };
 
-const renderEdges = (ctx: CurrentContext, object: Omit<RenderableObject, "parentName">) => {
-  return `
-    nodes.map((elm) => {
-      return {
-        ${renderFields(ctx, { ...object, parentName: "elm" })}
-      }
-    }),
-  `;
-};
-
 const renderConnection = (
   ctx: CurrentContext,
   object: RenderableObject,
   opts: { pageParam: { first: number | undefined; after: string | undefined }; whose: string }
 ) => {
   const allNodes = `${object.parentName}${opts.whose}()`;
-  let nodes = "allNodes";
+  let nodes = ALL_NODES_VAR_NAME;
   if (opts.pageParam.first !== undefined || opts.pageParam.after !== undefined) {
     nodes = `pagenate(${nodes}, ${JSON.stringify(opts.pageParam)}, extractId)`;
   }
 
   return `
     (() => {
-      const allNodes = ${allNodes};
-      const nodes = ${nodes};
+      const ${ALL_NODES_VAR_NAME} = ${allNodes};
+      const ${NODES_VAR_NAME} = ${nodes};
       return {
         ${renderFields(ctx, object)}
       }
