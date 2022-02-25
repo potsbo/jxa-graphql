@@ -297,19 +297,6 @@ type MailAlarmEdge {
   node: MailAlarm!
 }
 
-type Mutation {
-  pushApplication: Application!
-  pushAttendee: Attendee!
-  pushCalendar(description: String, name: String, title: String): Calendar!
-  pushDisplayAlarm(triggerDate: String, triggerInterval: Int): DisplayAlarm!
-  pushDocument: Document!
-  pushEvent(alldayEvent: Boolean, description: String, endDate: String, excludedDates: [String!], location: String, recurrence: String, stampDate: String, startDate: String, summary: String, url: String): Event!
-  pushMailAlarm(triggerDate: String, triggerInterval: Int): MailAlarm!
-  pushOpenFileAlarm(filepath: String, triggerDate: String, triggerInterval: Int): OpenFileAlarm!
-  pushSoundAlarm(soundFile: String, soundName: String, triggerDate: String, triggerInterval: Int): SoundAlarm!
-  pushWindow(index: Int, miniaturized: Boolean, visible: Boolean, zoomed: Boolean): Window!
-}
-
 interface Node {
   id: ID!
 }
@@ -582,37 +569,6 @@ type Application {
   windows(after: ID, first: Int, whose: Condition): WindowConnection!
 }
 
-"""Represents an inline text attachment."""
-type Attachment {
-  attachments(after: ID, first: Int, whose: Condition): AttachmentConnection!
-  attributeRuns(after: ID, first: Int, whose: Condition): AttributeRunConnection!
-  characters(after: ID, first: Int, whose: Condition): CharacterConnection!
-  fileAttachments(after: ID, first: Int, whose: Condition): FileAttachmentConnection!
-
-  """The name of the font of the first character."""
-  font: String!
-  paragraphs(after: ID, first: Int, whose: Condition): ParagraphConnection!
-
-  """The size in points of the first character."""
-  size: Int!
-
-  """The style of the text."""
-  style: Style!
-
-  """The plain text contents of the rich text."""
-  text: String!
-  words(after: ID, first: Int, whose: Condition): WordConnection!
-}
-
-type AttachmentConnection {
-  edges: [AttachmentEdge!]!
-  pageInfo: PageInfo!
-}
-
-type AttachmentEdge {
-  cursor: String!
-}
-
 """An attribute of a style."""
 type Attribute {
   """
@@ -641,41 +597,6 @@ type AttributeConnection {
 type AttributeEdge {
   cursor: String!
   node: Attribute!
-}
-
-"""
-This subdivides the text into chunks that all have the same attributes.
-"""
-type AttributeRun {
-  attachments(after: ID, first: Int, whose: Condition): AttachmentConnection!
-  attributeRuns(after: ID, first: Int, whose: Condition): AttributeRunConnection!
-  characters(after: ID, first: Int, whose: Condition): CharacterConnection!
-  fileAttachments(after: ID, first: Int, whose: Condition): FileAttachmentConnection!
-
-  """The name of the font of the first character."""
-  font: String!
-  paragraphs(after: ID, first: Int, whose: Condition): ParagraphConnection!
-
-  """The size in points of the first character."""
-  size: Int!
-
-  """The style of the text."""
-  style: Style!
-
-  """The plain text contents of the rich text."""
-  text: String!
-  words(after: ID, first: Int, whose: Condition): WordConnection!
-}
-
-type AttributeRunConnection {
-  byId(id: ID!): AttributeRun
-  edges: [AttributeRunEdge!]!
-  pageInfo: PageInfo!
-}
-
-type AttributeRunEdge {
-  cursor: String!
-  node: AttributeRun!
 }
 
 """
@@ -856,39 +777,6 @@ type BuiltinPerspectiveConnection implements Connection {
 type BuiltinPerspectiveEdge implements Edge {
   cursor: String!
   node: BuiltinPerspective!
-}
-
-"""This subdivides the text into characters."""
-type Character {
-  attachments(after: ID, first: Int, whose: Condition): AttachmentConnection!
-  attributeRuns(after: ID, first: Int, whose: Condition): AttributeRunConnection!
-  characters(after: ID, first: Int, whose: Condition): CharacterConnection!
-  fileAttachments(after: ID, first: Int, whose: Condition): FileAttachmentConnection!
-
-  """The name of the font of the first character."""
-  font: String!
-  paragraphs(after: ID, first: Int, whose: Condition): ParagraphConnection!
-
-  """The size in points of the first character."""
-  size: Int!
-
-  """The style of the text."""
-  style: Style!
-
-  """The plain text contents of the rich text."""
-  text: String!
-  words(after: ID, first: Int, whose: Condition): WordConnection!
-}
-
-type CharacterConnection {
-  byId(id: ID!): Character
-  edges: [CharacterEdge!]!
-  pageInfo: PageInfo!
-}
-
-type CharacterEdge {
-  cursor: String!
-  node: Character!
 }
 
 input Condition {
@@ -1311,25 +1199,6 @@ type DocumentWindowEdge implements Edge {
 interface Edge {
   cursor: String!
   node: Node!
-}
-
-"""A text attachment refering to a plain file."""
-type FileAttachment {
-  """
-  If true, the attached file will reside inside the document on the next save.
-  """
-  embedded: Boolean!
-}
-
-type FileAttachmentConnection {
-  byId(id: ID!): FileAttachment
-  edges: [FileAttachmentEdge!]!
-  pageInfo: PageInfo!
-}
-
-type FileAttachmentEdge {
-  cursor: String!
-  node: FileAttachment!
 }
 
 """A flattened list of folders in a document."""
@@ -2377,54 +2246,6 @@ enum LocationTrigger {
   NOTIFY_WHEN_LEAVING
 }
 
-type Mutation {
-  pushAncestorTree(expanded: Boolean, noteExpanded: Boolean, selected: Boolean): AncestorTree!
-  pushApplication: Application!
-  pushAttachment(font: String, size: Int, text: String): Attachment!
-  pushAttribute: Attribute!
-  pushAttributeRun(font: String, size: Int, text: String): AttributeRun!
-  pushAvailableTask(completedByChildren: Boolean, completionDate: String, creationDate: String, deferDate: String, droppedDate: String, dueDate: String, estimatedMinutes: Int, flagged: Boolean, id: String, name: String, sequential: Boolean, shouldUseFloatingTimeZone: Boolean): AvailableTask!
-  pushBuiltinPerspective(id: String, name: String): BuiltinPerspective!
-  pushCharacter(font: String, size: Int, text: String): Character!
-  pushContentTree(expanded: Boolean, noteExpanded: Boolean, selected: Boolean, selectedGroupingIdentifier: String, selectedSortingIdentifier: String, selectedTaskDurationFilterIdentifier: String, selectedTaskFlaggedFilterIdentifier: String, selectedTaskStateFilterIdentifier: String): ContentTree!
-  pushCustomPerspective(id: String, name: String): CustomPerspective!
-  pushDeprecatedContext(allowsNextAction: Boolean, hidden: Boolean, id: String, name: String): DeprecatedContext!
-  pushDescendantTree(expanded: Boolean, noteExpanded: Boolean, selected: Boolean): DescendantTree!
-  pushDocument: Document!
-  pushDocumentWindow(index: Int, miniaturized: Boolean, perspectiveName: String, searchTerm: String, visible: Boolean, zoomed: Boolean): DocumentWindow!
-  pushFileAttachment: FileAttachment!
-  pushFlattenedFolder(hidden: Boolean, name: String): FlattenedFolder!
-  pushFlattenedProject(completedByChildren: Boolean, completionDate: String, creationDate: String, defaultSingletonActionHolder: Boolean, deferDate: String, droppedDate: String, dueDate: String, estimatedMinutes: Int, flagged: Boolean, id: String, lastReviewDate: String, name: String, nextReviewDate: String, sequential: Boolean, shouldUseFloatingTimeZone: Boolean, singletonActionHolder: Boolean): FlattenedProject!
-  pushFlattenedTag(allowsNextAction: Boolean, hidden: Boolean, id: String, name: String): FlattenedTag!
-  pushFlattenedTask(completedByChildren: Boolean, completionDate: String, creationDate: String, deferDate: String, droppedDate: String, dueDate: String, estimatedMinutes: Int, flagged: Boolean, id: String, name: String, sequential: Boolean, shouldUseFloatingTimeZone: Boolean): FlattenedTask!
-  pushFolder(hidden: Boolean, name: String): Folder!
-  pushFollowingSibling(expanded: Boolean, noteExpanded: Boolean, selected: Boolean): FollowingSibling!
-  pushForecastDay(badgeCount: Int, empty: Boolean, id: String, name: String): ForecastDay!
-  pushForecastSidebarTree(selectedSmartGroupIdentifier: String): ForecastSidebarTree!
-  pushInboxTask(completedByChildren: Boolean, completionDate: String, creationDate: String, deferDate: String, droppedDate: String, dueDate: String, estimatedMinutes: Int, flagged: Boolean, id: String, name: String, sequential: Boolean, shouldUseFloatingTimeZone: Boolean): InboxTask!
-  pushInboxTree(expanded: Boolean, noteExpanded: Boolean, selected: Boolean): InboxTree!
-  pushLeaf(expanded: Boolean, noteExpanded: Boolean, selected: Boolean): Leaf!
-  pushLibraryTree(expanded: Boolean, noteExpanded: Boolean, selected: Boolean): LibraryTree!
-  pushNamedStyle(font: String, name: String): NamedStyle!
-  pushParagraph(font: String, size: Int, text: String): Paragraph!
-  pushPerspective(id: String, name: String): Perspective!
-  pushPrecedingSibling(expanded: Boolean, noteExpanded: Boolean, selected: Boolean): PrecedingSibling!
-  pushPreference: Preference!
-  pushProject(completedByChildren: Boolean, completionDate: String, creationDate: String, defaultSingletonActionHolder: Boolean, deferDate: String, droppedDate: String, dueDate: String, estimatedMinutes: Int, flagged: Boolean, id: String, lastReviewDate: String, name: String, nextReviewDate: String, sequential: Boolean, shouldUseFloatingTimeZone: Boolean, singletonActionHolder: Boolean): Project!
-  pushQuickEntryTree(expanded: Boolean, noteExpanded: Boolean, selected: Boolean): QuickEntryTree!
-  pushRemainingTask(completedByChildren: Boolean, completionDate: String, creationDate: String, deferDate: String, droppedDate: String, dueDate: String, estimatedMinutes: Int, flagged: Boolean, id: String, name: String, sequential: Boolean, shouldUseFloatingTimeZone: Boolean): RemainingTask!
-  pushSection(name: String): Section!
-  pushSelectedTree(expanded: Boolean, noteExpanded: Boolean, selected: Boolean): SelectedTree!
-  pushSetting: Setting!
-  pushSidebarTree(expanded: Boolean, noteExpanded: Boolean, selected: Boolean, selectedSmartGroupIdentifier: String): SidebarTree!
-  pushStyle(font: String): Style!
-  pushTag(allowsNextAction: Boolean, hidden: Boolean, id: String, name: String): Tag!
-  pushTask(completedByChildren: Boolean, completionDate: String, creationDate: String, deferDate: String, droppedDate: String, dueDate: String, estimatedMinutes: Int, flagged: Boolean, id: String, name: String, sequential: Boolean, shouldUseFloatingTimeZone: Boolean): Task!
-  pushTree(expanded: Boolean, noteExpanded: Boolean, selected: Boolean): Tree!
-  pushWindow(index: Int, miniaturized: Boolean, visible: Boolean, zoomed: Boolean): Window!
-  pushWord(font: String, size: Int, text: String): Word!
-}
-
 """A named style object."""
 type NamedStyle implements Node & StyleInterface {
   attributes(after: ID, first: Int, whose: Condition): AttributeConnection!
@@ -2472,39 +2293,6 @@ type PageInfo {
   hasNextPage: Boolean!
   hasPreviousPage: Boolean!
   startCursor: String!
-}
-
-"""This subdivides the text into paragraphs."""
-type Paragraph {
-  attachments(after: ID, first: Int, whose: Condition): AttachmentConnection!
-  attributeRuns(after: ID, first: Int, whose: Condition): AttributeRunConnection!
-  characters(after: ID, first: Int, whose: Condition): CharacterConnection!
-  fileAttachments(after: ID, first: Int, whose: Condition): FileAttachmentConnection!
-
-  """The name of the font of the first character."""
-  font: String!
-  paragraphs(after: ID, first: Int, whose: Condition): ParagraphConnection!
-
-  """The size in points of the first character."""
-  size: Int!
-
-  """The style of the text."""
-  style: Style!
-
-  """The plain text contents of the rich text."""
-  text: String!
-  words(after: ID, first: Int, whose: Condition): WordConnection!
-}
-
-type ParagraphConnection {
-  byId(id: ID!): Paragraph
-  edges: [ParagraphEdge!]!
-  pageInfo: PageInfo!
-}
-
-type ParagraphEdge {
-  cursor: String!
-  node: Paragraph!
 }
 
 """A perspective."""
@@ -4031,38 +3819,5 @@ interface WindowInterface implements Node {
 
   """Is the window zoomed right now?"""
   zoomed: Boolean!
-}
-
-"""This subdivides the text into words."""
-type Word {
-  attachments(after: ID, first: Int, whose: Condition): AttachmentConnection!
-  attributeRuns(after: ID, first: Int, whose: Condition): AttributeRunConnection!
-  characters(after: ID, first: Int, whose: Condition): CharacterConnection!
-  fileAttachments(after: ID, first: Int, whose: Condition): FileAttachmentConnection!
-
-  """The name of the font of the first character."""
-  font: String!
-  paragraphs(after: ID, first: Int, whose: Condition): ParagraphConnection!
-
-  """The size in points of the first character."""
-  size: Int!
-
-  """The style of the text."""
-  style: Style!
-
-  """The plain text contents of the rich text."""
-  text: String!
-  words(after: ID, first: Int, whose: Condition): WordConnection!
-}
-
-type WordConnection {
-  byId(id: ID!): Word
-  edges: [WordEdge!]!
-  pageInfo: PageInfo!
-}
-
-type WordEdge {
-  cursor: String!
-  node: Word!
 }
 `;

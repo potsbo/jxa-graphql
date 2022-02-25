@@ -33,15 +33,6 @@ export class ClassBuilder {
       interfaces: [named(NodeInterface.name.value)],
     };
   };
-  private getMutationExtension = (verb: string, inherits: ClassBuilder | undefined): ObjectTypeExtensionNode => {
-    const mutableFields = collectMutationArgs(this.c).concat(inherits ? collectMutationArgs(inherits.c) : []);
-    const typeName = camelCase(this.c.$.name, { pascalCase: true });
-    return {
-      kind: Kind.OBJECT_TYPE_EXTENSION,
-      name: name("Mutation", { pascalCase: true }),
-      fields: [field(`${verb}${typeName}`, nonNull(typeName), { arguments: mutableFields })],
-    };
-  };
   build = ({ override, builders }: Environment): DefinitionNode[] => {
     const typeName = camelCase(this.c.$.name, { pascalCase: true });
 
@@ -93,6 +84,6 @@ export class ClassBuilder {
         interfaces: [CONNECTION_TYPE_NAME],
       }
     );
-    return [connectionDef, edgeDef, classDef, this.getInterfaced(), this.getMutationExtension("push", parent)];
+    return [connectionDef, edgeDef, classDef, this.getInterfaced()];
   };
 }
