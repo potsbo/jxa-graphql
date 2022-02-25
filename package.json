@@ -1,8 +1,11 @@
 {
   "name": "jxa-graphql",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "main": "lib/index.js",
   "bin": "lib/cmd.js",
+  "files": [
+    "lib/"
+  ],
   "repository": "https://github.com/potsbo/jxa-graphql",
   "author": "Shimpei Otsubo <potsbo@gmail.com>",
   "license": "MIT",
@@ -30,6 +33,7 @@
   },
   "scripts": {
     "test": "jest --coverage",
+    "prepack": "tsc",
     "postinstall": "patch-package"
   }
 }
