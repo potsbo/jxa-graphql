@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`query for Connection 1`] = `
+"function pascalCase(s) {
+  return (s.match(/[a-zA-Z0-9]+/g) || [])
+    .map((w) => \`\${w[0].toUpperCase()}\${w.slice(1)}\`)
+    .join(\\"\\");
+}
+function extractId(obj) {
+  const spec = Automation.getDisplayString(obj);
+  return (
+    spec
+      ?.split(\\"byId\\")
+      .reverse()[0]
+      .match(/^\\\\(\\"(.+)\\"\\\\)$/)
+      ?.reverse()[0] ?? null
+  );
+}
+function pagenate(nodes, { first, after }, getId) {
+  const afterIndex =
+    after === undefined
+      ? undefined
+      : nodes.findIndex((n) => getId(n) === after);
+  if (afterIndex === -1) {
+    return [];
+  }
+  const start = afterIndex === undefined ? 0 : afterIndex + 1;
+  const end = first !== undefined ? start + first : undefined;
+  return nodes.slice(start, end);
+}
+const app = Application(\\"Calendar\\");
+JSON.stringify({
+  result: {
+    calendars: (() => {
+      const allNodes = app.calendars.whose({ writable: { _equals: true } })();
+      const nodes = pagenate(allNodes, { first: 3 }, extractId);
+      return {
+        edges: nodes.map((elm) => {
+          return { node: { name: elm.name() } };
+        }),
+      };
+    })(),
+  },
+});
+"
+`;
