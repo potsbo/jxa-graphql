@@ -177,7 +177,7 @@ const renderConnection = (
   const allNodes = `${object.parentName}${opts.whose}()`;
   let nodes = ALL_NODES_VAR_NAME;
   if (opts.pageParam.first !== undefined || opts.pageParam.after !== undefined) {
-    nodes = `pagenate(${nodes}, ${JSON.stringify(opts.pageParam)}, extractId)`;
+    nodes = `paginate(${nodes}, ${JSON.stringify(opts.pageParam)}, extractId)`;
   }
 
   return `

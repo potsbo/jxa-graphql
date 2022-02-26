@@ -63,7 +63,7 @@ function extractId(obj) {
       ?.reverse()[0] ?? null
   );
 }
-function pagenate(nodes, { first, after }, getId) {
+function paginate(nodes, { first, after }, getId) {
   const afterIndex = after === undefined ? undefined : nodes.findIndex((n) => getId(n) === after);
   if (afterIndex === -1) {
     return [];
@@ -77,7 +77,7 @@ JSON.stringify({
   result: {
     calendars: (() => {
       const allNodes = app.calendars.whose({ writable: { _equals: true } })();
-      const nodes = pagenate(allNodes, { first: 3 }, extractId);
+      const nodes = paginate(allNodes, { first: 3 }, extractId);
       return {
         edges: nodes.map((elm) => {
           return { node: { name: elm.name() } };

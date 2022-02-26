@@ -16,7 +16,7 @@ function extractId(obj) {
       ?.reverse()[0] ?? null
   );
 }
-function pagenate(nodes, { first, after }, getId) {
+function paginate(nodes, { first, after }, getId) {
   const afterIndex =
     after === undefined
       ? undefined
@@ -74,7 +74,7 @@ function extractId(obj) {
       ?.reverse()[0] ?? null
   );
 }
-function pagenate(nodes, { first, after }, getId) {
+function paginate(nodes, { first, after }, getId) {
   const afterIndex =
     after === undefined
       ? undefined
@@ -167,7 +167,7 @@ function extractId(obj) {
       ?.reverse()[0] ?? null
   );
 }
-function pagenate(nodes, { first, after }, getId) {
+function paginate(nodes, { first, after }, getId) {
   const afterIndex =
     after === undefined
       ? undefined
@@ -250,7 +250,7 @@ function extractId(obj) {
       ?.reverse()[0] ?? null
   );
 }
-function pagenate(nodes, { first, after }, getId) {
+function paginate(nodes, { first, after }, getId) {
   const afterIndex =
     after === undefined
       ? undefined
@@ -268,7 +268,7 @@ JSON.stringify({
     defaultDocument: {
       projects: (() => {
         const allNodes = app.defaultDocument().projects();
-        const nodes = pagenate(
+        const nodes = paginate(
           allNodes,
           { first: 10, after: \\"SOME-ID\\" },
           extractId
@@ -306,7 +306,7 @@ function extractId(obj) {
       ?.reverse()[0] ?? null
   );
 }
-function pagenate(nodes, { first, after }, getId) {
+function paginate(nodes, { first, after }, getId) {
   const afterIndex =
     after === undefined
       ? undefined
@@ -368,7 +368,7 @@ function extractId(obj) {
       ?.reverse()[0] ?? null
   );
 }
-function pagenate(nodes, { first, after }, getId) {
+function paginate(nodes, { first, after }, getId) {
   const afterIndex =
     after === undefined
       ? undefined
