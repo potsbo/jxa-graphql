@@ -28,12 +28,12 @@ function pagenate(nodes, { first, after }, getId) {
   const end = first !== undefined ? start + first : undefined;
   return nodes.slice(start, end);
 }
-const _parent = Application(\\"OmniFocus\\");
+const app = Application(\\"OmniFocus\\");
 JSON.stringify({
   result: {
     defaultDocument: {
       projects: (() => {
-        const allNodes = _parent.defaultDocument().projects();
+        const allNodes = app.defaultDocument().projects();
         const nodes = allNodes;
         return {
           edges: nodes.map((elm) => {
@@ -87,25 +87,23 @@ function pagenate(nodes, { first, after }, getId) {
   return nodes.slice(start, end);
 }
 const projectId = \\"foobar\\";
-const _parent = Application(\\"OmniFocus\\");
+const app = Application(\\"OmniFocus\\");
 JSON.stringify({
   result: {
     defaultDocument: {
       projects: (() => {
-        const allNodes = _parent.defaultDocument().projects();
+        const allNodes = app.defaultDocument().projects();
         const nodes = allNodes;
         return {
-          byId: _parent.defaultDocument().projects.byId(projectId)
+          byId: app.defaultDocument().projects.byId(projectId)
             ? {
                 __typename: pascalCase(
-                  _parent
-                    .defaultDocument()
-                    .projects.byId(projectId)
-                    .properties().pcls
+                  app.defaultDocument().projects.byId(projectId).properties()
+                    .pcls
                 ),
                 rootTask: {
                   tasks: (() => {
-                    const allNodes = _parent
+                    const allNodes = app
                       .defaultDocument()
                       .projects.byId(projectId)
                       .rootTask()
@@ -181,12 +179,12 @@ function pagenate(nodes, { first, after }, getId) {
   const end = first !== undefined ? start + first : undefined;
   return nodes.slice(start, end);
 }
-const _parent = Application(\\"OmniFocus\\");
+const app = Application(\\"OmniFocus\\");
 JSON.stringify({
   result: {
     defaultDocument: {
       folders: (() => {
-        const allNodes = _parent.defaultDocument().folders();
+        const allNodes = app.defaultDocument().folders();
         const nodes = allNodes;
         return {
           edges: nodes.map((elm) => {
@@ -264,12 +262,12 @@ function pagenate(nodes, { first, after }, getId) {
   const end = first !== undefined ? start + first : undefined;
   return nodes.slice(start, end);
 }
-const _parent = Application(\\"OmniFocus\\");
+const app = Application(\\"OmniFocus\\");
 JSON.stringify({
   result: {
     defaultDocument: {
       projects: (() => {
-        const allNodes = _parent.defaultDocument().projects();
+        const allNodes = app.defaultDocument().projects();
         const nodes = pagenate(
           allNodes,
           { first: 10, after: \\"SOME-ID\\" },
@@ -320,25 +318,25 @@ function pagenate(nodes, { first, after }, getId) {
   const end = first !== undefined ? start + first : undefined;
   return nodes.slice(start, end);
 }
-const _parent = Application(\\"OmniFocus\\");
+const app = Application(\\"OmniFocus\\");
 JSON.stringify({
   result: {
     defaultDocument: {
       projects: (() => {
-        const allNodes = _parent.defaultDocument().projects();
+        const allNodes = app.defaultDocument().projects();
         const nodes = allNodes;
         return {
-          byId: _parent.defaultDocument().projects.byId(\\"hZoaSakOnG4\\")
+          byId: app.defaultDocument().projects.byId(\\"hZoaSakOnG4\\")
             ? {
                 __typename: pascalCase(
-                  _parent
+                  app
                     .defaultDocument()
                     .projects.byId(\\"hZoaSakOnG4\\")
                     .properties().pcls
                 ),
                 rootTask: {
                   id: extractId(
-                    _parent
+                    app
                       .defaultDocument()
                       .projects.byId(\\"hZoaSakOnG4\\")
                       .rootTask()
@@ -382,12 +380,12 @@ function pagenate(nodes, { first, after }, getId) {
   const end = first !== undefined ? start + first : undefined;
   return nodes.slice(start, end);
 }
-const _parent = Application(\\"OmniFocus\\");
+const app = Application(\\"OmniFocus\\");
 JSON.stringify({
   result: {
     defaultDocument: {
       sections: (() => {
-        const allNodes = _parent.defaultDocument().sections();
+        const allNodes = app.defaultDocument().sections();
         const nodes = allNodes;
         return {
           edges: nodes.map((elm) => {
@@ -422,7 +420,7 @@ JSON.stringify({
         };
       })(),
     },
-    perspectiveNames: _parent.perspectiveNames(),
+    perspectiveNames: app.perspectiveNames(),
   },
 });
 "

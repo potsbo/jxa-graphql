@@ -274,7 +274,7 @@ export const compile = (
   }
 
   const selectedFields = field.selectionSet.selections;
-  const rootName = rootObjName ?? "_parent";
+  const rootName = rootObjName ?? "app";
   const convert = rootObjName ? "" : `const ${rootName} = Application("${appName}");`;
 
   return `${library};${vars};${convert};JSON.stringify({ result: ${renderObject(info, {
