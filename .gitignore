@@ -2,3 +2,4 @@ lib
 .vscode
 node_modules
 coverage
+jxa-graphql-*.tgz
