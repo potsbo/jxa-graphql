@@ -87,3 +87,14 @@ JSON.stringify({
   },
 });
 ```
+
+## Release
+
+When new tag pushed, GitHub Actions automatically create GitHub Releases and run `npm publish`
+
+### Command to run
+
+```
+$ npm version <newversion>
+$ git push origin <newversion>
+```
