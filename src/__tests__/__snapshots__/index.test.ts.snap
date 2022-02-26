@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Integration Test - Calendar 1`] = `
+Object {
+  "data": Object {
+    "application": Object {
+      "calendars": Object {
+        "edges": Array [
+          Object {
+            "node": Object {
+              "events": Object {
+                "edges": Array [
+                  Object {
+                    "node": Object {
+                      "summary": "Some Event Summary 0",
+                    },
+                  },
+                ],
+                "pageInfo": Object {
+                  "hasNextPage": true,
+                  "hasPreviousPage": false,
+                },
+              },
+              "id": "SOME-CALENDAR-ID-4",
+              "name": "Some Calendar Name 4",
+            },
+          },
+          Object {
+            "node": Object {
+              "events": Object {
+                "edges": Array [
+                  Object {
+                    "node": Object {
+                      "summary": "Some Event Summary 0",
+                    },
+                  },
+                ],
+                "pageInfo": Object {
+                  "hasNextPage": true,
+                  "hasPreviousPage": false,
+                },
+              },
+              "id": "SOME-CALENDAR-ID-5",
+              "name": "Some Calendar Name 5",
+            },
+          },
+          Object {
+            "node": Object {
+              "events": Object {
+                "edges": Array [
+                  Object {
+                    "node": Object {
+                      "summary": "Some Event Summary 0",
+                    },
+                  },
+                ],
+                "pageInfo": Object {
+                  "hasNextPage": true,
+                  "hasPreviousPage": false,
+                },
+              },
+              "id": "SOME-CALENDAR-ID-6",
+              "name": "Some Calendar Name 6",
+            },
+          },
+        ],
+      },
+    },
+  },
+}
+`;
