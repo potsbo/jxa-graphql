@@ -6,7 +6,7 @@ import { run } from "./run";
 
 yargs(hideBin(process.argv))
   .command(
-    "serve [appPath]",
+    "serve <appPath>",
     "start a GraphQL server for the given Application",
     (yargs) => {
       return yargs
@@ -20,10 +20,6 @@ yargs(hideBin(process.argv))
           type: "number",
           default: 4000,
           description: "port number of the GraphQL server",
-        })
-        .option("graphiql", {
-          type: "boolean",
-          default: true,
         });
     },
     run

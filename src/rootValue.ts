@@ -6,7 +6,7 @@ export const buildRootValue = (appName: string, runner: (code: string) => Promis
     {},
     {
       get: () => {
-        return (_: unknown, _2: unknown, info: GraphQLResolveInfo) => {
+        return (_1: unknown, _2: unknown, _3: unknown, info: GraphQLResolveInfo) => {
           const code = compile(appName, info);
           return runner(code);
         };
