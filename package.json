@@ -1,6 +1,6 @@
 {
   "name": "jxa-graphql",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "main": "lib/index.js",
   "bin": "lib/cmd.js",
   "files": [
@@ -35,7 +35,7 @@
   "scripts": {
     "test": "jest --coverage",
     "build": "tsc",
-    "prepack": "build",
+    "prepack": "npm run build",
     "postinstall": "patch-package"
   }
 }
