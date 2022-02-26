@@ -34,7 +34,8 @@
   },
   "scripts": {
     "test": "jest --coverage",
-    "prepack": "tsc",
+    "build": "tsc",
+    "prepack": "build",
     "postinstall": "patch-package"
   }
 }
