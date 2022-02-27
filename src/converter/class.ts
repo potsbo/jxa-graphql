@@ -54,9 +54,8 @@ export class ClassBuilder {
     if (parent === undefined) {
       return [];
     }
-    return [...parent.getAncestors(classBuilders), parent];
+    return [parent, ...parent.getAncestors(classBuilders)];
   };
-
   build = ({ override, builders }: Environment): DefinitionNode[] => {
     const typeName = camelCase(this.c.$.name, { pascalCase: true });
 
@@ -71,7 +70,7 @@ export class ClassBuilder {
     const inherited = classBuilders.map((c) => c.getInherits()).some((c): c is string => c === this.getClassName());
 
     const fields = complementId(
-      [...ancestors, this].reduce((acum: FieldDefinitionNode[], cur) => {
+      [this, ...ancestors].reduce((acum: FieldDefinitionNode[], cur) => {
         return [...acum, ...cur.fields];
       }, [])
     );

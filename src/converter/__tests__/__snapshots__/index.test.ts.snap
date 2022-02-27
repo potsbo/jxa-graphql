@@ -5820,13 +5820,13 @@ type FlattenedFolder implements FolderInterface & Node & SectionInterface {
   """Set if the folder is currently hidden."""
   hidden: Boolean!
 
-  """The identifier of the project or folder."""
+  """The identifier of the folder."""
   id: ID! @extractFromObjectDisplayName
 
   """When the folder was last modified."""
   modificationDate: String!
 
-  """The name of the project or folder."""
+  """The name of the folder."""
   name: String!
 
   """The note of the folder."""
@@ -5871,13 +5871,13 @@ interface FlattenedFolderInterface implements Node {
   """Set if the folder is currently hidden."""
   hidden: Boolean!
 
-  """The identifier of the project or folder."""
+  """The identifier of the folder."""
   id: ID! @extractFromObjectDisplayName
 
   """When the folder was last modified."""
   modificationDate: String!
 
-  """The name of the project or folder."""
+  """The name of the folder."""
   name: String!
 
   """The note of the folder."""
@@ -5968,7 +5968,7 @@ type FlattenedProject implements Node & ProjectInterface & SectionInterface {
   """
   folder: Folder
 
-  """The identifier of the project or folder."""
+  """The identifier of the project."""
   id: ID! @extractFromObjectDisplayName
 
   """When the project was last reviewed."""
@@ -5977,7 +5977,7 @@ type FlattenedProject implements Node & ProjectInterface & SectionInterface {
   """When the project was last modified."""
   modificationDate: String!
 
-  """The name of the project or folder."""
+  """The name of the project."""
   name: String!
 
   """
@@ -6134,7 +6134,7 @@ interface FlattenedProjectInterface implements Node {
   """
   folder: Folder
 
-  """The identifier of the project or folder."""
+  """The identifier of the project."""
   id: ID! @extractFromObjectDisplayName
 
   """When the project was last reviewed."""
@@ -6143,7 +6143,7 @@ interface FlattenedProjectInterface implements Node {
   """When the project was last modified."""
   modificationDate: String!
 
-  """The name of the project or folder."""
+  """The name of the project."""
   name: String!
 
   """
@@ -6676,13 +6676,13 @@ type Folder implements FolderInterface & Node & SectionInterface {
   """Set if the folder is currently hidden."""
   hidden: Boolean!
 
-  """The identifier of the project or folder."""
+  """The identifier of the folder."""
   id: ID! @extractFromObjectDisplayName
 
   """When the folder was last modified."""
   modificationDate: String!
 
-  """The name of the project or folder."""
+  """The name of the folder."""
   name: String!
 
   """The note of the folder."""
@@ -6727,13 +6727,13 @@ interface FolderInterface implements Node {
   """Set if the folder is currently hidden."""
   hidden: Boolean!
 
-  """The identifier of the project or folder."""
+  """The identifier of the folder."""
   id: ID! @extractFromObjectDisplayName
 
   """When the folder was last modified."""
   modificationDate: String!
 
-  """The name of the project or folder."""
+  """The name of the folder."""
   name: String!
 
   """The note of the folder."""
@@ -8057,7 +8057,7 @@ type Project implements Node & ProjectInterface & SectionInterface {
   """
   folder: Folder
 
-  """The identifier of the project or folder."""
+  """The identifier of the project."""
   id: ID! @extractFromObjectDisplayName
 
   """When the project was last reviewed."""
@@ -8066,7 +8066,7 @@ type Project implements Node & ProjectInterface & SectionInterface {
   """When the project was last modified."""
   modificationDate: String!
 
-  """The name of the project or folder."""
+  """The name of the project."""
   name: String!
 
   """
@@ -8223,7 +8223,7 @@ interface ProjectInterface implements Node {
   """
   folder: Folder
 
-  """The identifier of the project or folder."""
+  """The identifier of the project."""
   id: ID! @extractFromObjectDisplayName
 
   """When the project was last reviewed."""
@@ -8232,7 +8232,7 @@ interface ProjectInterface implements Node {
   """When the project was last modified."""
   modificationDate: String!
 
-  """The name of the project or folder."""
+  """The name of the project."""
   name: String!
 
   """
