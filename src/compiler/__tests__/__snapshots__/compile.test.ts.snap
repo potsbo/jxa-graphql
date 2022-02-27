@@ -274,7 +274,7 @@ JSON.stringify({
                       return {
                         node: {
                           ...(() => {
-                            return extractClass(elm) === \\"Folder\\".toLowerCase()
+                            return extractClass(elm) === \\"Folder\\"
                               ? {
                                   name: elm.name(),
                                   __typename: \\"Folder\\",
@@ -282,7 +282,7 @@ JSON.stringify({
                               : {};
                           })(),
                           ...(() => {
-                            return extractClass(elm) === \\"Project\\".toLowerCase()
+                            return extractClass(elm) === \\"Project\\"
                               ? {
                                   completed: elm.completed(),
                                   __typename: \\"Project\\",
@@ -539,7 +539,7 @@ JSON.stringify({
             return {
               node: {
                 ...(() => {
-                  return extractClass(elm) === \\"Folder\\".toLowerCase()
+                  return extractClass(elm) === \\"Folder\\"
                     ? {
                         name: elm.name(),
                         __typename: \\"Folder\\",
@@ -547,7 +547,7 @@ JSON.stringify({
                     : {};
                 })(),
                 ...(() => {
-                  return extractClass(elm) === \\"Project\\".toLowerCase()
+                  return extractClass(elm) === \\"Project\\"
                     ? {
                         effectiveStatus: elm
                           .effectiveStatus()
