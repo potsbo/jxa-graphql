@@ -1,3 +1,8 @@
+[![npm version](https://badge.fury.io/js/jxa-graphql.svg)](https://badge.fury.io/js/jxa-graphql)
+![Test](https://github.com/potsbo/jxa-graphql/actions/workflows/main.yaml/badge.svg)
+[![codecov](https://codecov.io/gh/potsbo/jxa-graphql/branch/main/graph/badge.svg?token=O9Yb66a6Pb)](https://codecov.io/gh/potsbo/jxa-graphql)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 # JXA GraphQL
 
 Access AppleScript supported apps via GraphQL interface.
