@@ -1,21 +1,30 @@
 import { library } from "../index";
 
-test("pascalCase", () => {
-  const input = "some name";
-  const output = eval(`
-    ${library}
-    pascalCase("${input}");
-  `);
-
-  expect(output).toEqual("SomeName");
-});
-
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Automation = {
   getDisplayString: (obj: { getDisplayString: () => string | undefined } | undefined) => {
     return obj?.getDisplayString();
   },
 };
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const ObjectSpecifier = {
+  classOf: (obj: { _getClassName: () => string }) => {
+    return obj._getClassName();
+  },
+};
+
+test("extractClass", () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const input = { getDisplayString: () => `(() => { return { _getClassName: () => { return "someName"} }; })()` };
+
+  const output = eval(`
+    ${library}
+    extractClass(input);
+  `);
+
+  expect(output).toEqual("SomeName");
+});
 
 test("extractId", () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

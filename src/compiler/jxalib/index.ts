@@ -1,16 +1,20 @@
 export const library = `
-${pascalCase.toString()}
+${extractClass.toString()}
 ${extractId.toString()}
 ${paginate.toString()}
 `;
 
-function pascalCase(s: string) {
-  return (s.match(/[a-zA-Z0-9]+/g) || []).map((w) => `${w[0].toUpperCase()}${w.slice(1)}`).join("");
-}
-
 declare const Automation: {
   getDisplayString: (obj: unknown) => string | undefined;
 };
+declare const ObjectSpecifier: {
+  classOf: (obj: unknown) => string | undefined;
+};
+
+function extractClass(obj: unknown) {
+  const s = ObjectSpecifier.classOf(eval(Automation.getDisplayString(obj)!))!;
+  return (s.match(/[a-zA-Z0-9]+/g) || []).map((w) => `${w[0].toUpperCase()}${w.slice(1)}`).join("");
+}
 
 function extractId(obj: unknown) {
   const spec = Automation.getDisplayString(obj);

@@ -1,7 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`query for Connection 1`] = `
-"function pascalCase(s) {
+"function extractClass(obj) {
+  const s = ObjectSpecifier.classOf(eval(Automation.getDisplayString(obj)));
   return (s.match(/[a-zA-Z0-9]+/g) || [])
     .map((w) => \`\${w[0].toUpperCase()}\${w.slice(1)}\`)
     .join(\\"\\");
@@ -64,14 +65,7 @@ JSON.stringify({
           edges: nodes.map((elm) => {
             return {
               cursor: extractId(elm),
-              node: {
-                __typename: pascalCase(
-                  ObjectSpecifier.classOf(
-                    eval(Automation.getDisplayString(elm))
-                  )
-                ),
-                name: elm.name(),
-              },
+              node: { __typename: extractClass(elm), name: elm.name() },
             };
           }),
           pageInfo: {
@@ -88,7 +82,8 @@ JSON.stringify({
 `;
 
 exports[`query with fragment 1`] = `
-"function pascalCase(s) {
+"function extractClass(obj) {
+  const s = ObjectSpecifier.classOf(eval(Automation.getDisplayString(obj)));
   return (s.match(/[a-zA-Z0-9]+/g) || [])
     .map((w) => \`\${w[0].toUpperCase()}\${w.slice(1)}\`)
     .join(\\"\\");
@@ -151,14 +146,8 @@ JSON.stringify({
         return {
           byId: app.defaultDocument().projects.byId(projectId)
             ? {
-                __typename: pascalCase(
-                  ObjectSpecifier.classOf(
-                    eval(
-                      Automation.getDisplayString(
-                        app.defaultDocument().projects.byId(projectId)
-                      )
-                    )
-                  )
+                __typename: extractClass(
+                  app.defaultDocument().projects.byId(projectId)
                 ),
                 rootTask: {
                   tasks: (() => {
@@ -172,11 +161,7 @@ JSON.stringify({
                       edges: nodes.map((elm) => {
                         return {
                           node: {
-                            __typename: pascalCase(
-                              ObjectSpecifier.classOf(
-                                eval(Automation.getDisplayString(elm))
-                              )
-                            ),
+                            __typename: extractClass(elm),
                             completed: elm.completed(),
                             containingProject: elm.containingProject()
                               ? {
@@ -215,7 +200,8 @@ JSON.stringify({
 `;
 
 exports[`query with inline fragment 1`] = `
-"function pascalCase(s) {
+"function extractClass(obj) {
+  const s = ObjectSpecifier.classOf(eval(Automation.getDisplayString(obj)));
   return (s.match(/[a-zA-Z0-9]+/g) || [])
     .map((w) => \`\${w[0].toUpperCase()}\${w.slice(1)}\`)
     .join(\\"\\");
@@ -278,11 +264,7 @@ JSON.stringify({
           edges: nodes.map((elm) => {
             return {
               node: {
-                __typename: pascalCase(
-                  ObjectSpecifier.classOf(
-                    eval(Automation.getDisplayString(elm))
-                  )
-                ),
+                __typename: extractClass(elm),
                 name: elm.name(),
                 sections: (() => {
                   const allNodes = elm.sections();
@@ -292,11 +274,7 @@ JSON.stringify({
                       return {
                         node: {
                           ...(() => {
-                            return pascalCase(
-                              ObjectSpecifier.classOf(
-                                eval(Automation.getDisplayString(elm))
-                              )
-                            ) === \\"Folder\\".toLowerCase()
+                            return extractClass(elm) === \\"Folder\\".toLowerCase()
                               ? {
                                   name: elm.name(),
                                   __typename: \\"Folder\\",
@@ -304,22 +282,14 @@ JSON.stringify({
                               : {};
                           })(),
                           ...(() => {
-                            return pascalCase(
-                              ObjectSpecifier.classOf(
-                                eval(Automation.getDisplayString(elm))
-                              )
-                            ) === \\"Project\\".toLowerCase()
+                            return extractClass(elm) === \\"Project\\".toLowerCase()
                               ? {
                                   completed: elm.completed(),
                                   __typename: \\"Project\\",
                                 }
                               : {};
                           })(),
-                          __typename: pascalCase(
-                            ObjectSpecifier.classOf(
-                              eval(Automation.getDisplayString(elm))
-                            )
-                          ),
+                          __typename: extractClass(elm),
                         },
                       };
                     }),
@@ -337,7 +307,8 @@ JSON.stringify({
 `;
 
 exports[`query with pageInfo 1`] = `
-"function pascalCase(s) {
+"function extractClass(obj) {
+  const s = ObjectSpecifier.classOf(eval(Automation.getDisplayString(obj)));
   return (s.match(/[a-zA-Z0-9]+/g) || [])
     .map((w) => \`\${w[0].toUpperCase()}\${w.slice(1)}\`)
     .join(\\"\\");
@@ -418,7 +389,8 @@ JSON.stringify({
 `;
 
 exports[`query with project interface 1`] = `
-"function pascalCase(s) {
+"function extractClass(obj) {
+  const s = ObjectSpecifier.classOf(eval(Automation.getDisplayString(obj)));
   return (s.match(/[a-zA-Z0-9]+/g) || [])
     .map((w) => \`\${w[0].toUpperCase()}\${w.slice(1)}\`)
     .join(\\"\\");
@@ -480,14 +452,8 @@ JSON.stringify({
         return {
           byId: app.defaultDocument().projects.byId(\\"hZoaSakOnG4\\")
             ? {
-                __typename: pascalCase(
-                  ObjectSpecifier.classOf(
-                    eval(
-                      Automation.getDisplayString(
-                        app.defaultDocument().projects.byId(\\"hZoaSakOnG4\\")
-                      )
-                    )
-                  )
+                __typename: extractClass(
+                  app.defaultDocument().projects.byId(\\"hZoaSakOnG4\\")
                 ),
                 rootTask: {
                   id: extractId(
@@ -508,7 +474,8 @@ JSON.stringify({
 `;
 
 exports[`typename 1`] = `
-"function pascalCase(s) {
+"function extractClass(obj) {
+  const s = ObjectSpecifier.classOf(eval(Automation.getDisplayString(obj)));
   return (s.match(/[a-zA-Z0-9]+/g) || [])
     .map((w) => \`\${w[0].toUpperCase()}\${w.slice(1)}\`)
     .join(\\"\\");
@@ -572,11 +539,7 @@ JSON.stringify({
             return {
               node: {
                 ...(() => {
-                  return pascalCase(
-                    ObjectSpecifier.classOf(
-                      eval(Automation.getDisplayString(elm))
-                    )
-                  ) === \\"Folder\\".toLowerCase()
+                  return extractClass(elm) === \\"Folder\\".toLowerCase()
                     ? {
                         name: elm.name(),
                         __typename: \\"Folder\\",
@@ -584,11 +547,7 @@ JSON.stringify({
                     : {};
                 })(),
                 ...(() => {
-                  return pascalCase(
-                    ObjectSpecifier.classOf(
-                      eval(Automation.getDisplayString(elm))
-                    )
-                  ) === \\"Project\\".toLowerCase()
+                  return extractClass(elm) === \\"Project\\".toLowerCase()
                     ? {
                         effectiveStatus: elm
                           .effectiveStatus()
@@ -599,11 +558,7 @@ JSON.stringify({
                       }
                     : {};
                 })(),
-                __typename: pascalCase(
-                  ObjectSpecifier.classOf(
-                    eval(Automation.getDisplayString(elm))
-                  )
-                ),
+                __typename: extractClass(elm),
               },
             };
           }),

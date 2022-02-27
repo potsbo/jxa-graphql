@@ -1,7 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`query for Connection 1`] = `
-"function pascalCase(s) {
+"function extractClass(obj) {
+  const s = ObjectSpecifier.classOf(eval(Automation.getDisplayString(obj)));
   return (s.match(/[a-zA-Z0-9]+/g) || [])
     .map((w) => \`\${w[0].toUpperCase()}\${w.slice(1)}\`)
     .join(\\"\\");
