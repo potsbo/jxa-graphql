@@ -204,9 +204,8 @@ const renderNonNullObject = (ctx: CurrentContext, object: RenderableObject<NonNu
 const renderInlineFragment = (ctx: CurrentContext, field: InlineFragmentNode, parentName: string) => {
   const typeNode = field.typeCondition;
   assertSome(typeNode);
-  // TODO: calling `properties` can be expensive
   return `...(() => {
-    return extractClass(${parentName}) === "${typeNode.name.value}".toLowerCase()
+    return extractClass(${parentName}) === "${typeNode.name.value}"
       ? {
         ${renderFields(ctx, { parentName, selectedFields: field.selectionSet.selections, typeNode }, false)}
          __typename: "${typeNode.name.value}",
