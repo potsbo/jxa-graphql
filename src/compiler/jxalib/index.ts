@@ -14,12 +14,12 @@ declare const Automation: {
 
 function extractId(obj: unknown) {
   const spec = Automation.getDisplayString(obj);
-  return (
+  return JSON.parse(
     spec
       ?.split("byId")
       .reverse()[0]
-      .match(/^\("(.+)"\)$/)
-      ?.reverse()[0] ?? null
+      .match(/^\(([^\)]+)\)$/)
+      ?.reverse()[0] ?? "null"
   );
 }
 

@@ -56,6 +56,19 @@ test("extractId malformed", () => {
   expect(output).toEqual(null);
 });
 
+test("extractId int", () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const input = {
+    getDisplayString: () => `Application("Google Chrome").windows.byId(1234)`,
+  };
+  const output = eval(`
+    ${library}
+    extractId(input);
+  `);
+
+  expect(output).toEqual(1234);
+});
+
 test("extractId undefined", () => {
   const output = eval(`
     ${library}

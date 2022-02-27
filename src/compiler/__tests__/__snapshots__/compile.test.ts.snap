@@ -8,12 +8,12 @@ exports[`query for Connection 1`] = `
 }
 function extractId(obj) {
   const spec = Automation.getDisplayString(obj);
-  return (
+  return JSON.parse(
     spec
       ?.split(\\"byId\\")
       .reverse()[0]
-      .match(/^\\\\(\\"(.+)\\"\\\\)$/)
-      ?.reverse()[0] ?? null
+      .match(/^\\\\(([^\\\\)]+)\\\\)$/)
+      ?.reverse()[0] ?? \\"null\\"
   );
 }
 function paginate(nodes, { first, after }, getId) {
@@ -66,12 +66,12 @@ exports[`query with fragment 1`] = `
 }
 function extractId(obj) {
   const spec = Automation.getDisplayString(obj);
-  return (
+  return JSON.parse(
     spec
       ?.split(\\"byId\\")
       .reverse()[0]
-      .match(/^\\\\(\\"(.+)\\"\\\\)$/)
-      ?.reverse()[0] ?? null
+      .match(/^\\\\(([^\\\\)]+)\\\\)$/)
+      ?.reverse()[0] ?? \\"null\\"
   );
 }
 function paginate(nodes, { first, after }, getId) {
@@ -159,12 +159,12 @@ exports[`query with inline fragment 1`] = `
 }
 function extractId(obj) {
   const spec = Automation.getDisplayString(obj);
-  return (
+  return JSON.parse(
     spec
       ?.split(\\"byId\\")
       .reverse()[0]
-      .match(/^\\\\(\\"(.+)\\"\\\\)$/)
-      ?.reverse()[0] ?? null
+      .match(/^\\\\(([^\\\\)]+)\\\\)$/)
+      ?.reverse()[0] ?? \\"null\\"
   );
 }
 function paginate(nodes, { first, after }, getId) {
@@ -242,12 +242,12 @@ exports[`query with pageInfo 1`] = `
 }
 function extractId(obj) {
   const spec = Automation.getDisplayString(obj);
-  return (
+  return JSON.parse(
     spec
       ?.split(\\"byId\\")
       .reverse()[0]
-      .match(/^\\\\(\\"(.+)\\"\\\\)$/)
-      ?.reverse()[0] ?? null
+      .match(/^\\\\(([^\\\\)]+)\\\\)$/)
+      ?.reverse()[0] ?? \\"null\\"
   );
 }
 function paginate(nodes, { first, after }, getId) {
@@ -298,12 +298,12 @@ exports[`query with project interface 1`] = `
 }
 function extractId(obj) {
   const spec = Automation.getDisplayString(obj);
-  return (
+  return JSON.parse(
     spec
       ?.split(\\"byId\\")
       .reverse()[0]
-      .match(/^\\\\(\\"(.+)\\"\\\\)$/)
-      ?.reverse()[0] ?? null
+      .match(/^\\\\(([^\\\\)]+)\\\\)$/)
+      ?.reverse()[0] ?? \\"null\\"
   );
 }
 function paginate(nodes, { first, after }, getId) {
@@ -360,12 +360,12 @@ exports[`typename 1`] = `
 }
 function extractId(obj) {
   const spec = Automation.getDisplayString(obj);
-  return (
+  return JSON.parse(
     spec
       ?.split(\\"byId\\")
       .reverse()[0]
-      .match(/^\\\\(\\"(.+)\\"\\\\)$/)
-      ?.reverse()[0] ?? null
+      .match(/^\\\\(([^\\\\)]+)\\\\)$/)
+      ?.reverse()[0] ?? \\"null\\"
   );
 }
 function paginate(nodes, { first, after }, getId) {
