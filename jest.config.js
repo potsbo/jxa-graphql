@@ -6,4 +6,5 @@ module.exports = {
   // jxalib will be passed to `eval`. Without ignoring, jest will insert code that can't work with `eval`
   // related issue: https://github.com/facebook/jest/issues/7962#issuecomment-466647531
   coveragePathIgnorePatterns: ["<rootDir>/node_modules/", "<rootDir>/src/compiler/jxalib/"],
+  collectCoverageFrom: ["**/*.ts", "!**/node_modules/**"],
 };
