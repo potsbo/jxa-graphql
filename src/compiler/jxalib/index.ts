@@ -1,7 +1,7 @@
 export const library = `
 ${pascalCase.toString()}
 ${extractId.toString()}
-${pagenate.toString()}
+${paginate.toString()}
 `;
 
 function pascalCase(s: string) {
@@ -23,7 +23,7 @@ function extractId(obj: unknown) {
   );
 }
 
-function pagenate<T>(nodes: T[], { first, after }: { first?: number; after?: string }, getId: (elm: T) => string): T[] {
+function paginate<T>(nodes: T[], { first, after }: { first?: number; after?: string }, getId: (elm: T) => string): T[] {
   const afterIndex = after === undefined ? undefined : nodes.findIndex((n) => getId(n) === after);
   if (afterIndex === -1) {
     return [];

@@ -70,7 +70,7 @@ test("paginate no param", () => {
   const output = eval(`
       ${library}
       const nodes = ${JSON.stringify(input)};
-      pagenate(nodes, {}, (elm) => elm.id);
+      paginate(nodes, {}, (elm) => elm.id);
     `);
 
   expect(output).toEqual(input);
@@ -81,7 +81,7 @@ test("paginate normal param", () => {
   const output = eval(`
     ${library}
     const nodes = ${JSON.stringify(input)};
-    pagenate(nodes, { after: 3, first: 2 }, (elm) => elm.id);
+    paginate(nodes, { after: 3, first: 2 }, (elm) => elm.id);
   `);
 
   expect(output).toEqual([{ id: 4 }, { id: 5 }]);
@@ -92,7 +92,7 @@ test("paginate no match", () => {
   const output = eval(`
     ${library}
     const nodes = ${JSON.stringify(input)};
-    pagenate(nodes, { after: 100, first: 2 }, (elm) => elm.id);
+    paginate(nodes, { after: 100, first: 2 }, (elm) => elm.id);
   `);
 
   expect(output).toEqual([]);
@@ -103,7 +103,7 @@ test("paginate asks too many", () => {
   const output = eval(`
     ${library}
     const nodes = ${JSON.stringify(input)};
-    pagenate(nodes, { after: 2, first: 100 }, (elm) => elm.id);
+    paginate(nodes, { after: 2, first: 100 }, (elm) => elm.id);
   `);
 
   expect(output).toEqual([{ id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }, { id: 7 }, { id: 8 }]);
