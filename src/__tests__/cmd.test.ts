@@ -1,14 +1,13 @@
 import mockArgv from "mock-argv";
 import { run } from "../run";
-import { mockProcessStdout } from "jest-mock-process";
 import axios from "axios";
 
 test("Calendar", async () => {
   await mockArgv(["serve", "/System/Applications/Calendar.app", "-p", "4001"], async () => {
-    const mockStdout = mockProcessStdout();
+    const mockStdout = jest.spyOn(process.stdout, "write");
     const readyText = new Promise<boolean>((resolve) => {
-      mockStdout.mockImplementation((data: string) => {
-        if (data.includes("🚀  Server ready at http://localhost:4001/")) {
+      mockStdout.mockImplementation((str: string | Uint8Array): boolean => {
+        if (typeof str === "string" && str.includes("🚀  Server ready at http://localhost:4001/")) {
           resolve(true);
         }
         return true;
