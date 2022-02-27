@@ -7,6 +7,24 @@ import { EDGE_TYPE_NAME, CONNECTION_TYPE_NAME, NodeInterface } from "./constants
 import { name } from "./name";
 import { objectType } from "./object";
 
+const complementId = (fields: FieldDefinitionNode[]): FieldDefinitionNode[] => {
+  if (fields.some((f) => f.name.value === "id")) {
+    return fields;
+  }
+
+  return [
+    ...fields,
+    field("id", nonNull("ID"), {
+      directives: [
+        {
+          kind: Kind.DIRECTIVE,
+          name: name("extractFromObjectDisplayName"),
+        },
+      ],
+    }),
+  ];
+};
+
 export class ClassBuilder {
   private c: ClassDefinition;
   fields: FieldDefinitionNode[];
@@ -42,7 +60,7 @@ export class ClassBuilder {
     }
     const inherited = classBuilders.map((c) => c.getInherits()).some((c): c is string => c === this.getClassName());
 
-    const fields = [...this.fields, ...(parent?.fields ?? [])];
+    const fields = complementId([...this.fields, ...(parent?.fields ?? [])]);
 
     const interfaces: string[] = [NodeInterface.name.value];
     if (parent) {

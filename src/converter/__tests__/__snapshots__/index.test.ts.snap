@@ -6,12 +6,13 @@ directive @extractFromObjectDisplayName on FIELD_DEFINITION
 directive @recordType on OBJECT
 
 """The application's top-level scripting object."""
-type Application {
+type Application implements Node {
   calendars(after: ID, first: Int, whose: Condition): CalendarConnection!
   documents(after: ID, first: Int, whose: Condition): DocumentConnection!
 
   """Is this the active application?"""
   frontmost: Boolean!
+  id: ID! @extractFromObjectDisplayName
 
   """The name of the application."""
   name: String!
@@ -21,25 +22,37 @@ type Application {
   windows(after: ID, first: Int, whose: Condition): WindowConnection!
 }
 
+type ApplicationConnection implements Connection {
+  byId(id: ID!): Application
+  edges: [ApplicationEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ApplicationEdge implements Edge {
+  cursor: String!
+  node: Application!
+}
+
 """This class represents a attendee."""
-type Attendee {
+type Attendee implements Node {
   """The first and last name of the attendee."""
   displayName: String!
 
   """e-mail of the attendee."""
   email: String!
+  id: ID! @extractFromObjectDisplayName
 
   """The invitation status for the attendee."""
   participationStatus: ParticipationStatus!
 }
 
-type AttendeeConnection {
+type AttendeeConnection implements Connection {
   byId(id: ID!): Attendee
   edges: [AttendeeEdge!]!
   pageInfo: PageInfo!
 }
 
-type AttendeeEdge {
+type AttendeeEdge implements Edge {
   cursor: String!
   node: Attendee!
 }
@@ -107,7 +120,9 @@ interface Connection {
 }
 
 """This class represents a message alarm."""
-type DisplayAlarm {
+type DisplayAlarm implements Node {
+  id: ID! @extractFromObjectDisplayName
+
   """An absolute alarm date."""
   triggerDate: String!
 
@@ -117,19 +132,21 @@ type DisplayAlarm {
   triggerInterval: Int!
 }
 
-type DisplayAlarmConnection {
+type DisplayAlarmConnection implements Connection {
   byId(id: ID!): DisplayAlarm
   edges: [DisplayAlarmEdge!]!
   pageInfo: PageInfo!
 }
 
-type DisplayAlarmEdge {
+type DisplayAlarmEdge implements Edge {
   cursor: String!
   node: DisplayAlarm!
 }
 
 """A document."""
-type Document {
+type Document implements Node {
+  id: ID! @extractFromObjectDisplayName
+
   """Has it been modified since the last save?"""
   modified: Boolean!
 
@@ -137,13 +154,13 @@ type Document {
   name: String!
 }
 
-type DocumentConnection {
+type DocumentConnection implements Connection {
   byId(id: ID!): Document
   edges: [DocumentEdge!]!
   pageInfo: PageInfo!
 }
 
-type DocumentEdge {
+type DocumentEdge implements Edge {
   cursor: String!
   node: Document!
 }
@@ -276,7 +293,9 @@ enum EventStatus {
 }
 
 """This class represents a mail alarm."""
-type MailAlarm {
+type MailAlarm implements Node {
+  id: ID! @extractFromObjectDisplayName
+
   """An absolute alarm date."""
   triggerDate: String!
 
@@ -286,13 +305,13 @@ type MailAlarm {
   triggerInterval: Int!
 }
 
-type MailAlarmConnection {
+type MailAlarmConnection implements Connection {
   byId(id: ID!): MailAlarm
   edges: [MailAlarmEdge!]!
   pageInfo: PageInfo!
 }
 
-type MailAlarmEdge {
+type MailAlarmEdge implements Edge {
   cursor: String!
   node: MailAlarm!
 }
@@ -304,9 +323,10 @@ interface Node {
 """
 This class represents an 'open file' alarm. Starting with OS X 10.14, it is not possible to create new open file alarms or view URLs for existing open file alarms. Trying to save or modify an open file alarm will result in a save error. Editing other aspects of events or reminders that have existing open file alarms is allowed as long as the alarm isn't modified.
 """
-type OpenFileAlarm {
+type OpenFileAlarm implements Node {
   """The (POSIX) path to be opened by the alarm"""
   filepath: String!
+  id: ID! @extractFromObjectDisplayName
 
   """An absolute alarm date."""
   triggerDate: String!
@@ -317,13 +337,13 @@ type OpenFileAlarm {
   triggerInterval: Int!
 }
 
-type OpenFileAlarmConnection {
+type OpenFileAlarmConnection implements Connection {
   byId(id: ID!): OpenFileAlarm
   edges: [OpenFileAlarmEdge!]!
   pageInfo: PageInfo!
 }
 
-type OpenFileAlarmEdge {
+type OpenFileAlarmEdge implements Edge {
   cursor: String!
   node: OpenFileAlarm!
 }
@@ -354,7 +374,9 @@ type Query {
 }
 
 """This class represents a sound alarm."""
-type SoundAlarm {
+type SoundAlarm implements Node {
+  id: ID! @extractFromObjectDisplayName
+
   """The (POSIX) path to the sound file to be used for the alarm"""
   soundFile: String!
 
@@ -370,13 +392,13 @@ type SoundAlarm {
   triggerInterval: Int!
 }
 
-type SoundAlarmConnection {
+type SoundAlarmConnection implements Connection {
   byId(id: ID!): SoundAlarm
   edges: [SoundAlarmEdge!]!
   pageInfo: PageInfo!
 }
 
-type SoundAlarmEdge {
+type SoundAlarmEdge implements Edge {
   cursor: String!
   node: SoundAlarm!
 }
@@ -470,7 +492,9 @@ directive @extractFromObjectDisplayName on FIELD_DEFINITION
 directive @recordType on OBJECT
 
 """An alias file (created with “Make Alias”)"""
-type AliasFile implements FileInterface {
+type AliasFile implements FileInterface & Node {
+  id: ID! @extractFromObjectDisplayName
+
   """
   the version of the product (visible at the top of the “Get Info” window)
   """
@@ -485,19 +509,37 @@ type AliasFile implements FileInterface {
   version: String!
 }
 
-type AliasFileConnection {
+type AliasFileConnection implements Connection {
   byId(id: ID!): AliasFile
   edges: [AliasFileEdge!]!
   pageInfo: PageInfo!
 }
 
-type AliasFileEdge {
+type AliasFileEdge implements Edge {
   cursor: String!
   node: AliasFile!
 }
 
+"""
+A list of aliases. Use ‘as alias list’ when a list of aliases is needed (instead of a list of file system item references).
+"""
+type AliasList implements Node {
+  id: ID! @extractFromObjectDisplayName
+}
+
+type AliasListConnection implements Connection {
+  byId(id: ID!): AliasList
+  edges: [AliasListEdge!]!
+  pageInfo: PageInfo!
+}
+
+type AliasListEdge implements Edge {
+  cursor: String!
+  node: AliasList!
+}
+
 """The Finder"""
-type Application {
+type Application implements Node {
   aliasFiles(after: ID, first: Int, whose: Condition): AliasFileConnection!
   applicationFiles(after: ID, first: Int, whose: Condition): ApplicationFileConnection!
   clippingWindows(after: ID, first: Int, whose: Condition): ClippingWindowConnection!
@@ -526,6 +568,7 @@ type Application {
 
   """the home directory"""
   home: Folder!
+  id: ID! @extractFromObjectDisplayName
   internetLocationFiles(after: ID, first: Int, whose: Condition): InternetLocationFileConnection!
   items(after: ID, first: Int, whose: Condition): ItemConnection!
 
@@ -548,6 +591,17 @@ type Application {
   """Is the Finder’s layer visible?"""
   visible: Boolean!
   windows(after: ID, first: Int, whose: Condition): WindowConnection!
+}
+
+type ApplicationConnection implements Connection {
+  byId(id: ID!): Application
+  edges: [ApplicationEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ApplicationEdge implements Edge {
+  cursor: String!
+  node: Application!
 }
 
 """An application's file on disk"""
@@ -645,8 +699,56 @@ interface ApplicationFileInterface implements Node {
   suggestedSize: Int!
 }
 
+"""A process launched from an application file"""
+type ApplicationProcess implements Node & ProcessInterface {
+  """
+  Is the process high-level event aware (accepts open application, open document, print document, and quit)?
+  """
+  acceptsHighLevelEvents: Boolean!
+
+  """Does the process accept remote events?"""
+  acceptsRemoteEvents: Boolean!
+
+  """the application file from which this process was launched"""
+  applicationFile: ApplicationFile!
+
+  """Is the process the frontmost process?"""
+  frontmost: Boolean!
+
+  """
+  Does the process have a scripting terminology, i.e., can it be scripted?
+  """
+  hasScriptingTerminology: Boolean!
+  id: ID! @extractFromObjectDisplayName
+
+  """the name of the process"""
+  name: String!
+
+  """the number of bytes currently used in the process' partition"""
+  partitionSpaceUsed: Int!
+
+  """the size of the partition with which the process was launched"""
+  totalPartitionSize: Int!
+
+  """Is the process' layer visible?"""
+  visible: Boolean!
+}
+
+type ApplicationProcessConnection implements Connection {
+  byId(id: ID!): ApplicationProcess
+  edges: [ApplicationProcessEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ApplicationProcessEdge implements Edge {
+  cursor: String!
+  node: ApplicationProcess!
+}
+
 """A clipping"""
-type Clipping implements FileInterface {
+type Clipping implements FileInterface & Node {
+  id: ID! @extractFromObjectDisplayName
+
   """
   the version of the product (visible at the top of the “Get Info” window)
   """
@@ -661,13 +763,13 @@ type Clipping implements FileInterface {
   version: String!
 }
 
-type ClippingConnection {
+type ClippingConnection implements Connection {
   byId(id: ID!): Clipping
   edges: [ClippingEdge!]!
   pageInfo: PageInfo!
 }
 
-type ClippingEdge {
+type ClippingEdge implements Edge {
   cursor: String!
   node: Clipping!
 }
@@ -723,7 +825,9 @@ type ClippingWindowEdge implements Edge {
 }
 
 """a column of a list view"""
-type Column {
+type Column implements Node {
+  id: ID! @extractFromObjectDisplayName
+
   """the index in the front-to-back ordering within its container"""
   index: Int!
 
@@ -746,21 +850,22 @@ type Column {
   width: Int!
 }
 
-type ColumnConnection {
+type ColumnConnection implements Connection {
   byId(id: ID!): Column
   edges: [ColumnEdge!]!
   pageInfo: PageInfo!
 }
 
-type ColumnEdge {
+type ColumnEdge implements Edge {
   cursor: String!
   node: Column!
 }
 
 """the column view options"""
-type ColumnViewOptions {
+type ColumnViewOptions implements Node {
   """discloses the preview pane of the preview column in column view"""
   disclosesPreviewPane: Boolean!
+  id: ID! @extractFromObjectDisplayName
 
   """displays an icon next to the label in column view"""
   showsIcon: Boolean!
@@ -775,8 +880,19 @@ type ColumnViewOptions {
   textSize: Int!
 }
 
+type ColumnViewOptionsConnection implements Connection {
+  byId(id: ID!): ColumnViewOptions
+  edges: [ColumnViewOptionsEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ColumnViewOptionsEdge implements Edge {
+  cursor: String!
+  node: ColumnViewOptions!
+}
+
 """the Computer location (as in Go > Computer)"""
-type ComputerObject implements ItemInterface {
+type ComputerObject implements ItemInterface & Node {
   """the comment of the item, displayed in the “Get Info” window"""
   comment: String!
 
@@ -796,6 +912,10 @@ type ComputerObject implements ItemInterface {
   """the user or group that has special access to the container"""
   group: String!
   groupPrivileges: Priv!
+
+  """the icon bitmap of the item"""
+  icon: IconFamily!
+  id: ID! @extractFromObjectDisplayName
 
   """the index in the front-to-back ordering within its container"""
   index: Int!
@@ -826,6 +946,17 @@ type ComputerObject implements ItemInterface {
   url: String!
 }
 
+type ComputerObjectConnection implements Connection {
+  byId(id: ID!): ComputerObject
+  edges: [ComputerObjectEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ComputerObjectEdge implements Edge {
+  cursor: String!
+  node: ComputerObject!
+}
+
 input Condition {
   enabled: Boolean! = true
   field: String
@@ -841,7 +972,7 @@ interface Connection {
 }
 
 """An item that contains other items"""
-type Container implements ContainerInterface & ItemInterface {
+type Container implements ContainerInterface & ItemInterface & Node {
   aliasFiles(after: ID, first: Int, whose: Condition): AliasFileConnection!
   applicationFiles(after: ID, first: Int, whose: Condition): ApplicationFileConnection!
   clippings(after: ID, first: Int, whose: Condition): ClippingConnection!
@@ -884,6 +1015,10 @@ type Container implements ContainerInterface & ItemInterface {
   """the user or group that has special access to the container"""
   group: String!
   groupPrivileges: Priv!
+
+  """the icon bitmap of the item"""
+  icon: IconFamily!
+  id: ID! @extractFromObjectDisplayName
 
   """the index in the front-to-back ordering within its container"""
   index: Int!
@@ -956,8 +1091,51 @@ interface ContainerInterface {
   packages(after: ID, first: Int, whose: Condition): PackageConnection!
 }
 
+"""A process launched from a desk accessory file"""
+type DeskAccessoryProcess implements Node & ProcessInterface {
+  """
+  Is the process high-level event aware (accepts open application, open document, print document, and quit)?
+  """
+  acceptsHighLevelEvents: Boolean!
+
+  """Does the process accept remote events?"""
+  acceptsRemoteEvents: Boolean!
+
+  """Is the process the frontmost process?"""
+  frontmost: Boolean!
+
+  """
+  Does the process have a scripting terminology, i.e., can it be scripted?
+  """
+  hasScriptingTerminology: Boolean!
+  id: ID! @extractFromObjectDisplayName
+
+  """the name of the process"""
+  name: String!
+
+  """the number of bytes currently used in the process' partition"""
+  partitionSpaceUsed: Int!
+
+  """the size of the partition with which the process was launched"""
+  totalPartitionSize: Int!
+
+  """Is the process' layer visible?"""
+  visible: Boolean!
+}
+
+type DeskAccessoryProcessConnection implements Connection {
+  byId(id: ID!): DeskAccessoryProcess
+  edges: [DeskAccessoryProcessEdge!]!
+  pageInfo: PageInfo!
+}
+
+type DeskAccessoryProcessEdge implements Edge {
+  cursor: String!
+  node: DeskAccessoryProcess!
+}
+
 """Desktop-object is the class of the “desktop” object"""
-type DesktopObject implements ContainerInterface {
+type DesktopObject implements ContainerInterface & Node {
   aliasFiles(after: ID, first: Int, whose: Condition): AliasFileConnection!
   applicationFiles(after: ID, first: Int, whose: Condition): ApplicationFileConnection!
   clippings(after: ID, first: Int, whose: Condition): ClippingConnection!
@@ -981,13 +1159,25 @@ type DesktopObject implements ContainerInterface {
   expanded: Boolean!
   files(after: ID, first: Int, whose: Condition): FileConnection!
   folders(after: ID, first: Int, whose: Condition): FolderConnection!
+  id: ID! @extractFromObjectDisplayName
   internetLocationFiles(after: ID, first: Int, whose: Condition): InternetLocationFileConnection!
   items(after: ID, first: Int, whose: Condition): ItemConnection!
   packages(after: ID, first: Int, whose: Condition): PackageConnection!
 }
 
+type DesktopObjectConnection implements Connection {
+  byId(id: ID!): DesktopObject
+  edges: [DesktopObjectEdge!]!
+  pageInfo: PageInfo!
+}
+
+type DesktopObjectEdge implements Edge {
+  cursor: String!
+  node: DesktopObject!
+}
+
 """the desktop window"""
-type DesktopWindow implements FinderWindowInterface {
+type DesktopWindow implements FinderWindowInterface & Node {
   """the column view options for the container window"""
   columnViewOptions: ColumnViewOptions!
 
@@ -996,6 +1186,7 @@ type DesktopWindow implements FinderWindowInterface {
 
   """the icon view options for the container window"""
   iconViewOptions: IconViewOptions!
+  id: ID! @extractFromObjectDisplayName
 
   """the list view options for the container window"""
   listViewOptions: ListViewOptions!
@@ -1011,6 +1202,17 @@ type DesktopWindow implements FinderWindowInterface {
 
   """Is the window's toolbar visible?"""
   toolbarVisible: Boolean!
+}
+
+type DesktopWindowConnection implements Connection {
+  byId(id: ID!): DesktopWindow
+  edges: [DesktopWindowEdge!]!
+  pageInfo: PageInfo!
+}
+
+type DesktopWindowEdge implements Edge {
+  cursor: String!
+  node: DesktopWindow!
 }
 
 """A disk"""
@@ -1113,7 +1315,9 @@ interface DiskInterface implements Node {
 }
 
 """A document file"""
-type DocumentFile implements FileInterface {
+type DocumentFile implements FileInterface & Node {
+  id: ID! @extractFromObjectDisplayName
+
   """
   the version of the product (visible at the top of the “Get Info” window)
   """
@@ -1128,13 +1332,13 @@ type DocumentFile implements FileInterface {
   version: String!
 }
 
-type DocumentFileConnection {
+type DocumentFileConnection implements Connection {
   byId(id: ID!): DocumentFile
   edges: [DocumentFileEdge!]!
   pageInfo: PageInfo!
 }
 
-type DocumentFileEdge {
+type DocumentFileEdge implements Edge {
   cursor: String!
   node: DocumentFile!
 }
@@ -1205,7 +1409,7 @@ enum Epos {
 }
 
 """A file"""
-type File implements FileInterface & ItemInterface {
+type File implements FileInterface & ItemInterface & Node {
   """the comment of the item, displayed in the “Get Info” window"""
   comment: String!
 
@@ -1225,6 +1429,10 @@ type File implements FileInterface & ItemInterface {
   """the user or group that has special access to the container"""
   group: String!
   groupPrivileges: Priv!
+
+  """the icon bitmap of the item"""
+  icon: IconFamily!
+  id: ID! @extractFromObjectDisplayName
 
   """the index in the front-to-back ordering within its container"""
   index: Int!
@@ -1395,7 +1603,7 @@ interface FinderWindowInterface {
 }
 
 """A folder"""
-type Folder implements ContainerInterface {
+type Folder implements ContainerInterface & Node {
   aliasFiles(after: ID, first: Int, whose: Condition): AliasFileConnection!
   applicationFiles(after: ID, first: Int, whose: Condition): ApplicationFileConnection!
   clippings(after: ID, first: Int, whose: Condition): ClippingConnection!
@@ -1418,24 +1626,41 @@ type Folder implements ContainerInterface {
   expanded: Boolean!
   files(after: ID, first: Int, whose: Condition): FileConnection!
   folders(after: ID, first: Int, whose: Condition): FolderConnection!
+  id: ID! @extractFromObjectDisplayName
   internetLocationFiles(after: ID, first: Int, whose: Condition): InternetLocationFileConnection!
   items(after: ID, first: Int, whose: Condition): ItemConnection!
   packages(after: ID, first: Int, whose: Condition): PackageConnection!
 }
 
-type FolderConnection {
+type FolderConnection implements Connection {
   byId(id: ID!): Folder
   edges: [FolderEdge!]!
   pageInfo: PageInfo!
 }
 
-type FolderEdge {
+type FolderEdge implements Edge {
   cursor: String!
   node: Folder!
 }
 
+"""(NOT AVAILABLE YET) A family of icons"""
+type IconFamily implements Node {
+  id: ID! @extractFromObjectDisplayName
+}
+
+type IconFamilyConnection implements Connection {
+  byId(id: ID!): IconFamily
+  edges: [IconFamilyEdge!]!
+  pageInfo: PageInfo!
+}
+
+type IconFamilyEdge implements Edge {
+  cursor: String!
+  node: IconFamily!
+}
+
 """the icon view options"""
-type IconViewOptions {
+type IconViewOptions implements Node {
   """the property by which to keep icons arranged"""
   arrangement: Earr!
 
@@ -1444,6 +1669,7 @@ type IconViewOptions {
 
   """the size of icons displayed in the icon view"""
   iconSize: Int!
+  id: ID! @extractFromObjectDisplayName
 
   """the location of the label in reference to the icon"""
   labelPosition: Epos!
@@ -1456,6 +1682,17 @@ type IconViewOptions {
 
   """the size of the text displayed in the icon view"""
   textSize: Int!
+}
+
+type IconViewOptionsConnection implements Connection {
+  byId(id: ID!): IconViewOptions
+  edges: [IconViewOptionsEdge!]!
+  pageInfo: PageInfo!
+}
+
+type IconViewOptionsEdge implements Edge {
+  cursor: String!
+  node: IconViewOptions!
 }
 
 """An inspector window (opened by “Show Info”)"""
@@ -1512,7 +1749,9 @@ type InformationWindowEdge implements Edge {
 }
 
 """A file containing an internet location"""
-type InternetLocationFile implements FileInterface {
+type InternetLocationFile implements FileInterface & Node {
+  id: ID! @extractFromObjectDisplayName
+
   """the internet location"""
   location: String!
 
@@ -1530,13 +1769,13 @@ type InternetLocationFile implements FileInterface {
   version: String!
 }
 
-type InternetLocationFileConnection {
+type InternetLocationFileConnection implements Connection {
   byId(id: ID!): InternetLocationFile
   edges: [InternetLocationFileEdge!]!
   pageInfo: PageInfo!
 }
 
-type InternetLocationFileEdge {
+type InternetLocationFileEdge implements Edge {
   cursor: String!
   node: InternetLocationFile!
 }
@@ -1558,7 +1797,7 @@ enum Ipnl {
 }
 
 """An item"""
-type Item implements ItemInterface {
+type Item implements ItemInterface & Node {
   """the comment of the item, displayed in the “Get Info” window"""
   comment: String!
 
@@ -1578,6 +1817,10 @@ type Item implements ItemInterface {
   """the user or group that has special access to the container"""
   group: String!
   groupPrivileges: Priv!
+
+  """the icon bitmap of the item"""
+  icon: IconFamily!
+  id: ID! @extractFromObjectDisplayName
 
   """the index in the front-to-back ordering within its container"""
   index: Int!
@@ -1640,6 +1883,9 @@ interface ItemInterface {
   group: String!
   groupPrivileges: Priv!
 
+  """the icon bitmap of the item"""
+  icon: IconFamily!
+
   """the index in the front-to-back ordering within its container"""
   index: Int!
 
@@ -1669,14 +1915,37 @@ interface ItemInterface {
   url: String!
 }
 
+"""(NOT AVAILABLE YET) A Finder label (name and color)"""
+type Label implements Node {
+  id: ID! @extractFromObjectDisplayName
+
+  """the index in the front-to-back ordering within its container"""
+  index: Int!
+
+  """the name associated with the label"""
+  name: String!
+}
+
+type LabelConnection implements Connection {
+  byId(id: ID!): Label
+  edges: [LabelEdge!]!
+  pageInfo: PageInfo!
+}
+
+type LabelEdge implements Edge {
+  cursor: String!
+  node: Label!
+}
+
 """the list view options"""
-type ListViewOptions {
+type ListViewOptions implements Node {
   """Are folder sizes calculated and displayed in the window?"""
   calculatesFolderSizes: Boolean!
   columns(after: ID, first: Int, whose: Condition): ColumnConnection!
 
   """the size of icons displayed in the list view"""
   iconSize: Lvic!
+  id: ID! @extractFromObjectDisplayName
 
   """displays a preview of the item in list view"""
   showsIconPreview: Boolean!
@@ -1691,6 +1960,17 @@ type ListViewOptions {
   usesRelativeDates: Boolean!
 }
 
+type ListViewOptionsConnection implements Connection {
+  byId(id: ID!): ListViewOptions
+  edges: [ListViewOptionsEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ListViewOptionsEdge implements Edge {
+  cursor: String!
+  node: ListViewOptions!
+}
+
 enum Lvic {
   LARGE_ICON
   SMALL_ICON
@@ -1701,7 +1981,7 @@ interface Node {
 }
 
 """A package"""
-type Package implements ItemInterface {
+type Package implements ItemInterface & Node {
   """the comment of the item, displayed in the “Get Info” window"""
   comment: String!
 
@@ -1722,6 +2002,10 @@ type Package implements ItemInterface {
   group: String!
   groupPrivileges: Priv!
 
+  """the icon bitmap of the item"""
+  icon: IconFamily!
+  id: ID! @extractFromObjectDisplayName
+
   """the index in the front-to-back ordering within its container"""
   index: Int!
 
@@ -1751,13 +2035,13 @@ type Package implements ItemInterface {
   url: String!
 }
 
-type PackageConnection {
+type PackageConnection implements Connection {
   byId(id: ID!): Package
   edges: [PackageEdge!]!
   pageInfo: PageInfo!
 }
 
-type PackageEdge {
+type PackageEdge implements Edge {
   cursor: String!
   node: Package!
 }
@@ -1777,7 +2061,7 @@ enum Pple {
 }
 
 """The Finder Preferences"""
-type Preferences {
+type Preferences implements Node {
   """Show name extensions, even for items whose “extension hidden” is true?"""
   allNameExtensionsShowing: Boolean!
 
@@ -1812,6 +2096,7 @@ type Preferences {
 
   """the default icon view options"""
   iconViewOptions: IconViewOptions!
+  id: ID! @extractFromObjectDisplayName
 
   """the default list view options"""
   listViewOptions: ListViewOptions!
@@ -1821,6 +2106,17 @@ type Preferences {
 
   """the window that would open if Finder preferences was opened"""
   window: PreferencesWindow!
+}
+
+type PreferencesConnection implements Connection {
+  byId(id: ID!): Preferences
+  edges: [PreferencesEdge!]!
+  pageInfo: PageInfo!
+}
+
+type PreferencesEdge implements Edge {
+  cursor: String!
+  node: Preferences!
 }
 
 """The Finder Preferences window"""
@@ -1883,6 +2179,68 @@ enum Priv {
   WRITE_ONLY
 }
 
+"""A process running on this computer"""
+type Process implements Node & ProcessInterface {
+  """
+  Is the process high-level event aware (accepts open application, open document, print document, and quit)?
+  """
+  acceptsHighLevelEvents: Boolean!
+
+  """Does the process accept remote events?"""
+  acceptsRemoteEvents: Boolean!
+
+  """Is the process the frontmost process?"""
+  frontmost: Boolean!
+
+  """
+  Does the process have a scripting terminology, i.e., can it be scripted?
+  """
+  hasScriptingTerminology: Boolean!
+  id: ID! @extractFromObjectDisplayName
+
+  """the name of the process"""
+  name: String!
+
+  """the number of bytes currently used in the process' partition"""
+  partitionSpaceUsed: Int!
+
+  """the size of the partition with which the process was launched"""
+  totalPartitionSize: Int!
+
+  """Is the process' layer visible?"""
+  visible: Boolean!
+}
+
+interface ProcessInterface {
+  """
+  Is the process high-level event aware (accepts open application, open document, print document, and quit)?
+  """
+  acceptsHighLevelEvents: Boolean!
+
+  """Does the process accept remote events?"""
+  acceptsRemoteEvents: Boolean!
+
+  """Is the process the frontmost process?"""
+  frontmost: Boolean!
+
+  """
+  Does the process have a scripting terminology, i.e., can it be scripted?
+  """
+  hasScriptingTerminology: Boolean!
+
+  """the name of the process"""
+  name: String!
+
+  """the number of bytes currently used in the process' partition"""
+  partitionSpaceUsed: Int!
+
+  """the size of the partition with which the process was launched"""
+  totalPartitionSize: Int!
+
+  """Is the process' layer visible?"""
+  visible: Boolean!
+}
+
 type Query {
   application: Application!
 }
@@ -1893,7 +2251,7 @@ enum Sodr {
 }
 
 """Trash-object is the class of the “trash” object"""
-type TrashObject implements ContainerInterface {
+type TrashObject implements ContainerInterface & Node {
   aliasFiles(after: ID, first: Int, whose: Condition): AliasFileConnection!
   applicationFiles(after: ID, first: Int, whose: Condition): ApplicationFileConnection!
   clippings(after: ID, first: Int, whose: Condition): ClippingConnection!
@@ -1916,12 +2274,24 @@ type TrashObject implements ContainerInterface {
   expanded: Boolean!
   files(after: ID, first: Int, whose: Condition): FileConnection!
   folders(after: ID, first: Int, whose: Condition): FolderConnection!
+  id: ID! @extractFromObjectDisplayName
   internetLocationFiles(after: ID, first: Int, whose: Condition): InternetLocationFileConnection!
   items(after: ID, first: Int, whose: Condition): ItemConnection!
   packages(after: ID, first: Int, whose: Condition): PackageConnection!
 
   """Display a dialog when emptying the trash?"""
   warnsBeforeEmptying: Boolean!
+}
+
+type TrashObjectConnection implements Connection {
+  byId(id: ID!): TrashObject
+  edges: [TrashObjectEdge!]!
+  pageInfo: PageInfo!
+}
+
+type TrashObjectEdge implements Edge {
+  cursor: String!
+  node: TrashObject!
 }
 
 """A window"""
@@ -2079,7 +2449,7 @@ type AncestorTreeEdge implements Edge {
 }
 
 """The application's top-level scripting object."""
-type Application {
+type Application implements Node {
   """
   This is the build number of the application, for example 63.1 or 63.  Major and minor versions are separated by a dot.  So 63.10 comes after 63.1.
   """
@@ -2096,6 +2466,7 @@ type Application {
 
   """Is this the active application?"""
   frontmost: Boolean!
+  id: ID! @extractFromObjectDisplayName
 
   """The name of the application."""
   name: String!
@@ -2118,8 +2489,51 @@ type Application {
   windows(after: ID, first: Int, whose: Condition): WindowConnection!
 }
 
+type ApplicationConnection implements Connection {
+  byId(id: ID!): Application
+  edges: [ApplicationEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ApplicationEdge implements Edge {
+  cursor: String!
+  node: Application!
+}
+
+"""Represents an inline text attachment."""
+type Attachment implements Node {
+  attachments(after: ID, first: Int, whose: Condition): AttachmentConnection!
+  attributeRuns(after: ID, first: Int, whose: Condition): AttributeRunConnection!
+  characters(after: ID, first: Int, whose: Condition): CharacterConnection!
+  fileAttachments(after: ID, first: Int, whose: Condition): FileAttachmentConnection!
+
+  """The name of the font of the first character."""
+  font: String!
+  id: ID! @extractFromObjectDisplayName
+  paragraphs(after: ID, first: Int, whose: Condition): ParagraphConnection!
+
+  """The size in points of the first character."""
+  size: Int!
+
+  """The style of the text."""
+  style: Style!
+
+  """The plain text contents of the rich text."""
+  text: String!
+  words(after: ID, first: Int, whose: Condition): WordConnection!
+}
+
+type AttachmentConnection {
+  edges: [AttachmentEdge!]!
+  pageInfo: PageInfo!
+}
+
+type AttachmentEdge {
+  cursor: String!
+}
+
 """An attribute of a style."""
-type Attribute {
+type Attribute implements Node {
   """
   The style responsible for the effective value in this attributes's style.  This processes the local values, inherited styles and cascade chain.
   """
@@ -2129,6 +2543,7 @@ type Attribute {
   If true, the containing style defines a local value for this attribute.
   """
   hasLocalValue: Boolean!
+  id: ID! @extractFromObjectDisplayName
 
   """The name of the attribute."""
   name: String!
@@ -2137,15 +2552,51 @@ type Attribute {
   style: Style!
 }
 
-type AttributeConnection {
+type AttributeConnection implements Connection {
   byId(id: ID!): Attribute
   edges: [AttributeEdge!]!
   pageInfo: PageInfo!
 }
 
-type AttributeEdge {
+type AttributeEdge implements Edge {
   cursor: String!
   node: Attribute!
+}
+
+"""
+This subdivides the text into chunks that all have the same attributes.
+"""
+type AttributeRun implements Node {
+  attachments(after: ID, first: Int, whose: Condition): AttachmentConnection!
+  attributeRuns(after: ID, first: Int, whose: Condition): AttributeRunConnection!
+  characters(after: ID, first: Int, whose: Condition): CharacterConnection!
+  fileAttachments(after: ID, first: Int, whose: Condition): FileAttachmentConnection!
+
+  """The name of the font of the first character."""
+  font: String!
+  id: ID! @extractFromObjectDisplayName
+  paragraphs(after: ID, first: Int, whose: Condition): ParagraphConnection!
+
+  """The size in points of the first character."""
+  size: Int!
+
+  """The style of the text."""
+  style: Style!
+
+  """The plain text contents of the rich text."""
+  text: String!
+  words(after: ID, first: Int, whose: Condition): WordConnection!
+}
+
+type AttributeRunConnection implements Connection {
+  byId(id: ID!): AttributeRun
+  edges: [AttributeRunEdge!]!
+  pageInfo: PageInfo!
+}
+
+type AttributeRunEdge implements Edge {
+  cursor: String!
+  node: AttributeRun!
 }
 
 """
@@ -2326,6 +2777,40 @@ type BuiltinPerspectiveConnection implements Connection {
 type BuiltinPerspectiveEdge implements Edge {
   cursor: String!
   node: BuiltinPerspective!
+}
+
+"""This subdivides the text into characters."""
+type Character implements Node {
+  attachments(after: ID, first: Int, whose: Condition): AttachmentConnection!
+  attributeRuns(after: ID, first: Int, whose: Condition): AttributeRunConnection!
+  characters(after: ID, first: Int, whose: Condition): CharacterConnection!
+  fileAttachments(after: ID, first: Int, whose: Condition): FileAttachmentConnection!
+
+  """The name of the font of the first character."""
+  font: String!
+  id: ID! @extractFromObjectDisplayName
+  paragraphs(after: ID, first: Int, whose: Condition): ParagraphConnection!
+
+  """The size in points of the first character."""
+  size: Int!
+
+  """The style of the text."""
+  style: Style!
+
+  """The plain text contents of the rich text."""
+  text: String!
+  words(after: ID, first: Int, whose: Condition): WordConnection!
+}
+
+type CharacterConnection implements Connection {
+  byId(id: ID!): Character
+  edges: [CharacterEdge!]!
+  pageInfo: PageInfo!
+}
+
+type CharacterEdge implements Edge {
+  cursor: String!
+  node: Character!
 }
 
 input Condition {
@@ -2595,7 +3080,7 @@ type DescendantTreeEdge implements Edge {
 }
 
 """A document."""
-type Document {
+type Document implements Node {
   """Whether the document can redo the most recently undone command."""
   canRedo: Boolean!
 
@@ -2624,8 +3109,6 @@ type Document {
   The subset of the sections that are folders; folders having this folder as their container.
   """
   folders(after: ID, first: Int, whose: Condition): FolderConnection!
-
-  """The document's unique identifier."""
   id: ID! @extractFromObjectDisplayName
   inboxTasks(after: ID, first: Int, whose: Condition): InboxTaskConnection!
 
@@ -2676,13 +3159,13 @@ type Document {
   willAutosave: Boolean!
 }
 
-type DocumentConnection {
+type DocumentConnection implements Connection {
   byId(id: ID!): Document
   edges: [DocumentEdge!]!
   pageInfo: PageInfo!
 }
 
-type DocumentEdge {
+type DocumentEdge implements Edge {
   cursor: String!
   node: Document!
 }
@@ -2748,6 +3231,26 @@ type DocumentWindowEdge implements Edge {
 interface Edge {
   cursor: String!
   node: Node!
+}
+
+"""A text attachment refering to a plain file."""
+type FileAttachment implements Node {
+  """
+  If true, the attached file will reside inside the document on the next save.
+  """
+  embedded: Boolean!
+  id: ID! @extractFromObjectDisplayName
+}
+
+type FileAttachmentConnection implements Connection {
+  byId(id: ID!): FileAttachment
+  edges: [FileAttachmentEdge!]!
+  pageInfo: PageInfo!
+}
+
+type FileAttachmentEdge implements Edge {
+  cursor: String!
+  node: FileAttachment!
 }
 
 """A flattened list of folders in a document."""
@@ -3191,6 +3694,22 @@ type FlattenedTaskEdge implements Edge {
   node: FlattenedTask!
 }
 
+"""The current focus of a document window."""
+type FocusSections implements Node {
+  id: ID! @extractFromObjectDisplayName
+}
+
+type FocusSectionsConnection implements Connection {
+  byId(id: ID!): FocusSections
+  edges: [FocusSectionsEdge!]!
+  pageInfo: PageInfo!
+}
+
+type FocusSectionsEdge implements Edge {
+  cursor: String!
+  node: FocusSections!
+}
+
 """
 A group of projects and sub-folders representing an area of responsibility.
 """
@@ -3398,15 +3917,27 @@ interface ForecastDayInterface implements Node {
 """
 The sidebar tree used when the window's sidebar tab property is set to forecast tab.
 """
-type ForecastSidebarTree implements SidebarTreeInterface {
+type ForecastSidebarTree implements Node & SidebarTreeInterface {
   """
   The list of possible smart group identifiers that can be set as the selected smart group identifier.
   """
   availableSmartGroupIdentifiers: [String!]!
   forecastDays(after: ID, first: Int, whose: Condition): ForecastDayConnection!
+  id: ID! @extractFromObjectDisplayName
 
   """The currently selected smart group identifier."""
   selectedSmartGroupIdentifier: String
+}
+
+type ForecastSidebarTreeConnection implements Connection {
+  byId(id: ID!): ForecastSidebarTree
+  edges: [ForecastSidebarTreeEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ForecastSidebarTreeEdge implements Edge {
+  cursor: String!
+  node: ForecastSidebarTree!
 }
 
 """A task that is in the document's inbox"""
@@ -3842,6 +4373,40 @@ type PageInfo {
   hasNextPage: Boolean!
   hasPreviousPage: Boolean!
   startCursor: String!
+}
+
+"""This subdivides the text into paragraphs."""
+type Paragraph implements Node {
+  attachments(after: ID, first: Int, whose: Condition): AttachmentConnection!
+  attributeRuns(after: ID, first: Int, whose: Condition): AttributeRunConnection!
+  characters(after: ID, first: Int, whose: Condition): CharacterConnection!
+  fileAttachments(after: ID, first: Int, whose: Condition): FileAttachmentConnection!
+
+  """The name of the font of the first character."""
+  font: String!
+  id: ID! @extractFromObjectDisplayName
+  paragraphs(after: ID, first: Int, whose: Condition): ParagraphConnection!
+
+  """The size in points of the first character."""
+  size: Int!
+
+  """The style of the text."""
+  style: Style!
+
+  """The plain text contents of the rich text."""
+  text: String!
+  words(after: ID, first: Int, whose: Condition): WordConnection!
+}
+
+type ParagraphConnection implements Connection {
+  byId(id: ID!): Paragraph
+  edges: [ParagraphEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ParagraphEdge implements Edge {
+  cursor: String!
+  node: Paragraph!
 }
 
 """A perspective."""
@@ -4742,11 +5307,12 @@ interface SidebarTreeInterface {
 }
 
 """A style object."""
-type Style implements StyleInterface {
+type Style implements Node & StyleInterface {
   attributes(after: ID, first: Int, whose: Condition): AttributeConnection!
 
   """The name of the font of the style."""
   font: String!
+  id: ID! @extractFromObjectDisplayName
   namedStyles(after: ID, first: Int, whose: Condition): NamedStyleConnection!
 }
 
@@ -5368,5 +5934,39 @@ interface WindowInterface implements Node {
 
   """Is the window zoomed right now?"""
   zoomed: Boolean!
+}
+
+"""This subdivides the text into words."""
+type Word implements Node {
+  attachments(after: ID, first: Int, whose: Condition): AttachmentConnection!
+  attributeRuns(after: ID, first: Int, whose: Condition): AttributeRunConnection!
+  characters(after: ID, first: Int, whose: Condition): CharacterConnection!
+  fileAttachments(after: ID, first: Int, whose: Condition): FileAttachmentConnection!
+
+  """The name of the font of the first character."""
+  font: String!
+  id: ID! @extractFromObjectDisplayName
+  paragraphs(after: ID, first: Int, whose: Condition): ParagraphConnection!
+
+  """The size in points of the first character."""
+  size: Int!
+
+  """The style of the text."""
+  style: Style!
+
+  """The plain text contents of the rich text."""
+  text: String!
+  words(after: ID, first: Int, whose: Condition): WordConnection!
+}
+
+type WordConnection implements Connection {
+  byId(id: ID!): Word
+  edges: [WordEdge!]!
+  pageInfo: PageInfo!
+}
+
+type WordEdge implements Edge {
+  cursor: String!
+  node: Word!
 }
 `;
