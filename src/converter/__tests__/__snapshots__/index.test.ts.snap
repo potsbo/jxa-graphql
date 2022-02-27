@@ -464,6 +464,1555 @@ interface WindowInterface implements Node {
 }
 `;
 
+exports[`build - Finder: finder.graphql 1`] = `
+directive @extractFromObjectDisplayName on FIELD_DEFINITION
+
+directive @recordType on OBJECT
+
+"""An alias file (created with “Make Alias”)"""
+type AliasFile implements FileInterface {
+  """
+  the version of the product (visible at the top of the “Get Info” window)
+  """
+  productVersion: String!
+
+  """Is the file a stationery pad?"""
+  stationery: Boolean!
+
+  """
+  the version of the file (visible at the bottom of the “Get Info” window)
+  """
+  version: String!
+}
+
+type AliasFileConnection {
+  byId(id: ID!): AliasFile
+  edges: [AliasFileEdge!]!
+  pageInfo: PageInfo!
+}
+
+type AliasFileEdge {
+  cursor: String!
+  node: AliasFile!
+}
+
+"""The Finder"""
+type Application {
+  aliasFiles(after: ID, first: Int, whose: Condition): AliasFileConnection!
+  applicationFiles(after: ID, first: Int, whose: Condition): ApplicationFileConnection!
+  clippingWindows(after: ID, first: Int, whose: Condition): ClippingWindowConnection!
+  clippings(after: ID, first: Int, whose: Condition): ClippingConnection!
+
+  """the computer location (as in Go > Computer)"""
+  computerContainer: ComputerObject!
+  containers(after: ID, first: Int, whose: Condition): ContainerConnection!
+
+  """the desktop"""
+  desktop: DesktopObject!
+
+  """the desktop picture of the main monitor"""
+  desktopPicture: File!
+  disks(after: ID, first: Int, whose: Condition): DiskConnection!
+  documentFiles(after: ID, first: Int, whose: Condition): DocumentFileConnection!
+  files(after: ID, first: Int, whose: Condition): FileConnection!
+
+  """Various preferences that apply to the Finder as a whole"""
+  finderPreferences: Preferences!
+  finderWindows(after: ID, first: Int, whose: Condition): FinderWindowConnection!
+  folders(after: ID, first: Int, whose: Condition): FolderConnection!
+
+  """Is the Finder the frontmost process?"""
+  frontmost: Boolean!
+
+  """the home directory"""
+  home: Folder!
+  internetLocationFiles(after: ID, first: Int, whose: Condition): InternetLocationFileConnection!
+  items(after: ID, first: Int, whose: Condition): ItemConnection!
+
+  """the Finder’s name"""
+  name: String!
+  packages(after: ID, first: Int, whose: Condition): PackageConnection!
+
+  """the version of the System software running on this computer"""
+  productVersion: String!
+
+  """the startup disk"""
+  startupDisk: Disk!
+
+  """the trash"""
+  trash: TrashObject!
+
+  """the version of the Finder"""
+  version: String!
+
+  """Is the Finder’s layer visible?"""
+  visible: Boolean!
+  windows(after: ID, first: Int, whose: Condition): WindowConnection!
+}
+
+"""An application's file on disk"""
+type ApplicationFile implements FileInterface & Node {
+  """
+  Is the application high-level event aware? (OBSOLETE: always returns true)
+  """
+  acceptsHighLevelEvents: Boolean!
+
+  """
+  Does the process have a scripting terminology, i.e., can it be scripted?
+  """
+  hasScriptingTerminology: Boolean!
+
+  """the bundle identifier or creator type of the application"""
+  id: ID! @extractFromObjectDisplayName
+
+  """
+  (AVAILABLE IN 10.1 TO 10.4) the smallest memory size with which the application can be launched
+  """
+  minimumSize: Int!
+
+  """
+  (AVAILABLE IN 10.1 TO 10.4) Should the application launch in the Classic environment?
+  """
+  opensInClassic: Boolean!
+
+  """
+  (AVAILABLE IN 10.1 TO 10.4) the memory size with which the application will be launched
+  """
+  preferredSize: Int!
+
+  """
+  the version of the product (visible at the top of the “Get Info” window)
+  """
+  productVersion: String!
+
+  """Is the file a stationery pad?"""
+  stationery: Boolean!
+
+  """
+  (AVAILABLE IN 10.1 TO 10.4) the memory size with which the developer recommends the application be launched
+  """
+  suggestedSize: Int!
+
+  """
+  the version of the file (visible at the bottom of the “Get Info” window)
+  """
+  version: String!
+}
+
+type ApplicationFileConnection implements Connection {
+  byId(id: ID!): ApplicationFile
+  edges: [ApplicationFileEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ApplicationFileEdge implements Edge {
+  cursor: String!
+  node: ApplicationFile!
+}
+
+interface ApplicationFileInterface implements Node {
+  """
+  Is the application high-level event aware? (OBSOLETE: always returns true)
+  """
+  acceptsHighLevelEvents: Boolean!
+
+  """
+  Does the process have a scripting terminology, i.e., can it be scripted?
+  """
+  hasScriptingTerminology: Boolean!
+
+  """the bundle identifier or creator type of the application"""
+  id: ID! @extractFromObjectDisplayName
+
+  """
+  (AVAILABLE IN 10.1 TO 10.4) the smallest memory size with which the application can be launched
+  """
+  minimumSize: Int!
+
+  """
+  (AVAILABLE IN 10.1 TO 10.4) Should the application launch in the Classic environment?
+  """
+  opensInClassic: Boolean!
+
+  """
+  (AVAILABLE IN 10.1 TO 10.4) the memory size with which the application will be launched
+  """
+  preferredSize: Int!
+
+  """
+  (AVAILABLE IN 10.1 TO 10.4) the memory size with which the developer recommends the application be launched
+  """
+  suggestedSize: Int!
+}
+
+"""A clipping"""
+type Clipping implements FileInterface {
+  """
+  the version of the product (visible at the top of the “Get Info” window)
+  """
+  productVersion: String!
+
+  """Is the file a stationery pad?"""
+  stationery: Boolean!
+
+  """
+  the version of the file (visible at the bottom of the “Get Info” window)
+  """
+  version: String!
+}
+
+type ClippingConnection {
+  byId(id: ID!): Clipping
+  edges: [ClippingEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ClippingEdge {
+  cursor: String!
+  node: Clipping!
+}
+
+"""The window containing a clipping"""
+type ClippingWindow implements Node & WindowInterface {
+  """Does the window have a close box?"""
+  closeable: Boolean!
+
+  """Is the window collapsed"""
+  collapsed: Boolean!
+
+  """Does the window have a title bar?"""
+  floating: Boolean!
+
+  """the unique id for this window"""
+  id: ID! @extractFromObjectDisplayName
+
+  """the number of the window in the front-to-back layer ordering"""
+  index: Int!
+
+  """Is the window modal?"""
+  modal: Boolean!
+
+  """the name of the window"""
+  name: String!
+
+  """Is the window resizable?"""
+  resizable: Boolean!
+
+  """Does the window have a title bar?"""
+  titled: Boolean!
+
+  """Is the window visible (always true for open Finder windows)?"""
+  visible: Boolean!
+
+  """Is the window zoomable?"""
+  zoomable: Boolean!
+
+  """Is the window zoomed?"""
+  zoomed: Boolean!
+}
+
+type ClippingWindowConnection implements Connection {
+  byId(id: ID!): ClippingWindow
+  edges: [ClippingWindowEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ClippingWindowEdge implements Edge {
+  cursor: String!
+  node: ClippingWindow!
+}
+
+"""a column of a list view"""
+type Column {
+  """the index in the front-to-back ordering within its container"""
+  index: Int!
+
+  """the maximum allowed width of this column"""
+  maximumWidth: Int!
+
+  """the minimum allowed width of this column"""
+  minimumWidth: Int!
+
+  """the column name"""
+  name: Elsv!
+
+  """The direction in which the window is sorted"""
+  sortDirection: Sodr!
+
+  """is this column visible"""
+  visible: Boolean!
+
+  """the width of this column"""
+  width: Int!
+}
+
+type ColumnConnection {
+  byId(id: ID!): Column
+  edges: [ColumnEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ColumnEdge {
+  cursor: String!
+  node: Column!
+}
+
+"""the column view options"""
+type ColumnViewOptions {
+  """discloses the preview pane of the preview column in column view"""
+  disclosesPreviewPane: Boolean!
+
+  """displays an icon next to the label in column view"""
+  showsIcon: Boolean!
+
+  """displays a preview of the item in column view"""
+  showsIconPreview: Boolean!
+
+  """displays the preview column in column view"""
+  showsPreviewColumn: Boolean!
+
+  """the size of the text displayed in the column view"""
+  textSize: Int!
+}
+
+"""the Computer location (as in Go > Computer)"""
+type ComputerObject implements ItemInterface {
+  """the comment of the item, displayed in the “Get Info” window"""
+  comment: String!
+
+  """the date on which the item was created"""
+  creationDate: String!
+
+  """a description of the item"""
+  description: String!
+
+  """the user-visible name of the item"""
+  displayedName: String!
+  everyonesPrivileges: Priv!
+
+  """Is the item's extension hidden from the user?"""
+  extensionHidden: Boolean!
+
+  """the user or group that has special access to the container"""
+  group: String!
+  groupPrivileges: Priv!
+
+  """the index in the front-to-back ordering within its container"""
+  index: Int!
+
+  """the kind of the item"""
+  kind: String!
+
+  """the label of the item"""
+  labelIndex: Int!
+
+  """Is the file locked?"""
+  locked: Boolean!
+
+  """the date on which the item was last modified"""
+  modificationDate: String!
+
+  """the name of the item"""
+  name: String!
+
+  """the name extension of the item (such as “txt”)"""
+  nameExtension: String!
+
+  """the user that owns the container"""
+  owner: String!
+  ownerPrivileges: Priv!
+
+  """the URL of the item"""
+  url: String!
+}
+
+input Condition {
+  enabled: Boolean! = true
+  field: String
+  operands: [Condition!]
+  operator: String! = "="
+  value: String! = "true"
+}
+
+interface Connection {
+  byId(id: ID!): Node
+  edges: [Edge!]!
+  pageInfo: PageInfo!
+}
+
+"""An item that contains other items"""
+type Container implements ContainerInterface & ItemInterface {
+  aliasFiles(after: ID, first: Int, whose: Condition): AliasFileConnection!
+  applicationFiles(after: ID, first: Int, whose: Condition): ApplicationFileConnection!
+  clippings(after: ID, first: Int, whose: Condition): ClippingConnection!
+
+  """the comment of the item, displayed in the “Get Info” window"""
+  comment: String!
+
+  """
+  (NOT AVAILABLE YET) Are the container and all of its children opened as outlines? (can only be set for containers viewed as lists)
+  """
+  completelyExpanded: Boolean!
+  containers(after: ID, first: Int, whose: Condition): ContainerConnection!
+
+  """the date on which the item was created"""
+  creationDate: String!
+
+  """a description of the item"""
+  description: String!
+
+  """the user-visible name of the item"""
+  displayedName: String!
+  documentFiles(after: ID, first: Int, whose: Condition): DocumentFileConnection!
+  everyonesPrivileges: Priv!
+
+  """
+  (NOT AVAILABLE YET) Is the container capable of being expanded as an outline?
+  """
+  expandable: Boolean!
+
+  """
+  (NOT AVAILABLE YET) Is the container opened as an outline? (can only be set for containers viewed as lists)
+  """
+  expanded: Boolean!
+
+  """Is the item's extension hidden from the user?"""
+  extensionHidden: Boolean!
+  files(after: ID, first: Int, whose: Condition): FileConnection!
+  folders(after: ID, first: Int, whose: Condition): FolderConnection!
+
+  """the user or group that has special access to the container"""
+  group: String!
+  groupPrivileges: Priv!
+
+  """the index in the front-to-back ordering within its container"""
+  index: Int!
+  internetLocationFiles(after: ID, first: Int, whose: Condition): InternetLocationFileConnection!
+  items(after: ID, first: Int, whose: Condition): ItemConnection!
+
+  """the kind of the item"""
+  kind: String!
+
+  """the label of the item"""
+  labelIndex: Int!
+
+  """Is the file locked?"""
+  locked: Boolean!
+
+  """the date on which the item was last modified"""
+  modificationDate: String!
+
+  """the name of the item"""
+  name: String!
+
+  """the name extension of the item (such as “txt”)"""
+  nameExtension: String!
+
+  """the user that owns the container"""
+  owner: String!
+  ownerPrivileges: Priv!
+  packages(after: ID, first: Int, whose: Condition): PackageConnection!
+
+  """the URL of the item"""
+  url: String!
+}
+
+type ContainerConnection {
+  byId(id: ID!): ContainerInterface
+  edges: [ContainerEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ContainerEdge {
+  cursor: String!
+  node: ContainerInterface!
+}
+
+interface ContainerInterface {
+  aliasFiles(after: ID, first: Int, whose: Condition): AliasFileConnection!
+  applicationFiles(after: ID, first: Int, whose: Condition): ApplicationFileConnection!
+  clippings(after: ID, first: Int, whose: Condition): ClippingConnection!
+
+  """
+  (NOT AVAILABLE YET) Are the container and all of its children opened as outlines? (can only be set for containers viewed as lists)
+  """
+  completelyExpanded: Boolean!
+  containers(after: ID, first: Int, whose: Condition): ContainerConnection!
+  documentFiles(after: ID, first: Int, whose: Condition): DocumentFileConnection!
+
+  """
+  (NOT AVAILABLE YET) Is the container capable of being expanded as an outline?
+  """
+  expandable: Boolean!
+
+  """
+  (NOT AVAILABLE YET) Is the container opened as an outline? (can only be set for containers viewed as lists)
+  """
+  expanded: Boolean!
+  files(after: ID, first: Int, whose: Condition): FileConnection!
+  folders(after: ID, first: Int, whose: Condition): FolderConnection!
+  internetLocationFiles(after: ID, first: Int, whose: Condition): InternetLocationFileConnection!
+  items(after: ID, first: Int, whose: Condition): ItemConnection!
+  packages(after: ID, first: Int, whose: Condition): PackageConnection!
+}
+
+"""Desktop-object is the class of the “desktop” object"""
+type DesktopObject implements ContainerInterface {
+  aliasFiles(after: ID, first: Int, whose: Condition): AliasFileConnection!
+  applicationFiles(after: ID, first: Int, whose: Condition): ApplicationFileConnection!
+  clippings(after: ID, first: Int, whose: Condition): ClippingConnection!
+
+  """
+  (NOT AVAILABLE YET) Are the container and all of its children opened as outlines? (can only be set for containers viewed as lists)
+  """
+  completelyExpanded: Boolean!
+  containers(after: ID, first: Int, whose: Condition): ContainerConnection!
+  disks(after: ID, first: Int, whose: Condition): DiskConnection!
+  documentFiles(after: ID, first: Int, whose: Condition): DocumentFileConnection!
+
+  """
+  (NOT AVAILABLE YET) Is the container capable of being expanded as an outline?
+  """
+  expandable: Boolean!
+
+  """
+  (NOT AVAILABLE YET) Is the container opened as an outline? (can only be set for containers viewed as lists)
+  """
+  expanded: Boolean!
+  files(after: ID, first: Int, whose: Condition): FileConnection!
+  folders(after: ID, first: Int, whose: Condition): FolderConnection!
+  internetLocationFiles(after: ID, first: Int, whose: Condition): InternetLocationFileConnection!
+  items(after: ID, first: Int, whose: Condition): ItemConnection!
+  packages(after: ID, first: Int, whose: Condition): PackageConnection!
+}
+
+"""the desktop window"""
+type DesktopWindow implements FinderWindowInterface {
+  """the column view options for the container window"""
+  columnViewOptions: ColumnViewOptions!
+
+  """the current view for the container window"""
+  currentView: Ecvw!
+
+  """the icon view options for the container window"""
+  iconViewOptions: IconViewOptions!
+
+  """the list view options for the container window"""
+  listViewOptions: ListViewOptions!
+
+  """Is the window's path bar visible?"""
+  pathbarVisible: Boolean!
+
+  """the width of the sidebar for the container window"""
+  sidebarWidth: Int!
+
+  """Is the window's status bar visible?"""
+  statusbarVisible: Boolean!
+
+  """Is the window's toolbar visible?"""
+  toolbarVisible: Boolean!
+}
+
+"""A disk"""
+type Disk implements ContainerInterface & Node {
+  aliasFiles(after: ID, first: Int, whose: Condition): AliasFileConnection!
+  applicationFiles(after: ID, first: Int, whose: Condition): ApplicationFileConnection!
+  clippings(after: ID, first: Int, whose: Condition): ClippingConnection!
+
+  """
+  (NOT AVAILABLE YET) Are the container and all of its children opened as outlines? (can only be set for containers viewed as lists)
+  """
+  completelyExpanded: Boolean!
+  containers(after: ID, first: Int, whose: Condition): ContainerConnection!
+  documentFiles(after: ID, first: Int, whose: Condition): DocumentFileConnection!
+
+  """Can the media be ejected (floppies, CDs, and so on)?"""
+  ejectable: Boolean!
+
+  """
+  (NOT AVAILABLE YET) Is the container capable of being expanded as an outline?
+  """
+  expandable: Boolean!
+
+  """
+  (NOT AVAILABLE YET) Is the container opened as an outline? (can only be set for containers viewed as lists)
+  """
+  expanded: Boolean!
+  files(after: ID, first: Int, whose: Condition): FileConnection!
+  folders(after: ID, first: Int, whose: Condition): FolderConnection!
+
+  """the filesystem format of this disk"""
+  format: Edfm!
+
+  """
+  the unique id for this disk (unchanged while disk remains connected and Finder remains running)
+  """
+  id: ID! @extractFromObjectDisplayName
+
+  """Ignore permissions on this disk?"""
+  ignorePrivileges: Boolean!
+  internetLocationFiles(after: ID, first: Int, whose: Condition): InternetLocationFileConnection!
+  items(after: ID, first: Int, whose: Condition): ItemConnection!
+
+  """Does this disk do file system journaling?"""
+  journalingEnabled: Boolean!
+
+  """Is the media a local volume (as opposed to a file server)?"""
+  localVolume: Boolean!
+  packages(after: ID, first: Int, whose: Condition): PackageConnection!
+
+  """Is this disk the boot disk?"""
+  startup: Boolean!
+}
+
+type DiskConnection implements Connection {
+  byId(id: ID!): Disk
+  edges: [DiskEdge!]!
+  pageInfo: PageInfo!
+}
+
+type DiskEdge implements Edge {
+  cursor: String!
+  node: Disk!
+}
+
+interface DiskInterface implements Node {
+  aliasFiles(after: ID, first: Int, whose: Condition): AliasFileConnection!
+  applicationFiles(after: ID, first: Int, whose: Condition): ApplicationFileConnection!
+  clippings(after: ID, first: Int, whose: Condition): ClippingConnection!
+  containers(after: ID, first: Int, whose: Condition): ContainerConnection!
+  documentFiles(after: ID, first: Int, whose: Condition): DocumentFileConnection!
+
+  """Can the media be ejected (floppies, CDs, and so on)?"""
+  ejectable: Boolean!
+  files(after: ID, first: Int, whose: Condition): FileConnection!
+  folders(after: ID, first: Int, whose: Condition): FolderConnection!
+
+  """the filesystem format of this disk"""
+  format: Edfm!
+
+  """
+  the unique id for this disk (unchanged while disk remains connected and Finder remains running)
+  """
+  id: ID! @extractFromObjectDisplayName
+
+  """Ignore permissions on this disk?"""
+  ignorePrivileges: Boolean!
+  internetLocationFiles(after: ID, first: Int, whose: Condition): InternetLocationFileConnection!
+  items(after: ID, first: Int, whose: Condition): ItemConnection!
+
+  """Does this disk do file system journaling?"""
+  journalingEnabled: Boolean!
+
+  """Is the media a local volume (as opposed to a file server)?"""
+  localVolume: Boolean!
+  packages(after: ID, first: Int, whose: Condition): PackageConnection!
+
+  """Is this disk the boot disk?"""
+  startup: Boolean!
+}
+
+"""A document file"""
+type DocumentFile implements FileInterface {
+  """
+  the version of the product (visible at the top of the “Get Info” window)
+  """
+  productVersion: String!
+
+  """Is the file a stationery pad?"""
+  stationery: Boolean!
+
+  """
+  the version of the file (visible at the bottom of the “Get Info” window)
+  """
+  version: String!
+}
+
+type DocumentFileConnection {
+  byId(id: ID!): DocumentFile
+  edges: [DocumentFileEdge!]!
+  pageInfo: PageInfo!
+}
+
+type DocumentFileEdge {
+  cursor: String!
+  node: DocumentFile!
+}
+
+enum Earr {
+  ARRANGED_BY_CREATION_DATE
+  ARRANGED_BY_KIND
+  ARRANGED_BY_LABEL
+  ARRANGED_BY_MODIFICATION_DATE
+  ARRANGED_BY_NAME
+  ARRANGED_BY_SIZE
+  NOT_ARRANGED
+  SNAP_TO_GRID
+}
+
+enum Ecvw {
+  COLUMN_VIEW
+  FLOW_VIEW
+  GROUP_VIEW
+  ICON_VIEW
+  LIST_VIEW
+}
+
+enum Edfm {
+  APFS_FORMAT
+  APPLESHARE_FORMAT
+  APPLE_PHOTO_FORMAT
+  AUDIO_FORMAT
+  EXFAT_FORMAT
+  FTP_FORMAT
+  HIGH_SIERRA_FORMAT
+  ISO_9660_FORMAT
+  MAC_OS_EXTENDED_FORMAT
+  MAC_OS_FORMAT
+  MSDOS_FORMAT
+  NFS_FORMAT
+  NTFS_FORMAT
+  PACKET_WRITTEN_UDF_FORMAT
+  PRODOS_FORMAT
+  QUICKTAKE_FORMAT
+  SMB_FORMAT
+  UDF_FORMAT
+  UFS_FORMAT
+  UNKNOWN_FORMAT
+  WEBDAV_FORMAT
+  XSAN_FORMAT
+}
+
+interface Edge {
+  cursor: String!
+  node: Node!
+}
+
+enum Elsv {
+  COMMENT_COLUMN
+  CREATION_DATE_COLUMN
+  KIND_COLUMN
+  LABEL_COLUMN
+  MODIFICATION_DATE_COLUMN
+  NAME_COLUMN
+  SIZE_COLUMN
+  VERSION_COLUMN
+}
+
+enum Epos {
+  BOTTOM
+  RIGHT
+}
+
+"""A file"""
+type File implements FileInterface & ItemInterface {
+  """the comment of the item, displayed in the “Get Info” window"""
+  comment: String!
+
+  """the date on which the item was created"""
+  creationDate: String!
+
+  """a description of the item"""
+  description: String!
+
+  """the user-visible name of the item"""
+  displayedName: String!
+  everyonesPrivileges: Priv!
+
+  """Is the item's extension hidden from the user?"""
+  extensionHidden: Boolean!
+
+  """the user or group that has special access to the container"""
+  group: String!
+  groupPrivileges: Priv!
+
+  """the index in the front-to-back ordering within its container"""
+  index: Int!
+
+  """the kind of the item"""
+  kind: String!
+
+  """the label of the item"""
+  labelIndex: Int!
+
+  """Is the file locked?"""
+  locked: Boolean!
+
+  """the date on which the item was last modified"""
+  modificationDate: String!
+
+  """the name of the item"""
+  name: String!
+
+  """the name extension of the item (such as “txt”)"""
+  nameExtension: String!
+
+  """the user that owns the container"""
+  owner: String!
+  ownerPrivileges: Priv!
+
+  """
+  the version of the product (visible at the top of the “Get Info” window)
+  """
+  productVersion: String!
+
+  """Is the file a stationery pad?"""
+  stationery: Boolean!
+
+  """the URL of the item"""
+  url: String!
+
+  """
+  the version of the file (visible at the bottom of the “Get Info” window)
+  """
+  version: String!
+}
+
+type FileConnection {
+  byId(id: ID!): FileInterface
+  edges: [FileEdge!]!
+  pageInfo: PageInfo!
+}
+
+type FileEdge {
+  cursor: String!
+  node: FileInterface!
+}
+
+interface FileInterface {
+  """
+  the version of the product (visible at the top of the “Get Info” window)
+  """
+  productVersion: String!
+
+  """Is the file a stationery pad?"""
+  stationery: Boolean!
+
+  """
+  the version of the file (visible at the bottom of the “Get Info” window)
+  """
+  version: String!
+}
+
+"""A file viewer window"""
+type FinderWindow implements FinderWindowInterface & Node & WindowInterface {
+  """Does the window have a close box?"""
+  closeable: Boolean!
+
+  """Is the window collapsed"""
+  collapsed: Boolean!
+
+  """the column view options for the container window"""
+  columnViewOptions: ColumnViewOptions!
+
+  """the current view for the container window"""
+  currentView: Ecvw!
+
+  """Does the window have a title bar?"""
+  floating: Boolean!
+
+  """the icon view options for the container window"""
+  iconViewOptions: IconViewOptions!
+
+  """the unique id for this window"""
+  id: ID! @extractFromObjectDisplayName
+
+  """the number of the window in the front-to-back layer ordering"""
+  index: Int!
+
+  """the list view options for the container window"""
+  listViewOptions: ListViewOptions!
+
+  """Is the window modal?"""
+  modal: Boolean!
+
+  """the name of the window"""
+  name: String!
+
+  """Is the window's path bar visible?"""
+  pathbarVisible: Boolean!
+
+  """Is the window resizable?"""
+  resizable: Boolean!
+
+  """the width of the sidebar for the container window"""
+  sidebarWidth: Int!
+
+  """Is the window's status bar visible?"""
+  statusbarVisible: Boolean!
+
+  """Does the window have a title bar?"""
+  titled: Boolean!
+
+  """Is the window's toolbar visible?"""
+  toolbarVisible: Boolean!
+
+  """Is the window visible (always true for open Finder windows)?"""
+  visible: Boolean!
+
+  """Is the window zoomable?"""
+  zoomable: Boolean!
+
+  """Is the window zoomed?"""
+  zoomed: Boolean!
+}
+
+type FinderWindowConnection {
+  byId(id: ID!): FinderWindowInterface
+  edges: [FinderWindowEdge!]!
+  pageInfo: PageInfo!
+}
+
+type FinderWindowEdge {
+  cursor: String!
+  node: FinderWindowInterface!
+}
+
+interface FinderWindowInterface {
+  """the column view options for the container window"""
+  columnViewOptions: ColumnViewOptions!
+
+  """the current view for the container window"""
+  currentView: Ecvw!
+
+  """the icon view options for the container window"""
+  iconViewOptions: IconViewOptions!
+
+  """the list view options for the container window"""
+  listViewOptions: ListViewOptions!
+
+  """Is the window's path bar visible?"""
+  pathbarVisible: Boolean!
+
+  """the width of the sidebar for the container window"""
+  sidebarWidth: Int!
+
+  """Is the window's status bar visible?"""
+  statusbarVisible: Boolean!
+
+  """Is the window's toolbar visible?"""
+  toolbarVisible: Boolean!
+}
+
+"""A folder"""
+type Folder implements ContainerInterface {
+  aliasFiles(after: ID, first: Int, whose: Condition): AliasFileConnection!
+  applicationFiles(after: ID, first: Int, whose: Condition): ApplicationFileConnection!
+  clippings(after: ID, first: Int, whose: Condition): ClippingConnection!
+
+  """
+  (NOT AVAILABLE YET) Are the container and all of its children opened as outlines? (can only be set for containers viewed as lists)
+  """
+  completelyExpanded: Boolean!
+  containers(after: ID, first: Int, whose: Condition): ContainerConnection!
+  documentFiles(after: ID, first: Int, whose: Condition): DocumentFileConnection!
+
+  """
+  (NOT AVAILABLE YET) Is the container capable of being expanded as an outline?
+  """
+  expandable: Boolean!
+
+  """
+  (NOT AVAILABLE YET) Is the container opened as an outline? (can only be set for containers viewed as lists)
+  """
+  expanded: Boolean!
+  files(after: ID, first: Int, whose: Condition): FileConnection!
+  folders(after: ID, first: Int, whose: Condition): FolderConnection!
+  internetLocationFiles(after: ID, first: Int, whose: Condition): InternetLocationFileConnection!
+  items(after: ID, first: Int, whose: Condition): ItemConnection!
+  packages(after: ID, first: Int, whose: Condition): PackageConnection!
+}
+
+type FolderConnection {
+  byId(id: ID!): Folder
+  edges: [FolderEdge!]!
+  pageInfo: PageInfo!
+}
+
+type FolderEdge {
+  cursor: String!
+  node: Folder!
+}
+
+"""the icon view options"""
+type IconViewOptions {
+  """the property by which to keep icons arranged"""
+  arrangement: Earr!
+
+  """the background picture of the icon view"""
+  backgroundPicture: File!
+
+  """the size of icons displayed in the icon view"""
+  iconSize: Int!
+
+  """the location of the label in reference to the icon"""
+  labelPosition: Epos!
+
+  """displays a preview of the item in icon view"""
+  showsIconPreview: Boolean!
+
+  """additional info about an item displayed in icon view"""
+  showsItemInfo: Boolean!
+
+  """the size of the text displayed in the icon view"""
+  textSize: Int!
+}
+
+"""An inspector window (opened by “Show Info”)"""
+type InformationWindow implements Node & WindowInterface {
+  """Does the window have a close box?"""
+  closeable: Boolean!
+
+  """Is the window collapsed"""
+  collapsed: Boolean!
+
+  """the current panel in the information window"""
+  currentPanel: Ipnl!
+
+  """Does the window have a title bar?"""
+  floating: Boolean!
+
+  """the unique id for this window"""
+  id: ID! @extractFromObjectDisplayName
+
+  """the number of the window in the front-to-back layer ordering"""
+  index: Int!
+
+  """Is the window modal?"""
+  modal: Boolean!
+
+  """the name of the window"""
+  name: String!
+
+  """Is the window resizable?"""
+  resizable: Boolean!
+
+  """Does the window have a title bar?"""
+  titled: Boolean!
+
+  """Is the window visible (always true for open Finder windows)?"""
+  visible: Boolean!
+
+  """Is the window zoomable?"""
+  zoomable: Boolean!
+
+  """Is the window zoomed?"""
+  zoomed: Boolean!
+}
+
+type InformationWindowConnection implements Connection {
+  byId(id: ID!): InformationWindow
+  edges: [InformationWindowEdge!]!
+  pageInfo: PageInfo!
+}
+
+type InformationWindowEdge implements Edge {
+  cursor: String!
+  node: InformationWindow!
+}
+
+"""A file containing an internet location"""
+type InternetLocationFile implements FileInterface {
+  """the internet location"""
+  location: String!
+
+  """
+  the version of the product (visible at the top of the “Get Info” window)
+  """
+  productVersion: String!
+
+  """Is the file a stationery pad?"""
+  stationery: Boolean!
+
+  """
+  the version of the file (visible at the bottom of the “Get Info” window)
+  """
+  version: String!
+}
+
+type InternetLocationFileConnection {
+  byId(id: ID!): InternetLocationFile
+  edges: [InternetLocationFileEdge!]!
+  pageInfo: PageInfo!
+}
+
+type InternetLocationFileEdge {
+  cursor: String!
+  node: InternetLocationFile!
+}
+
+enum Ipnl {
+  APPLICATION_PANEL
+  BURNING_PANEL
+  COMMENTS_PANEL
+  CONTENT_INDEX_PANEL
+  GENERAL_INFORMATION_PANEL
+  LANGUAGES_PANEL
+  MEMORY_PANEL
+  MORE_INFO_PANEL
+  NAME__AND__EXTENSION_PANEL
+  PLUGINS_PANEL
+  PREVIEW_PANEL
+  SHARING_PANEL
+  SIMPLE_HEADER_PANEL
+}
+
+"""An item"""
+type Item implements ItemInterface {
+  """the comment of the item, displayed in the “Get Info” window"""
+  comment: String!
+
+  """the date on which the item was created"""
+  creationDate: String!
+
+  """a description of the item"""
+  description: String!
+
+  """the user-visible name of the item"""
+  displayedName: String!
+  everyonesPrivileges: Priv!
+
+  """Is the item's extension hidden from the user?"""
+  extensionHidden: Boolean!
+
+  """the user or group that has special access to the container"""
+  group: String!
+  groupPrivileges: Priv!
+
+  """the index in the front-to-back ordering within its container"""
+  index: Int!
+
+  """the kind of the item"""
+  kind: String!
+
+  """the label of the item"""
+  labelIndex: Int!
+
+  """Is the file locked?"""
+  locked: Boolean!
+
+  """the date on which the item was last modified"""
+  modificationDate: String!
+
+  """the name of the item"""
+  name: String!
+
+  """the name extension of the item (such as “txt”)"""
+  nameExtension: String!
+
+  """the user that owns the container"""
+  owner: String!
+  ownerPrivileges: Priv!
+
+  """the URL of the item"""
+  url: String!
+}
+
+type ItemConnection {
+  byId(id: ID!): ItemInterface
+  edges: [ItemEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ItemEdge {
+  cursor: String!
+  node: ItemInterface!
+}
+
+interface ItemInterface {
+  """the comment of the item, displayed in the “Get Info” window"""
+  comment: String!
+
+  """the date on which the item was created"""
+  creationDate: String!
+
+  """a description of the item"""
+  description: String!
+
+  """the user-visible name of the item"""
+  displayedName: String!
+  everyonesPrivileges: Priv!
+
+  """Is the item's extension hidden from the user?"""
+  extensionHidden: Boolean!
+
+  """the user or group that has special access to the container"""
+  group: String!
+  groupPrivileges: Priv!
+
+  """the index in the front-to-back ordering within its container"""
+  index: Int!
+
+  """the kind of the item"""
+  kind: String!
+
+  """the label of the item"""
+  labelIndex: Int!
+
+  """Is the file locked?"""
+  locked: Boolean!
+
+  """the date on which the item was last modified"""
+  modificationDate: String!
+
+  """the name of the item"""
+  name: String!
+
+  """the name extension of the item (such as “txt”)"""
+  nameExtension: String!
+
+  """the user that owns the container"""
+  owner: String!
+  ownerPrivileges: Priv!
+
+  """the URL of the item"""
+  url: String!
+}
+
+"""the list view options"""
+type ListViewOptions {
+  """Are folder sizes calculated and displayed in the window?"""
+  calculatesFolderSizes: Boolean!
+  columns(after: ID, first: Int, whose: Condition): ColumnConnection!
+
+  """the size of icons displayed in the list view"""
+  iconSize: Lvic!
+
+  """displays a preview of the item in list view"""
+  showsIconPreview: Boolean!
+
+  """the column that the list view is sorted on"""
+  sortColumn: Column!
+
+  """the size of the text displayed in the list view"""
+  textSize: Int!
+
+  """Are relative dates (e.g., today, yesterday) shown in the list view?"""
+  usesRelativeDates: Boolean!
+}
+
+enum Lvic {
+  LARGE_ICON
+  SMALL_ICON
+}
+
+interface Node {
+  id: ID!
+}
+
+"""A package"""
+type Package implements ItemInterface {
+  """the comment of the item, displayed in the “Get Info” window"""
+  comment: String!
+
+  """the date on which the item was created"""
+  creationDate: String!
+
+  """a description of the item"""
+  description: String!
+
+  """the user-visible name of the item"""
+  displayedName: String!
+  everyonesPrivileges: Priv!
+
+  """Is the item's extension hidden from the user?"""
+  extensionHidden: Boolean!
+
+  """the user or group that has special access to the container"""
+  group: String!
+  groupPrivileges: Priv!
+
+  """the index in the front-to-back ordering within its container"""
+  index: Int!
+
+  """the kind of the item"""
+  kind: String!
+
+  """the label of the item"""
+  labelIndex: Int!
+
+  """Is the file locked?"""
+  locked: Boolean!
+
+  """the date on which the item was last modified"""
+  modificationDate: String!
+
+  """the name of the item"""
+  name: String!
+
+  """the name extension of the item (such as “txt”)"""
+  nameExtension: String!
+
+  """the user that owns the container"""
+  owner: String!
+  ownerPrivileges: Priv!
+
+  """the URL of the item"""
+  url: String!
+}
+
+type PackageConnection {
+  byId(id: ID!): Package
+  edges: [PackageEdge!]!
+  pageInfo: PageInfo!
+}
+
+type PackageEdge {
+  cursor: String!
+  node: Package!
+}
+
+type PageInfo {
+  endCursor: String!
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String!
+}
+
+enum Pple {
+  ADVANCED_PREFERENCES_PANEL
+  GENERAL_PREFERENCES_PANEL
+  LABEL_PREFERENCES_PANEL
+  SIDEBAR_PREFERENCES_PANEL
+}
+
+"""The Finder Preferences"""
+type Preferences {
+  """Show name extensions, even for items whose “extension hidden” is true?"""
+  allNameExtensionsShowing: Boolean!
+
+  """the column view options for all windows"""
+  columnViewOptions: ColumnViewOptions!
+
+  """
+  the delay before springing open a container in seconds (from 0.167 to 1.169)
+  """
+  delayBeforeSpringing: Float!
+
+  """Connected servers appear on the desktop?"""
+  desktopShowsConnectedServers: Boolean!
+
+  """External hard disks appear on the desktop?"""
+  desktopShowsExternalHardDisks: Boolean!
+
+  """Hard disks appear on the desktop?"""
+  desktopShowsHardDisks: Boolean!
+
+  """CDs, DVDs, and iPods appear on the desktop?"""
+  desktopShowsRemovableMedia: Boolean!
+
+  """Folders open into new tabs?"""
+  foldersOpenInNewTabs: Boolean!
+
+  """Folders open into new windows?"""
+  foldersOpenInNewWindows: Boolean!
+
+  """Spring open folders after the specified delay?"""
+  foldersSpringOpen: Boolean!
+
+  """the default icon view options"""
+  iconViewOptions: IconViewOptions!
+
+  """the default list view options"""
+  listViewOptions: ListViewOptions!
+
+  """Open new windows in column view?"""
+  newWindowsOpenInColumnView: Boolean!
+
+  """the window that would open if Finder preferences was opened"""
+  window: PreferencesWindow!
+}
+
+"""The Finder Preferences window"""
+type PreferencesWindow implements Node & WindowInterface {
+  """Does the window have a close box?"""
+  closeable: Boolean!
+
+  """Is the window collapsed"""
+  collapsed: Boolean!
+
+  """The current panel in the Finder preferences window"""
+  currentPanel: Pple!
+
+  """Does the window have a title bar?"""
+  floating: Boolean!
+
+  """the unique id for this window"""
+  id: ID! @extractFromObjectDisplayName
+
+  """the number of the window in the front-to-back layer ordering"""
+  index: Int!
+
+  """Is the window modal?"""
+  modal: Boolean!
+
+  """the name of the window"""
+  name: String!
+
+  """Is the window resizable?"""
+  resizable: Boolean!
+
+  """Does the window have a title bar?"""
+  titled: Boolean!
+
+  """Is the window visible (always true for open Finder windows)?"""
+  visible: Boolean!
+
+  """Is the window zoomable?"""
+  zoomable: Boolean!
+
+  """Is the window zoomed?"""
+  zoomed: Boolean!
+}
+
+type PreferencesWindowConnection implements Connection {
+  byId(id: ID!): PreferencesWindow
+  edges: [PreferencesWindowEdge!]!
+  pageInfo: PageInfo!
+}
+
+type PreferencesWindowEdge implements Edge {
+  cursor: String!
+  node: PreferencesWindow!
+}
+
+enum Priv {
+  NONE
+  READ_ONLY
+  READ_WRITE
+  WRITE_ONLY
+}
+
+type Query {
+  application: Application!
+}
+
+enum Sodr {
+  NORMAL
+  REVERSED
+}
+
+"""Trash-object is the class of the “trash” object"""
+type TrashObject implements ContainerInterface {
+  aliasFiles(after: ID, first: Int, whose: Condition): AliasFileConnection!
+  applicationFiles(after: ID, first: Int, whose: Condition): ApplicationFileConnection!
+  clippings(after: ID, first: Int, whose: Condition): ClippingConnection!
+
+  """
+  (NOT AVAILABLE YET) Are the container and all of its children opened as outlines? (can only be set for containers viewed as lists)
+  """
+  completelyExpanded: Boolean!
+  containers(after: ID, first: Int, whose: Condition): ContainerConnection!
+  documentFiles(after: ID, first: Int, whose: Condition): DocumentFileConnection!
+
+  """
+  (NOT AVAILABLE YET) Is the container capable of being expanded as an outline?
+  """
+  expandable: Boolean!
+
+  """
+  (NOT AVAILABLE YET) Is the container opened as an outline? (can only be set for containers viewed as lists)
+  """
+  expanded: Boolean!
+  files(after: ID, first: Int, whose: Condition): FileConnection!
+  folders(after: ID, first: Int, whose: Condition): FolderConnection!
+  internetLocationFiles(after: ID, first: Int, whose: Condition): InternetLocationFileConnection!
+  items(after: ID, first: Int, whose: Condition): ItemConnection!
+  packages(after: ID, first: Int, whose: Condition): PackageConnection!
+
+  """Display a dialog when emptying the trash?"""
+  warnsBeforeEmptying: Boolean!
+}
+
+"""A window"""
+type Window implements Node & WindowInterface {
+  """Does the window have a close box?"""
+  closeable: Boolean!
+
+  """Is the window collapsed"""
+  collapsed: Boolean!
+
+  """Does the window have a title bar?"""
+  floating: Boolean!
+
+  """the unique id for this window"""
+  id: ID! @extractFromObjectDisplayName
+
+  """the number of the window in the front-to-back layer ordering"""
+  index: Int!
+
+  """Is the window modal?"""
+  modal: Boolean!
+
+  """the name of the window"""
+  name: String!
+
+  """Is the window resizable?"""
+  resizable: Boolean!
+
+  """Does the window have a title bar?"""
+  titled: Boolean!
+
+  """Is the window visible (always true for open Finder windows)?"""
+  visible: Boolean!
+
+  """Is the window zoomable?"""
+  zoomable: Boolean!
+
+  """Is the window zoomed?"""
+  zoomed: Boolean!
+}
+
+type WindowConnection implements Connection {
+  byId(id: ID!): WindowInterface
+  edges: [WindowEdge!]!
+  pageInfo: PageInfo!
+}
+
+type WindowEdge implements Edge {
+  cursor: String!
+  node: WindowInterface!
+}
+
+interface WindowInterface implements Node {
+  """Does the window have a close box?"""
+  closeable: Boolean!
+
+  """Is the window collapsed"""
+  collapsed: Boolean!
+
+  """Does the window have a title bar?"""
+  floating: Boolean!
+
+  """the unique id for this window"""
+  id: ID! @extractFromObjectDisplayName
+
+  """the number of the window in the front-to-back layer ordering"""
+  index: Int!
+
+  """Is the window modal?"""
+  modal: Boolean!
+
+  """the name of the window"""
+  name: String!
+
+  """Is the window resizable?"""
+  resizable: Boolean!
+
+  """Does the window have a title bar?"""
+  titled: Boolean!
+
+  """Is the window visible (always true for open Finder windows)?"""
+  visible: Boolean!
+
+  """Is the window zoomable?"""
+  zoomable: Boolean!
+
+  """Is the window zoomed?"""
+  zoomed: Boolean!
+}
+`;
+
 exports[`build - OmniFocus: omnifocus.graphql 1`] = `
 directive @extractFromObjectDisplayName on FIELD_DEFINITION
 

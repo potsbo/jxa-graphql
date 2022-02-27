@@ -15,3 +15,7 @@ test("build - OmniFocus", async () => {
 test("build - Calendar", async () => {
   expect(await build("/System/Applications/Calendar.app")).toMatchSnapshot("calendar.graphql");
 });
+
+test("build - Finder", async () => {
+  expect(await build("/System/Library/CoreServices/Finder.app")).toMatchSnapshot("finder.graphql");
+});
