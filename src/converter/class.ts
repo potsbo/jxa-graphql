@@ -44,6 +44,18 @@ export class ClassBuilder {
       interfaces: [named(NodeInterface.name.value)],
     };
   };
+  private getAncestors = (classBuilders: ClassBuilder[]): ClassBuilder[] => {
+    const inherits = this.getInherits();
+    const parent = classBuilders.find((t) => t.getClassName() === inherits);
+    if (inherits !== undefined && parent === undefined) {
+      /* istanbul ignore next */
+      throw new Error("parent not found");
+    }
+    if (parent === undefined) {
+      return [];
+    }
+    return [parent, ...parent.getAncestors(classBuilders)];
+  };
   build = ({ override, builders }: Environment): DefinitionNode[] => {
     const typeName = camelCase(this.c.$.name, { pascalCase: true });
 
@@ -51,21 +63,19 @@ export class ClassBuilder {
     if (override?.definitions.some((d) => "name" in d && d.name?.value === typeName)) {
       return [];
     }
-    const inherits = this.getInherits();
+
     const classBuilders = builders.filter((b): b is ClassBuilder => b instanceof ClassBuilder);
-    const parent = classBuilders.find((t) => t.getClassName() === inherits);
-    if (inherits !== undefined && parent === undefined) {
-      /* istanbul ignore next */
-      throw new Error("parent not found");
-    }
+    const ancestors = this.getAncestors(classBuilders);
+
     const inherited = classBuilders.map((c) => c.getInherits()).some((c): c is string => c === this.getClassName());
 
-    const fields = complementId([...this.fields, ...(parent?.fields ?? [])]);
+    const fields = complementId(
+      [this, ...ancestors].reduce((acum: FieldDefinitionNode[], cur) => {
+        return [...acum, ...cur.fields];
+      }, [])
+    );
 
-    const interfaces: string[] = [NodeInterface.name.value];
-    if (parent) {
-      interfaces.push(parent.getInterfaceName());
-    }
+    const interfaces: string[] = [NodeInterface.name.value, ...ancestors.map((a) => a.getInterfaceName())];
     if (inherited) {
       interfaces.push(this.getInterfaceName());
     }
