@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`build: calendar.graphql 1`] = `
+exports[`build - Calendar: calendar.graphql 1`] = `
 directive @extractFromObjectDisplayName on FIELD_DEFINITION
 
 directive @recordType on OBJECT
@@ -464,7 +464,7 @@ interface WindowInterface implements Node {
 }
 `;
 
-exports[`build: omnifocus.graphql 1`] = `
+exports[`build - OmniFocus: omnifocus.graphql 1`] = `
 directive @extractFromObjectDisplayName on FIELD_DEFINITION
 
 directive @recordType on OBJECT
