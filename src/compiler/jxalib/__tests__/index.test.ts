@@ -66,7 +66,35 @@ test("extractId int", () => {
     extractId(input);
   `);
 
-  expect(output).toEqual(1234);
+  expect(output).toEqual("1234");
+});
+
+test("extractId byName", () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const input = {
+    getDisplayString: () =>
+      `Application("Finder").startupDisk.folders.byName("Users").folders.byName("potsbo").documentFiles.byName("src")`,
+  };
+  const output = eval(`
+    ${library}
+    extractId(input);
+  `);
+
+  expect(output).toEqual("src");
+});
+
+test("extractId byName", () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const input = {
+    getDisplayString: () =>
+      'Application("Finder").startupDisk.folders.byName("Users").folders.byName("potsbo").documentFiles.byName("aaa (bbb).byName(\\"ccc\\")")',
+  };
+  const output = eval(`
+    ${library}
+    extractId(input);
+  `);
+
+  expect(output).toEqual('aaa (bbb).byName("ccc")');
 });
 
 test("extractId undefined", () => {

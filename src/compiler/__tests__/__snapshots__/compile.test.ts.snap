@@ -8,13 +8,38 @@ exports[`query for Connection 1`] = `
 }
 function extractId(obj) {
   const spec = Automation.getDisplayString(obj);
-  return JSON.parse(
-    spec
-      ?.split(\\"byId\\")
-      .reverse()[0]
-      .match(/^\\\\(([^\\\\)]+)\\\\)$/)
-      ?.reverse()[0] ?? \\"null\\"
-  );
+  if (spec === undefined) {
+    return null;
+  }
+  let inParen = false;
+  let inStr = false;
+  let ret = \\"\\";
+  let nextEscape = null;
+  for (let i = 0; i < spec.length; i++) {
+    const c = spec[i];
+    const inEscape = nextEscape === i;
+    if (c === \\"\\\\\\\\\\") {
+      nextEscape = i + 1;
+      continue;
+    }
+    if (!inEscape && c === '\\"') {
+      inStr = !inStr;
+      continue;
+    }
+    if (!inStr) {
+      if (c === \\"(\\") {
+        inParen = true;
+        ret = \\"\\";
+        continue;
+      }
+      if (c === \\")\\") {
+        inParen = false;
+        continue;
+      }
+    }
+    ret = \`\${ret}\${c}\`;
+  }
+  return ret !== \\"\\" ? ret : null;
 }
 function paginate(nodes, { first, after }, getId) {
   const afterIndex =
@@ -40,7 +65,11 @@ JSON.stringify({
             return {
               cursor: extractId(elm),
               node: {
-                __typename: pascalCase(elm.properties().pcls),
+                __typename: pascalCase(
+                  ObjectSpecifier.classOf(
+                    eval(Automation.getDisplayString(elm))
+                  )
+                ),
                 name: elm.name(),
               },
             };
@@ -66,13 +95,38 @@ exports[`query with fragment 1`] = `
 }
 function extractId(obj) {
   const spec = Automation.getDisplayString(obj);
-  return JSON.parse(
-    spec
-      ?.split(\\"byId\\")
-      .reverse()[0]
-      .match(/^\\\\(([^\\\\)]+)\\\\)$/)
-      ?.reverse()[0] ?? \\"null\\"
-  );
+  if (spec === undefined) {
+    return null;
+  }
+  let inParen = false;
+  let inStr = false;
+  let ret = \\"\\";
+  let nextEscape = null;
+  for (let i = 0; i < spec.length; i++) {
+    const c = spec[i];
+    const inEscape = nextEscape === i;
+    if (c === \\"\\\\\\\\\\") {
+      nextEscape = i + 1;
+      continue;
+    }
+    if (!inEscape && c === '\\"') {
+      inStr = !inStr;
+      continue;
+    }
+    if (!inStr) {
+      if (c === \\"(\\") {
+        inParen = true;
+        ret = \\"\\";
+        continue;
+      }
+      if (c === \\")\\") {
+        inParen = false;
+        continue;
+      }
+    }
+    ret = \`\${ret}\${c}\`;
+  }
+  return ret !== \\"\\" ? ret : null;
 }
 function paginate(nodes, { first, after }, getId) {
   const afterIndex =
@@ -98,8 +152,13 @@ JSON.stringify({
           byId: app.defaultDocument().projects.byId(projectId)
             ? {
                 __typename: pascalCase(
-                  app.defaultDocument().projects.byId(projectId).properties()
-                    .pcls
+                  ObjectSpecifier.classOf(
+                    eval(
+                      Automation.getDisplayString(
+                        app.defaultDocument().projects.byId(projectId)
+                      )
+                    )
+                  )
                 ),
                 rootTask: {
                   tasks: (() => {
@@ -113,7 +172,11 @@ JSON.stringify({
                       edges: nodes.map((elm) => {
                         return {
                           node: {
-                            __typename: pascalCase(elm.properties().pcls),
+                            __typename: pascalCase(
+                              ObjectSpecifier.classOf(
+                                eval(Automation.getDisplayString(elm))
+                              )
+                            ),
                             completed: elm.completed(),
                             containingProject: elm.containingProject()
                               ? {
@@ -159,13 +222,38 @@ exports[`query with inline fragment 1`] = `
 }
 function extractId(obj) {
   const spec = Automation.getDisplayString(obj);
-  return JSON.parse(
-    spec
-      ?.split(\\"byId\\")
-      .reverse()[0]
-      .match(/^\\\\(([^\\\\)]+)\\\\)$/)
-      ?.reverse()[0] ?? \\"null\\"
-  );
+  if (spec === undefined) {
+    return null;
+  }
+  let inParen = false;
+  let inStr = false;
+  let ret = \\"\\";
+  let nextEscape = null;
+  for (let i = 0; i < spec.length; i++) {
+    const c = spec[i];
+    const inEscape = nextEscape === i;
+    if (c === \\"\\\\\\\\\\") {
+      nextEscape = i + 1;
+      continue;
+    }
+    if (!inEscape && c === '\\"') {
+      inStr = !inStr;
+      continue;
+    }
+    if (!inStr) {
+      if (c === \\"(\\") {
+        inParen = true;
+        ret = \\"\\";
+        continue;
+      }
+      if (c === \\")\\") {
+        inParen = false;
+        continue;
+      }
+    }
+    ret = \`\${ret}\${c}\`;
+  }
+  return ret !== \\"\\" ? ret : null;
 }
 function paginate(nodes, { first, after }, getId) {
   const afterIndex =
@@ -190,7 +278,11 @@ JSON.stringify({
           edges: nodes.map((elm) => {
             return {
               node: {
-                __typename: pascalCase(elm.properties().pcls),
+                __typename: pascalCase(
+                  ObjectSpecifier.classOf(
+                    eval(Automation.getDisplayString(elm))
+                  )
+                ),
                 name: elm.name(),
                 sections: (() => {
                   const allNodes = elm.sections();
@@ -200,8 +292,11 @@ JSON.stringify({
                       return {
                         node: {
                           ...(() => {
-                            return elm.properties().pcls.toLowerCase() ===
-                              \\"Folder\\".toLowerCase()
+                            return pascalCase(
+                              ObjectSpecifier.classOf(
+                                eval(Automation.getDisplayString(elm))
+                              )
+                            ) === \\"Folder\\".toLowerCase()
                               ? {
                                   name: elm.name(),
                                   __typename: \\"Folder\\",
@@ -209,15 +304,22 @@ JSON.stringify({
                               : {};
                           })(),
                           ...(() => {
-                            return elm.properties().pcls.toLowerCase() ===
-                              \\"Project\\".toLowerCase()
+                            return pascalCase(
+                              ObjectSpecifier.classOf(
+                                eval(Automation.getDisplayString(elm))
+                              )
+                            ) === \\"Project\\".toLowerCase()
                               ? {
                                   completed: elm.completed(),
                                   __typename: \\"Project\\",
                                 }
                               : {};
                           })(),
-                          __typename: pascalCase(elm.properties().pcls),
+                          __typename: pascalCase(
+                            ObjectSpecifier.classOf(
+                              eval(Automation.getDisplayString(elm))
+                            )
+                          ),
                         },
                       };
                     }),
@@ -242,13 +344,38 @@ exports[`query with pageInfo 1`] = `
 }
 function extractId(obj) {
   const spec = Automation.getDisplayString(obj);
-  return JSON.parse(
-    spec
-      ?.split(\\"byId\\")
-      .reverse()[0]
-      .match(/^\\\\(([^\\\\)]+)\\\\)$/)
-      ?.reverse()[0] ?? \\"null\\"
-  );
+  if (spec === undefined) {
+    return null;
+  }
+  let inParen = false;
+  let inStr = false;
+  let ret = \\"\\";
+  let nextEscape = null;
+  for (let i = 0; i < spec.length; i++) {
+    const c = spec[i];
+    const inEscape = nextEscape === i;
+    if (c === \\"\\\\\\\\\\") {
+      nextEscape = i + 1;
+      continue;
+    }
+    if (!inEscape && c === '\\"') {
+      inStr = !inStr;
+      continue;
+    }
+    if (!inStr) {
+      if (c === \\"(\\") {
+        inParen = true;
+        ret = \\"\\";
+        continue;
+      }
+      if (c === \\")\\") {
+        inParen = false;
+        continue;
+      }
+    }
+    ret = \`\${ret}\${c}\`;
+  }
+  return ret !== \\"\\" ? ret : null;
 }
 function paginate(nodes, { first, after }, getId) {
   const afterIndex =
@@ -298,13 +425,38 @@ exports[`query with project interface 1`] = `
 }
 function extractId(obj) {
   const spec = Automation.getDisplayString(obj);
-  return JSON.parse(
-    spec
-      ?.split(\\"byId\\")
-      .reverse()[0]
-      .match(/^\\\\(([^\\\\)]+)\\\\)$/)
-      ?.reverse()[0] ?? \\"null\\"
-  );
+  if (spec === undefined) {
+    return null;
+  }
+  let inParen = false;
+  let inStr = false;
+  let ret = \\"\\";
+  let nextEscape = null;
+  for (let i = 0; i < spec.length; i++) {
+    const c = spec[i];
+    const inEscape = nextEscape === i;
+    if (c === \\"\\\\\\\\\\") {
+      nextEscape = i + 1;
+      continue;
+    }
+    if (!inEscape && c === '\\"') {
+      inStr = !inStr;
+      continue;
+    }
+    if (!inStr) {
+      if (c === \\"(\\") {
+        inParen = true;
+        ret = \\"\\";
+        continue;
+      }
+      if (c === \\")\\") {
+        inParen = false;
+        continue;
+      }
+    }
+    ret = \`\${ret}\${c}\`;
+  }
+  return ret !== \\"\\" ? ret : null;
 }
 function paginate(nodes, { first, after }, getId) {
   const afterIndex =
@@ -329,10 +481,13 @@ JSON.stringify({
           byId: app.defaultDocument().projects.byId(\\"hZoaSakOnG4\\")
             ? {
                 __typename: pascalCase(
-                  app
-                    .defaultDocument()
-                    .projects.byId(\\"hZoaSakOnG4\\")
-                    .properties().pcls
+                  ObjectSpecifier.classOf(
+                    eval(
+                      Automation.getDisplayString(
+                        app.defaultDocument().projects.byId(\\"hZoaSakOnG4\\")
+                      )
+                    )
+                  )
                 ),
                 rootTask: {
                   id: extractId(
@@ -360,13 +515,38 @@ exports[`typename 1`] = `
 }
 function extractId(obj) {
   const spec = Automation.getDisplayString(obj);
-  return JSON.parse(
-    spec
-      ?.split(\\"byId\\")
-      .reverse()[0]
-      .match(/^\\\\(([^\\\\)]+)\\\\)$/)
-      ?.reverse()[0] ?? \\"null\\"
-  );
+  if (spec === undefined) {
+    return null;
+  }
+  let inParen = false;
+  let inStr = false;
+  let ret = \\"\\";
+  let nextEscape = null;
+  for (let i = 0; i < spec.length; i++) {
+    const c = spec[i];
+    const inEscape = nextEscape === i;
+    if (c === \\"\\\\\\\\\\") {
+      nextEscape = i + 1;
+      continue;
+    }
+    if (!inEscape && c === '\\"') {
+      inStr = !inStr;
+      continue;
+    }
+    if (!inStr) {
+      if (c === \\"(\\") {
+        inParen = true;
+        ret = \\"\\";
+        continue;
+      }
+      if (c === \\")\\") {
+        inParen = false;
+        continue;
+      }
+    }
+    ret = \`\${ret}\${c}\`;
+  }
+  return ret !== \\"\\" ? ret : null;
 }
 function paginate(nodes, { first, after }, getId) {
   const afterIndex =
@@ -392,8 +572,11 @@ JSON.stringify({
             return {
               node: {
                 ...(() => {
-                  return elm.properties().pcls.toLowerCase() ===
-                    \\"Folder\\".toLowerCase()
+                  return pascalCase(
+                    ObjectSpecifier.classOf(
+                      eval(Automation.getDisplayString(elm))
+                    )
+                  ) === \\"Folder\\".toLowerCase()
                     ? {
                         name: elm.name(),
                         __typename: \\"Folder\\",
@@ -401,8 +584,11 @@ JSON.stringify({
                     : {};
                 })(),
                 ...(() => {
-                  return elm.properties().pcls.toLowerCase() ===
-                    \\"Project\\".toLowerCase()
+                  return pascalCase(
+                    ObjectSpecifier.classOf(
+                      eval(Automation.getDisplayString(elm))
+                    )
+                  ) === \\"Project\\".toLowerCase()
                     ? {
                         effectiveStatus: elm
                           .effectiveStatus()
@@ -413,7 +599,11 @@ JSON.stringify({
                       }
                     : {};
                 })(),
-                __typename: pascalCase(elm.properties().pcls),
+                __typename: pascalCase(
+                  ObjectSpecifier.classOf(
+                    eval(Automation.getDisplayString(elm))
+                  )
+                ),
               },
             };
           }),

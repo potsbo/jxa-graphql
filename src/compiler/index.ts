@@ -206,7 +206,7 @@ const renderInlineFragment = (ctx: CurrentContext, field: InlineFragmentNode, pa
   assertSome(typeNode);
   // TODO: calling `properties` can be expensive
   return `...(() => {
-    return ${parentName}.properties().pcls.toLowerCase() === "${typeNode.name.value}".toLowerCase()
+    return pascalCase(ObjectSpecifier.classOf(eval(Automation.getDisplayString(${parentName})))) === "${typeNode.name.value}".toLowerCase()
       ? {
         ${renderFields(ctx, { parentName, selectedFields: field.selectionSet.selections, typeNode }, false)}
          __typename: "${typeNode.name.value}",
@@ -243,7 +243,7 @@ const renderFields = (ctx: CurrentContext, object: RenderableObject, withReflect
       assertSome(definition);
       return renderField(ctx, { parentName: object.parentName, field, definition }, { isRecordType });
     })
-    .concat(reflectionRequired ? `__typename: pascalCase(${object.parentName}.properties().pcls),` : "")
+    .concat(reflectionRequired ? `__typename: pascalCase(ObjectSpecifier.classOf(eval(Automation.getDisplayString(${object.parentName})))),` : "")
     .sort()
     .join("");
 };

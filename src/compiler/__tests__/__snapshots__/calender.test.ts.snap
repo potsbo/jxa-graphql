@@ -8,13 +8,38 @@ exports[`query for Connection 1`] = `
 }
 function extractId(obj) {
   const spec = Automation.getDisplayString(obj);
-  return JSON.parse(
-    spec
-      ?.split(\\"byId\\")
-      .reverse()[0]
-      .match(/^\\\\(([^\\\\)]+)\\\\)$/)
-      ?.reverse()[0] ?? \\"null\\"
-  );
+  if (spec === undefined) {
+    return null;
+  }
+  let inParen = false;
+  let inStr = false;
+  let ret = \\"\\";
+  let nextEscape = null;
+  for (let i = 0; i < spec.length; i++) {
+    const c = spec[i];
+    const inEscape = nextEscape === i;
+    if (c === \\"\\\\\\\\\\") {
+      nextEscape = i + 1;
+      continue;
+    }
+    if (!inEscape && c === '\\"') {
+      inStr = !inStr;
+      continue;
+    }
+    if (!inStr) {
+      if (c === \\"(\\") {
+        inParen = true;
+        ret = \\"\\";
+        continue;
+      }
+      if (c === \\")\\") {
+        inParen = false;
+        continue;
+      }
+    }
+    ret = \`\${ret}\${c}\`;
+  }
+  return ret !== \\"\\" ? ret : null;
 }
 function paginate(nodes, { first, after }, getId) {
   const afterIndex =
