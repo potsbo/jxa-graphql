@@ -142,13 +142,29 @@ query {
 }
 ```
 
-- Pagination
-- Fragment
-- Inline Fragment
-- Mutation (To be implemented)
-- Enum
-- Schema Override
-- whose / byId
+### Fragment
+
+To be written
+
+### Inline Fragment
+
+To be written
+
+### Mutation (To be implemented)
+
+To be written
+
+### Enum
+
+To be written
+
+### Schema Override
+
+To be written
+
+### whose / byId
+
+To be written
 
 ## How it works
 
