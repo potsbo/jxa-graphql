@@ -76,11 +76,7 @@ export class ClassBuilder {
       }, [])
     );
 
-    const interfaces: string[] = [NodeInterface.name.value];
-    ancestors.forEach((a) => {
-      interfaces.push(a.getInterfaceName());
-    });
-
+    const interfaces: string[] = [NodeInterface.name.value, ...ancestors.map((a) => a.getInterfaceName())];
     if (inherited) {
       interfaces.push(this.getInterfaceName());
     }
