@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 import { build } from "..";
 
-test("build", async () => {
+test("build - OmniFocus", async () => {
   expect(
     await build(
       "/Applications/OmniFocus.app",
@@ -12,6 +12,10 @@ test("build", async () => {
   ).toMatchSnapshot("omnifocus.graphql");
 });
 
-test("build", async () => {
+test("build - Calendar", async () => {
   expect(await build("/System/Applications/Calendar.app")).toMatchSnapshot("calendar.graphql");
+});
+
+test("build - Finder", async () => {
+  expect(await build("/System/Library/CoreServices/Finder.app")).toMatchSnapshot("finder.graphql");
 });
