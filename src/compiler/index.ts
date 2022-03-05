@@ -204,9 +204,8 @@ const renderNonNullObject = (ctx: CurrentContext, object: RenderableObject<NonNu
 const renderInlineFragment = (ctx: CurrentContext, field: InlineFragmentNode, parentName: string) => {
   const typeNode = field.typeCondition;
   assertSome(typeNode);
-  // TODO: calling `properties` can be expensive
   return `...(() => {
-    return ${parentName}.properties().pcls.toLowerCase() === "${typeNode.name.value}".toLowerCase()
+    return extractClass(${parentName}) === "${typeNode.name.value}"
       ? {
         ${renderFields(ctx, { parentName, selectedFields: field.selectionSet.selections, typeNode }, false)}
          __typename: "${typeNode.name.value}",
@@ -243,7 +242,7 @@ const renderFields = (ctx: CurrentContext, object: RenderableObject, withReflect
       assertSome(definition);
       return renderField(ctx, { parentName: object.parentName, field, definition }, { isRecordType });
     })
-    .concat(reflectionRequired ? `__typename: pascalCase(${object.parentName}.properties().pcls),` : "")
+    .concat(reflectionRequired ? `__typename: extractClass(${object.parentName}),` : "")
     .sort()
     .join("");
 };

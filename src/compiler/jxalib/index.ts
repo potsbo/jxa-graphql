@@ -1,26 +1,59 @@
 export const library = `
-${pascalCase.toString()}
+${extractClass.toString()}
 ${extractId.toString()}
 ${paginate.toString()}
 `;
 
-function pascalCase(s: string) {
-  return (s.match(/[a-zA-Z0-9]+/g) || []).map((w) => `${w[0].toUpperCase()}${w.slice(1)}`).join("");
-}
-
 declare const Automation: {
   getDisplayString: (obj: unknown) => string | undefined;
 };
+declare const ObjectSpecifier: {
+  classOf: (obj: unknown) => string | undefined;
+};
+
+function extractClass(obj: unknown) {
+  const s = ObjectSpecifier.classOf(eval(Automation.getDisplayString(obj)!))!;
+  return (s.match(/[a-zA-Z0-9]+/g) || []).map((w) => `${w[0].toUpperCase()}${w.slice(1)}`).join("");
+}
 
 function extractId(obj: unknown) {
   const spec = Automation.getDisplayString(obj);
-  return JSON.parse(
-    spec
-      ?.split("byId")
-      .reverse()[0]
-      .match(/^\(([^\)]+)\)$/)
-      ?.reverse()[0] ?? "null"
-  );
+  if (spec === undefined) {
+    return null;
+  }
+  let inParen = false;
+  let inStr = false;
+  let ret = "";
+  let nextEscape = null;
+  for (let i = 0; i < spec.length; i++) {
+    const c = spec[i];
+    const inEscape = nextEscape === i;
+
+    if (c === "\\") {
+      nextEscape = i + 1;
+      continue;
+    }
+    if (!inEscape && c === '"') {
+      inStr = !inStr;
+      continue;
+    }
+
+    if (!inStr) {
+      if (c === "(") {
+        inParen = true;
+        ret = "";
+        continue;
+      }
+      if (c === ")") {
+        inParen = false;
+        continue;
+      }
+    }
+
+    ret = `${ret}${c}`;
+  }
+
+  return ret !== "" ? ret : null;
 }
 
 function paginate<T>(nodes: T[], { first, after }: { first?: number; after?: string }, getId: (elm: T) => string): T[] {

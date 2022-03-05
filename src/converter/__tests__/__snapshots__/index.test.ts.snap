@@ -33,6 +33,21 @@ type ApplicationEdge implements Edge {
   node: Application!
 }
 
+interface ApplicationInterface implements Node {
+  documents(after: ID, first: Int, whose: Condition): DocumentConnection!
+
+  """Is this the active application?"""
+  frontmost: Boolean!
+  id: ID! @extractFromObjectDisplayName
+
+  """The name of the application."""
+  name: String!
+
+  """The version number of the application."""
+  version: String!
+  windows(after: ID, first: Int, whose: Condition): WindowConnection!
+}
+
 """This class represents a attendee."""
 type Attendee implements Node {
   """The first and last name of the attendee."""
@@ -55,6 +70,18 @@ type AttendeeConnection implements Connection {
 type AttendeeEdge implements Edge {
   cursor: String!
   node: Attendee!
+}
+
+interface AttendeeInterface implements Node {
+  """The first and last name of the attendee."""
+  displayName: String!
+
+  """e-mail of the attendee."""
+  email: String!
+  id: ID! @extractFromObjectDisplayName
+
+  """The invitation status for the attendee."""
+  participationStatus: ParticipationStatus!
 }
 
 """This class represents a calendar."""
@@ -143,6 +170,18 @@ type DisplayAlarmEdge implements Edge {
   node: DisplayAlarm!
 }
 
+interface DisplayAlarmInterface implements Node {
+  id: ID! @extractFromObjectDisplayName
+
+  """An absolute alarm date."""
+  triggerDate: String!
+
+  """
+  The interval in minutes between the event and the alarm: (positive for alarm that trigger after the event date or negative for alarms that trigger before).
+  """
+  triggerInterval: Int!
+}
+
 """A document."""
 type Document implements Node {
   id: ID! @extractFromObjectDisplayName
@@ -163,6 +202,16 @@ type DocumentConnection implements Connection {
 type DocumentEdge implements Edge {
   cursor: String!
   node: Document!
+}
+
+interface DocumentInterface implements Node {
+  id: ID! @extractFromObjectDisplayName
+
+  """Has it been modified since the last save?"""
+  modified: Boolean!
+
+  """Its name."""
+  name: String!
 }
 
 interface Edge {
@@ -316,6 +365,18 @@ type MailAlarmEdge implements Edge {
   node: MailAlarm!
 }
 
+interface MailAlarmInterface implements Node {
+  id: ID! @extractFromObjectDisplayName
+
+  """An absolute alarm date."""
+  triggerDate: String!
+
+  """
+  The interval in minutes between the event and the alarm: (positive for alarm that trigger after the event date or negative for alarms that trigger before).
+  """
+  triggerInterval: Int!
+}
+
 interface Node {
   id: ID!
 }
@@ -346,6 +407,20 @@ type OpenFileAlarmConnection implements Connection {
 type OpenFileAlarmEdge implements Edge {
   cursor: String!
   node: OpenFileAlarm!
+}
+
+interface OpenFileAlarmInterface implements Node {
+  """The (POSIX) path to be opened by the alarm"""
+  filepath: String!
+  id: ID! @extractFromObjectDisplayName
+
+  """An absolute alarm date."""
+  triggerDate: String!
+
+  """
+  The interval in minutes between the event and the alarm: (positive for alarm that trigger after the event date or negative for alarms that trigger before).
+  """
+  triggerInterval: Int!
 }
 
 type PageInfo {
@@ -401,6 +476,24 @@ type SoundAlarmConnection implements Connection {
 type SoundAlarmEdge implements Edge {
   cursor: String!
   node: SoundAlarm!
+}
+
+interface SoundAlarmInterface implements Node {
+  id: ID! @extractFromObjectDisplayName
+
+  """The (POSIX) path to the sound file to be used for the alarm"""
+  soundFile: String!
+
+  """The system sound name to be used for the alarm"""
+  soundName: String!
+
+  """An absolute alarm date."""
+  triggerDate: String!
+
+  """
+  The interval in minutes between the event and the alarm: (positive for alarm that trigger after the event date or negative for alarms that trigger before).
+  """
+  triggerInterval: Int!
 }
 
 """A window."""
@@ -570,6 +663,73 @@ type AliasFileEdge implements Edge {
   node: AliasFile!
 }
 
+interface AliasFileInterface implements Node {
+  """the comment of the item, displayed in the “Get Info” window"""
+  comment: String!
+
+  """the date on which the item was created"""
+  creationDate: String!
+
+  """a description of the item"""
+  description: String!
+
+  """the user-visible name of the item"""
+  displayedName: String!
+  everyonesPrivileges: Priv!
+
+  """Is the item's extension hidden from the user?"""
+  extensionHidden: Boolean!
+
+  """the user or group that has special access to the container"""
+  group: String!
+  groupPrivileges: Priv!
+
+  """the icon bitmap of the item"""
+  icon: IconFamily!
+  id: ID! @extractFromObjectDisplayName
+
+  """the index in the front-to-back ordering within its container"""
+  index: Int!
+
+  """the kind of the item"""
+  kind: String!
+
+  """the label of the item"""
+  labelIndex: Int!
+
+  """Is the file locked?"""
+  locked: Boolean!
+
+  """the date on which the item was last modified"""
+  modificationDate: String!
+
+  """the name of the item"""
+  name: String!
+
+  """the name extension of the item (such as “txt”)"""
+  nameExtension: String!
+
+  """the user that owns the container"""
+  owner: String!
+  ownerPrivileges: Priv!
+
+  """
+  the version of the product (visible at the top of the “Get Info” window)
+  """
+  productVersion: String!
+
+  """Is the file a stationery pad?"""
+  stationery: Boolean!
+
+  """the URL of the item"""
+  url: String!
+
+  """
+  the version of the file (visible at the bottom of the “Get Info” window)
+  """
+  version: String!
+}
+
 """
 A list of aliases. Use ‘as alias list’ when a list of aliases is needed (instead of a list of file system item references).
 """
@@ -586,6 +746,10 @@ type AliasListConnection implements Connection {
 type AliasListEdge implements Edge {
   cursor: String!
   node: AliasList!
+}
+
+interface AliasListInterface implements Node {
+  id: ID! @extractFromObjectDisplayName
 }
 
 """The Finder"""
@@ -771,23 +935,71 @@ interface ApplicationFileInterface implements Node {
   """
   acceptsHighLevelEvents: Boolean!
 
+  """the comment of the item, displayed in the “Get Info” window"""
+  comment: String!
+
+  """the date on which the item was created"""
+  creationDate: String!
+
+  """a description of the item"""
+  description: String!
+
+  """the user-visible name of the item"""
+  displayedName: String!
+  everyonesPrivileges: Priv!
+
+  """Is the item's extension hidden from the user?"""
+  extensionHidden: Boolean!
+
+  """the user or group that has special access to the container"""
+  group: String!
+  groupPrivileges: Priv!
+
   """
   Does the process have a scripting terminology, i.e., can it be scripted?
   """
   hasScriptingTerminology: Boolean!
 
+  """the icon bitmap of the item"""
+  icon: IconFamily!
+
   """the bundle identifier or creator type of the application"""
   id: ID! @extractFromObjectDisplayName
+
+  """the index in the front-to-back ordering within its container"""
+  index: Int!
+
+  """the kind of the item"""
+  kind: String!
+
+  """the label of the item"""
+  labelIndex: Int!
+
+  """Is the file locked?"""
+  locked: Boolean!
 
   """
   (AVAILABLE IN 10.1 TO 10.4) the smallest memory size with which the application can be launched
   """
   minimumSize: Int!
 
+  """the date on which the item was last modified"""
+  modificationDate: String!
+
+  """the name of the item"""
+  name: String!
+
+  """the name extension of the item (such as “txt”)"""
+  nameExtension: String!
+
   """
   (AVAILABLE IN 10.1 TO 10.4) Should the application launch in the Classic environment?
   """
   opensInClassic: Boolean!
+
+  """the user that owns the container"""
+  owner: String!
+  ownerPrivileges: Priv!
 
   """
   (AVAILABLE IN 10.1 TO 10.4) the memory size with which the application will be launched
@@ -795,9 +1007,76 @@ interface ApplicationFileInterface implements Node {
   preferredSize: Int!
 
   """
+  the version of the product (visible at the top of the “Get Info” window)
+  """
+  productVersion: String!
+
+  """Is the file a stationery pad?"""
+  stationery: Boolean!
+
+  """
   (AVAILABLE IN 10.1 TO 10.4) the memory size with which the developer recommends the application be launched
   """
   suggestedSize: Int!
+
+  """the URL of the item"""
+  url: String!
+
+  """
+  the version of the file (visible at the bottom of the “Get Info” window)
+  """
+  version: String!
+}
+
+interface ApplicationInterface implements Node {
+  aliasFiles(after: ID, first: Int, whose: Condition): AliasFileConnection!
+  applicationFiles(after: ID, first: Int, whose: Condition): ApplicationFileConnection!
+  clippingWindows(after: ID, first: Int, whose: Condition): ClippingWindowConnection!
+  clippings(after: ID, first: Int, whose: Condition): ClippingConnection!
+
+  """the computer location (as in Go > Computer)"""
+  computerContainer: ComputerObject!
+  containers(after: ID, first: Int, whose: Condition): ContainerConnection!
+
+  """the desktop"""
+  desktop: DesktopObject!
+  disks(after: ID, first: Int, whose: Condition): DiskConnection!
+  documentFiles(after: ID, first: Int, whose: Condition): DocumentFileConnection!
+  files(after: ID, first: Int, whose: Condition): FileConnection!
+
+  """Various preferences that apply to the Finder as a whole"""
+  finderPreferences: Preferences!
+  finderWindows(after: ID, first: Int, whose: Condition): FinderWindowConnection!
+  folders(after: ID, first: Int, whose: Condition): FolderConnection!
+
+  """Is the Finder the frontmost process?"""
+  frontmost: Boolean!
+
+  """the home directory"""
+  home: Folder!
+  id: ID! @extractFromObjectDisplayName
+  internetLocationFiles(after: ID, first: Int, whose: Condition): InternetLocationFileConnection!
+  items(after: ID, first: Int, whose: Condition): ItemConnection!
+
+  """the Finder’s name"""
+  name: String!
+  packages(after: ID, first: Int, whose: Condition): PackageConnection!
+
+  """the version of the System software running on this computer"""
+  productVersion: String!
+
+  """the startup disk"""
+  startupDisk: Disk!
+
+  """the trash"""
+  trash: TrashObject!
+
+  """the version of the Finder"""
+  version: String!
+
+  """Is the Finder’s layer visible?"""
+  visible: Boolean!
+  windows(after: ID, first: Int, whose: Condition): WindowConnection!
 }
 
 """A process launched from an application file"""
@@ -844,6 +1123,40 @@ type ApplicationProcessConnection implements Connection {
 type ApplicationProcessEdge implements Edge {
   cursor: String!
   node: ApplicationProcess!
+}
+
+interface ApplicationProcessInterface implements Node {
+  """
+  Is the process high-level event aware (accepts open application, open document, print document, and quit)?
+  """
+  acceptsHighLevelEvents: Boolean!
+
+  """Does the process accept remote events?"""
+  acceptsRemoteEvents: Boolean!
+
+  """the application file from which this process was launched"""
+  applicationFile: ApplicationFile!
+
+  """Is the process the frontmost process?"""
+  frontmost: Boolean!
+
+  """
+  Does the process have a scripting terminology, i.e., can it be scripted?
+  """
+  hasScriptingTerminology: Boolean!
+  id: ID! @extractFromObjectDisplayName
+
+  """the name of the process"""
+  name: String!
+
+  """the number of bytes currently used in the process' partition"""
+  partitionSpaceUsed: Int!
+
+  """the size of the partition with which the process was launched"""
+  totalPartitionSize: Int!
+
+  """Is the process' layer visible?"""
+  visible: Boolean!
 }
 
 """A clipping"""
@@ -925,6 +1238,73 @@ type ClippingEdge implements Edge {
   node: Clipping!
 }
 
+interface ClippingInterface implements Node {
+  """the comment of the item, displayed in the “Get Info” window"""
+  comment: String!
+
+  """the date on which the item was created"""
+  creationDate: String!
+
+  """a description of the item"""
+  description: String!
+
+  """the user-visible name of the item"""
+  displayedName: String!
+  everyonesPrivileges: Priv!
+
+  """Is the item's extension hidden from the user?"""
+  extensionHidden: Boolean!
+
+  """the user or group that has special access to the container"""
+  group: String!
+  groupPrivileges: Priv!
+
+  """the icon bitmap of the item"""
+  icon: IconFamily!
+  id: ID! @extractFromObjectDisplayName
+
+  """the index in the front-to-back ordering within its container"""
+  index: Int!
+
+  """the kind of the item"""
+  kind: String!
+
+  """the label of the item"""
+  labelIndex: Int!
+
+  """Is the file locked?"""
+  locked: Boolean!
+
+  """the date on which the item was last modified"""
+  modificationDate: String!
+
+  """the name of the item"""
+  name: String!
+
+  """the name extension of the item (such as “txt”)"""
+  nameExtension: String!
+
+  """the user that owns the container"""
+  owner: String!
+  ownerPrivileges: Priv!
+
+  """
+  the version of the product (visible at the top of the “Get Info” window)
+  """
+  productVersion: String!
+
+  """Is the file a stationery pad?"""
+  stationery: Boolean!
+
+  """the URL of the item"""
+  url: String!
+
+  """
+  the version of the file (visible at the bottom of the “Get Info” window)
+  """
+  version: String!
+}
+
 """The window containing a clipping"""
 type ClippingWindow implements Node & WindowInterface {
   """Does the window have a close box?"""
@@ -975,6 +1355,44 @@ type ClippingWindowEdge implements Edge {
   node: ClippingWindow!
 }
 
+interface ClippingWindowInterface implements Node {
+  """Does the window have a close box?"""
+  closeable: Boolean!
+
+  """Is the window collapsed"""
+  collapsed: Boolean!
+
+  """Does the window have a title bar?"""
+  floating: Boolean!
+
+  """the unique id for this window"""
+  id: ID! @extractFromObjectDisplayName
+
+  """the number of the window in the front-to-back layer ordering"""
+  index: Int!
+
+  """Is the window modal?"""
+  modal: Boolean!
+
+  """the name of the window"""
+  name: String!
+
+  """Is the window resizable?"""
+  resizable: Boolean!
+
+  """Does the window have a title bar?"""
+  titled: Boolean!
+
+  """Is the window visible (always true for open Finder windows)?"""
+  visible: Boolean!
+
+  """Is the window zoomable?"""
+  zoomable: Boolean!
+
+  """Is the window zoomed?"""
+  zoomed: Boolean!
+}
+
 """a column of a list view"""
 type Column implements Node {
   id: ID! @extractFromObjectDisplayName
@@ -1012,6 +1430,31 @@ type ColumnEdge implements Edge {
   node: Column!
 }
 
+interface ColumnInterface implements Node {
+  id: ID! @extractFromObjectDisplayName
+
+  """the index in the front-to-back ordering within its container"""
+  index: Int!
+
+  """the maximum allowed width of this column"""
+  maximumWidth: Int!
+
+  """the minimum allowed width of this column"""
+  minimumWidth: Int!
+
+  """the column name"""
+  name: Elsv!
+
+  """The direction in which the window is sorted"""
+  sortDirection: Sodr!
+
+  """is this column visible"""
+  visible: Boolean!
+
+  """the width of this column"""
+  width: Int!
+}
+
 """the column view options"""
 type ColumnViewOptions implements Node {
   """discloses the preview pane of the preview column in column view"""
@@ -1040,6 +1483,24 @@ type ColumnViewOptionsConnection implements Connection {
 type ColumnViewOptionsEdge implements Edge {
   cursor: String!
   node: ColumnViewOptions!
+}
+
+interface ColumnViewOptionsInterface implements Node {
+  """discloses the preview pane of the preview column in column view"""
+  disclosesPreviewPane: Boolean!
+  id: ID! @extractFromObjectDisplayName
+
+  """displays an icon next to the label in column view"""
+  showsIcon: Boolean!
+
+  """displays a preview of the item in column view"""
+  showsIconPreview: Boolean!
+
+  """displays the preview column in column view"""
+  showsPreviewColumn: Boolean!
+
+  """the size of the text displayed in the column view"""
+  textSize: Int!
 }
 
 """the Computer location (as in Go > Computer)"""
@@ -1106,6 +1567,60 @@ type ComputerObjectConnection implements Connection {
 type ComputerObjectEdge implements Edge {
   cursor: String!
   node: ComputerObject!
+}
+
+interface ComputerObjectInterface implements Node {
+  """the comment of the item, displayed in the “Get Info” window"""
+  comment: String!
+
+  """the date on which the item was created"""
+  creationDate: String!
+
+  """a description of the item"""
+  description: String!
+
+  """the user-visible name of the item"""
+  displayedName: String!
+  everyonesPrivileges: Priv!
+
+  """Is the item's extension hidden from the user?"""
+  extensionHidden: Boolean!
+
+  """the user or group that has special access to the container"""
+  group: String!
+  groupPrivileges: Priv!
+
+  """the icon bitmap of the item"""
+  icon: IconFamily!
+  id: ID! @extractFromObjectDisplayName
+
+  """the index in the front-to-back ordering within its container"""
+  index: Int!
+
+  """the kind of the item"""
+  kind: String!
+
+  """the label of the item"""
+  labelIndex: Int!
+
+  """Is the file locked?"""
+  locked: Boolean!
+
+  """the date on which the item was last modified"""
+  modificationDate: String!
+
+  """the name of the item"""
+  name: String!
+
+  """the name extension of the item (such as “txt”)"""
+  nameExtension: String!
+
+  """the user that owns the container"""
+  owner: String!
+  ownerPrivileges: Priv!
+
+  """the URL of the item"""
+  url: String!
 }
 
 input Condition {
@@ -1203,28 +1718,41 @@ type Container implements ContainerInterface & ItemInterface & Node {
   url: String!
 }
 
-type ContainerConnection {
+type ContainerConnection implements Connection {
   byId(id: ID!): ContainerInterface
   edges: [ContainerEdge!]!
   pageInfo: PageInfo!
 }
 
-type ContainerEdge {
+type ContainerEdge implements Edge {
   cursor: String!
   node: ContainerInterface!
 }
 
-interface ContainerInterface {
+interface ContainerInterface implements Node {
   aliasFiles(after: ID, first: Int, whose: Condition): AliasFileConnection!
   applicationFiles(after: ID, first: Int, whose: Condition): ApplicationFileConnection!
   clippings(after: ID, first: Int, whose: Condition): ClippingConnection!
+
+  """the comment of the item, displayed in the “Get Info” window"""
+  comment: String!
 
   """
   (NOT AVAILABLE YET) Are the container and all of its children opened as outlines? (can only be set for containers viewed as lists)
   """
   completelyExpanded: Boolean!
   containers(after: ID, first: Int, whose: Condition): ContainerConnection!
+
+  """the date on which the item was created"""
+  creationDate: String!
+
+  """a description of the item"""
+  description: String!
+
+  """the user-visible name of the item"""
+  displayedName: String!
   documentFiles(after: ID, first: Int, whose: Condition): DocumentFileConnection!
+  everyonesPrivileges: Priv!
 
   """
   (NOT AVAILABLE YET) Is the container capable of being expanded as an outline?
@@ -1235,11 +1763,50 @@ interface ContainerInterface {
   (NOT AVAILABLE YET) Is the container opened as an outline? (can only be set for containers viewed as lists)
   """
   expanded: Boolean!
+
+  """Is the item's extension hidden from the user?"""
+  extensionHidden: Boolean!
   files(after: ID, first: Int, whose: Condition): FileConnection!
   folders(after: ID, first: Int, whose: Condition): FolderConnection!
+
+  """the user or group that has special access to the container"""
+  group: String!
+  groupPrivileges: Priv!
+
+  """the icon bitmap of the item"""
+  icon: IconFamily!
+  id: ID! @extractFromObjectDisplayName
+
+  """the index in the front-to-back ordering within its container"""
+  index: Int!
   internetLocationFiles(after: ID, first: Int, whose: Condition): InternetLocationFileConnection!
   items(after: ID, first: Int, whose: Condition): ItemConnection!
+
+  """the kind of the item"""
+  kind: String!
+
+  """the label of the item"""
+  labelIndex: Int!
+
+  """Is the file locked?"""
+  locked: Boolean!
+
+  """the date on which the item was last modified"""
+  modificationDate: String!
+
+  """the name of the item"""
+  name: String!
+
+  """the name extension of the item (such as “txt”)"""
+  nameExtension: String!
+
+  """the user that owns the container"""
+  owner: String!
+  ownerPrivileges: Priv!
   packages(after: ID, first: Int, whose: Condition): PackageConnection!
+
+  """the URL of the item"""
+  url: String!
 }
 
 """A process launched from a desk accessory file"""
@@ -1283,6 +1850,37 @@ type DeskAccessoryProcessConnection implements Connection {
 type DeskAccessoryProcessEdge implements Edge {
   cursor: String!
   node: DeskAccessoryProcess!
+}
+
+interface DeskAccessoryProcessInterface implements Node {
+  """
+  Is the process high-level event aware (accepts open application, open document, print document, and quit)?
+  """
+  acceptsHighLevelEvents: Boolean!
+
+  """Does the process accept remote events?"""
+  acceptsRemoteEvents: Boolean!
+
+  """Is the process the frontmost process?"""
+  frontmost: Boolean!
+
+  """
+  Does the process have a scripting terminology, i.e., can it be scripted?
+  """
+  hasScriptingTerminology: Boolean!
+  id: ID! @extractFromObjectDisplayName
+
+  """the name of the process"""
+  name: String!
+
+  """the number of bytes currently used in the process' partition"""
+  partitionSpaceUsed: Int!
+
+  """the size of the partition with which the process was launched"""
+  totalPartitionSize: Int!
+
+  """Is the process' layer visible?"""
+  visible: Boolean!
 }
 
 """Desktop-object is the class of the “desktop” object"""
@@ -1378,6 +1976,87 @@ type DesktopObjectEdge implements Edge {
   node: DesktopObject!
 }
 
+interface DesktopObjectInterface implements Node {
+  aliasFiles(after: ID, first: Int, whose: Condition): AliasFileConnection!
+  applicationFiles(after: ID, first: Int, whose: Condition): ApplicationFileConnection!
+  clippings(after: ID, first: Int, whose: Condition): ClippingConnection!
+
+  """the comment of the item, displayed in the “Get Info” window"""
+  comment: String!
+
+  """
+  (NOT AVAILABLE YET) Are the container and all of its children opened as outlines? (can only be set for containers viewed as lists)
+  """
+  completelyExpanded: Boolean!
+  containers(after: ID, first: Int, whose: Condition): ContainerConnection!
+
+  """the date on which the item was created"""
+  creationDate: String!
+
+  """a description of the item"""
+  description: String!
+  disks(after: ID, first: Int, whose: Condition): DiskConnection!
+
+  """the user-visible name of the item"""
+  displayedName: String!
+  documentFiles(after: ID, first: Int, whose: Condition): DocumentFileConnection!
+  everyonesPrivileges: Priv!
+
+  """
+  (NOT AVAILABLE YET) Is the container capable of being expanded as an outline?
+  """
+  expandable: Boolean!
+
+  """
+  (NOT AVAILABLE YET) Is the container opened as an outline? (can only be set for containers viewed as lists)
+  """
+  expanded: Boolean!
+
+  """Is the item's extension hidden from the user?"""
+  extensionHidden: Boolean!
+  files(after: ID, first: Int, whose: Condition): FileConnection!
+  folders(after: ID, first: Int, whose: Condition): FolderConnection!
+
+  """the user or group that has special access to the container"""
+  group: String!
+  groupPrivileges: Priv!
+
+  """the icon bitmap of the item"""
+  icon: IconFamily!
+  id: ID! @extractFromObjectDisplayName
+
+  """the index in the front-to-back ordering within its container"""
+  index: Int!
+  internetLocationFiles(after: ID, first: Int, whose: Condition): InternetLocationFileConnection!
+  items(after: ID, first: Int, whose: Condition): ItemConnection!
+
+  """the kind of the item"""
+  kind: String!
+
+  """the label of the item"""
+  labelIndex: Int!
+
+  """Is the file locked?"""
+  locked: Boolean!
+
+  """the date on which the item was last modified"""
+  modificationDate: String!
+
+  """the name of the item"""
+  name: String!
+
+  """the name extension of the item (such as “txt”)"""
+  nameExtension: String!
+
+  """the user that owns the container"""
+  owner: String!
+  ownerPrivileges: Priv!
+  packages(after: ID, first: Int, whose: Condition): PackageConnection!
+
+  """the URL of the item"""
+  url: String!
+}
+
 """the desktop window"""
 type DesktopWindow implements FinderWindowInterface & Node & WindowInterface {
   """Does the window have a close box?"""
@@ -1450,6 +2129,68 @@ type DesktopWindowConnection implements Connection {
 type DesktopWindowEdge implements Edge {
   cursor: String!
   node: DesktopWindow!
+}
+
+interface DesktopWindowInterface implements Node {
+  """Does the window have a close box?"""
+  closeable: Boolean!
+
+  """Is the window collapsed"""
+  collapsed: Boolean!
+
+  """the column view options for the container window"""
+  columnViewOptions: ColumnViewOptions!
+
+  """the current view for the container window"""
+  currentView: Ecvw!
+
+  """Does the window have a title bar?"""
+  floating: Boolean!
+
+  """the icon view options for the container window"""
+  iconViewOptions: IconViewOptions!
+
+  """the unique id for this window"""
+  id: ID! @extractFromObjectDisplayName
+
+  """the number of the window in the front-to-back layer ordering"""
+  index: Int!
+
+  """the list view options for the container window"""
+  listViewOptions: ListViewOptions!
+
+  """Is the window modal?"""
+  modal: Boolean!
+
+  """the name of the window"""
+  name: String!
+
+  """Is the window's path bar visible?"""
+  pathbarVisible: Boolean!
+
+  """Is the window resizable?"""
+  resizable: Boolean!
+
+  """the width of the sidebar for the container window"""
+  sidebarWidth: Int!
+
+  """Is the window's status bar visible?"""
+  statusbarVisible: Boolean!
+
+  """Does the window have a title bar?"""
+  titled: Boolean!
+
+  """Is the window's toolbar visible?"""
+  toolbarVisible: Boolean!
+
+  """Is the window visible (always true for open Finder windows)?"""
+  visible: Boolean!
+
+  """Is the window zoomable?"""
+  zoomable: Boolean!
+
+  """Is the window zoomed?"""
+  zoomed: Boolean!
 }
 
 """A disk"""
@@ -1570,16 +2311,54 @@ interface DiskInterface implements Node {
   aliasFiles(after: ID, first: Int, whose: Condition): AliasFileConnection!
   applicationFiles(after: ID, first: Int, whose: Condition): ApplicationFileConnection!
   clippings(after: ID, first: Int, whose: Condition): ClippingConnection!
+
+  """the comment of the item, displayed in the “Get Info” window"""
+  comment: String!
+
+  """
+  (NOT AVAILABLE YET) Are the container and all of its children opened as outlines? (can only be set for containers viewed as lists)
+  """
+  completelyExpanded: Boolean!
   containers(after: ID, first: Int, whose: Condition): ContainerConnection!
+
+  """the date on which the item was created"""
+  creationDate: String!
+
+  """a description of the item"""
+  description: String!
+
+  """the user-visible name of the item"""
+  displayedName: String!
   documentFiles(after: ID, first: Int, whose: Condition): DocumentFileConnection!
 
   """Can the media be ejected (floppies, CDs, and so on)?"""
   ejectable: Boolean!
+  everyonesPrivileges: Priv!
+
+  """
+  (NOT AVAILABLE YET) Is the container capable of being expanded as an outline?
+  """
+  expandable: Boolean!
+
+  """
+  (NOT AVAILABLE YET) Is the container opened as an outline? (can only be set for containers viewed as lists)
+  """
+  expanded: Boolean!
+
+  """Is the item's extension hidden from the user?"""
+  extensionHidden: Boolean!
   files(after: ID, first: Int, whose: Condition): FileConnection!
   folders(after: ID, first: Int, whose: Condition): FolderConnection!
 
   """the filesystem format of this disk"""
   format: Edfm!
+
+  """the user or group that has special access to the container"""
+  group: String!
+  groupPrivileges: Priv!
+
+  """the icon bitmap of the item"""
+  icon: IconFamily!
 
   """
   the unique id for this disk (unchanged while disk remains connected and Finder remains running)
@@ -1588,18 +2367,46 @@ interface DiskInterface implements Node {
 
   """Ignore permissions on this disk?"""
   ignorePrivileges: Boolean!
+
+  """the index in the front-to-back ordering within its container"""
+  index: Int!
   internetLocationFiles(after: ID, first: Int, whose: Condition): InternetLocationFileConnection!
   items(after: ID, first: Int, whose: Condition): ItemConnection!
 
   """Does this disk do file system journaling?"""
   journalingEnabled: Boolean!
 
+  """the kind of the item"""
+  kind: String!
+
+  """the label of the item"""
+  labelIndex: Int!
+
   """Is the media a local volume (as opposed to a file server)?"""
   localVolume: Boolean!
+
+  """Is the file locked?"""
+  locked: Boolean!
+
+  """the date on which the item was last modified"""
+  modificationDate: String!
+
+  """the name of the item"""
+  name: String!
+
+  """the name extension of the item (such as “txt”)"""
+  nameExtension: String!
+
+  """the user that owns the container"""
+  owner: String!
+  ownerPrivileges: Priv!
   packages(after: ID, first: Int, whose: Condition): PackageConnection!
 
   """Is this disk the boot disk?"""
   startup: Boolean!
+
+  """the URL of the item"""
+  url: String!
 }
 
 """A document file"""
@@ -1679,6 +2486,73 @@ type DocumentFileConnection implements Connection {
 type DocumentFileEdge implements Edge {
   cursor: String!
   node: DocumentFile!
+}
+
+interface DocumentFileInterface implements Node {
+  """the comment of the item, displayed in the “Get Info” window"""
+  comment: String!
+
+  """the date on which the item was created"""
+  creationDate: String!
+
+  """a description of the item"""
+  description: String!
+
+  """the user-visible name of the item"""
+  displayedName: String!
+  everyonesPrivileges: Priv!
+
+  """Is the item's extension hidden from the user?"""
+  extensionHidden: Boolean!
+
+  """the user or group that has special access to the container"""
+  group: String!
+  groupPrivileges: Priv!
+
+  """the icon bitmap of the item"""
+  icon: IconFamily!
+  id: ID! @extractFromObjectDisplayName
+
+  """the index in the front-to-back ordering within its container"""
+  index: Int!
+
+  """the kind of the item"""
+  kind: String!
+
+  """the label of the item"""
+  labelIndex: Int!
+
+  """Is the file locked?"""
+  locked: Boolean!
+
+  """the date on which the item was last modified"""
+  modificationDate: String!
+
+  """the name of the item"""
+  name: String!
+
+  """the name extension of the item (such as “txt”)"""
+  nameExtension: String!
+
+  """the user that owns the container"""
+  owner: String!
+  ownerPrivileges: Priv!
+
+  """
+  the version of the product (visible at the top of the “Get Info” window)
+  """
+  productVersion: String!
+
+  """Is the file a stationery pad?"""
+  stationery: Boolean!
+
+  """the URL of the item"""
+  url: String!
+
+  """
+  the version of the file (visible at the bottom of the “Get Info” window)
+  """
+  version: String!
 }
 
 enum Earr {
@@ -1814,18 +2688,67 @@ type File implements FileInterface & ItemInterface & Node {
   version: String!
 }
 
-type FileConnection {
+type FileConnection implements Connection {
   byId(id: ID!): FileInterface
   edges: [FileEdge!]!
   pageInfo: PageInfo!
 }
 
-type FileEdge {
+type FileEdge implements Edge {
   cursor: String!
   node: FileInterface!
 }
 
-interface FileInterface {
+interface FileInterface implements Node {
+  """the comment of the item, displayed in the “Get Info” window"""
+  comment: String!
+
+  """the date on which the item was created"""
+  creationDate: String!
+
+  """a description of the item"""
+  description: String!
+
+  """the user-visible name of the item"""
+  displayedName: String!
+  everyonesPrivileges: Priv!
+
+  """Is the item's extension hidden from the user?"""
+  extensionHidden: Boolean!
+
+  """the user or group that has special access to the container"""
+  group: String!
+  groupPrivileges: Priv!
+
+  """the icon bitmap of the item"""
+  icon: IconFamily!
+  id: ID! @extractFromObjectDisplayName
+
+  """the index in the front-to-back ordering within its container"""
+  index: Int!
+
+  """the kind of the item"""
+  kind: String!
+
+  """the label of the item"""
+  labelIndex: Int!
+
+  """Is the file locked?"""
+  locked: Boolean!
+
+  """the date on which the item was last modified"""
+  modificationDate: String!
+
+  """the name of the item"""
+  name: String!
+
+  """the name extension of the item (such as “txt”)"""
+  nameExtension: String!
+
+  """the user that owns the container"""
+  owner: String!
+  ownerPrivileges: Priv!
+
   """
   the version of the product (visible at the top of the “Get Info” window)
   """
@@ -1833,6 +2756,9 @@ interface FileInterface {
 
   """Is the file a stationery pad?"""
   stationery: Boolean!
+
+  """the URL of the item"""
+  url: String!
 
   """
   the version of the file (visible at the bottom of the “Get Info” window)
@@ -1903,32 +2829,56 @@ type FinderWindow implements FinderWindowInterface & Node & WindowInterface {
   zoomed: Boolean!
 }
 
-type FinderWindowConnection {
+type FinderWindowConnection implements Connection {
   byId(id: ID!): FinderWindowInterface
   edges: [FinderWindowEdge!]!
   pageInfo: PageInfo!
 }
 
-type FinderWindowEdge {
+type FinderWindowEdge implements Edge {
   cursor: String!
   node: FinderWindowInterface!
 }
 
-interface FinderWindowInterface {
+interface FinderWindowInterface implements Node {
+  """Does the window have a close box?"""
+  closeable: Boolean!
+
+  """Is the window collapsed"""
+  collapsed: Boolean!
+
   """the column view options for the container window"""
   columnViewOptions: ColumnViewOptions!
 
   """the current view for the container window"""
   currentView: Ecvw!
 
+  """Does the window have a title bar?"""
+  floating: Boolean!
+
   """the icon view options for the container window"""
   iconViewOptions: IconViewOptions!
+
+  """the unique id for this window"""
+  id: ID! @extractFromObjectDisplayName
+
+  """the number of the window in the front-to-back layer ordering"""
+  index: Int!
 
   """the list view options for the container window"""
   listViewOptions: ListViewOptions!
 
+  """Is the window modal?"""
+  modal: Boolean!
+
+  """the name of the window"""
+  name: String!
+
   """Is the window's path bar visible?"""
   pathbarVisible: Boolean!
+
+  """Is the window resizable?"""
+  resizable: Boolean!
 
   """the width of the sidebar for the container window"""
   sidebarWidth: Int!
@@ -1936,8 +2886,20 @@ interface FinderWindowInterface {
   """Is the window's status bar visible?"""
   statusbarVisible: Boolean!
 
+  """Does the window have a title bar?"""
+  titled: Boolean!
+
   """Is the window's toolbar visible?"""
   toolbarVisible: Boolean!
+
+  """Is the window visible (always true for open Finder windows)?"""
+  visible: Boolean!
+
+  """Is the window zoomable?"""
+  zoomable: Boolean!
+
+  """Is the window zoomed?"""
+  zoomed: Boolean!
 }
 
 """A folder"""
@@ -2032,6 +2994,86 @@ type FolderEdge implements Edge {
   node: Folder!
 }
 
+interface FolderInterface implements Node {
+  aliasFiles(after: ID, first: Int, whose: Condition): AliasFileConnection!
+  applicationFiles(after: ID, first: Int, whose: Condition): ApplicationFileConnection!
+  clippings(after: ID, first: Int, whose: Condition): ClippingConnection!
+
+  """the comment of the item, displayed in the “Get Info” window"""
+  comment: String!
+
+  """
+  (NOT AVAILABLE YET) Are the container and all of its children opened as outlines? (can only be set for containers viewed as lists)
+  """
+  completelyExpanded: Boolean!
+  containers(after: ID, first: Int, whose: Condition): ContainerConnection!
+
+  """the date on which the item was created"""
+  creationDate: String!
+
+  """a description of the item"""
+  description: String!
+
+  """the user-visible name of the item"""
+  displayedName: String!
+  documentFiles(after: ID, first: Int, whose: Condition): DocumentFileConnection!
+  everyonesPrivileges: Priv!
+
+  """
+  (NOT AVAILABLE YET) Is the container capable of being expanded as an outline?
+  """
+  expandable: Boolean!
+
+  """
+  (NOT AVAILABLE YET) Is the container opened as an outline? (can only be set for containers viewed as lists)
+  """
+  expanded: Boolean!
+
+  """Is the item's extension hidden from the user?"""
+  extensionHidden: Boolean!
+  files(after: ID, first: Int, whose: Condition): FileConnection!
+  folders(after: ID, first: Int, whose: Condition): FolderConnection!
+
+  """the user or group that has special access to the container"""
+  group: String!
+  groupPrivileges: Priv!
+
+  """the icon bitmap of the item"""
+  icon: IconFamily!
+  id: ID! @extractFromObjectDisplayName
+
+  """the index in the front-to-back ordering within its container"""
+  index: Int!
+  internetLocationFiles(after: ID, first: Int, whose: Condition): InternetLocationFileConnection!
+  items(after: ID, first: Int, whose: Condition): ItemConnection!
+
+  """the kind of the item"""
+  kind: String!
+
+  """the label of the item"""
+  labelIndex: Int!
+
+  """Is the file locked?"""
+  locked: Boolean!
+
+  """the date on which the item was last modified"""
+  modificationDate: String!
+
+  """the name of the item"""
+  name: String!
+
+  """the name extension of the item (such as “txt”)"""
+  nameExtension: String!
+
+  """the user that owns the container"""
+  owner: String!
+  ownerPrivileges: Priv!
+  packages(after: ID, first: Int, whose: Condition): PackageConnection!
+
+  """the URL of the item"""
+  url: String!
+}
+
 """(NOT AVAILABLE YET) A family of icons"""
 type IconFamily implements Node {
   id: ID! @extractFromObjectDisplayName
@@ -2046,6 +3088,10 @@ type IconFamilyConnection implements Connection {
 type IconFamilyEdge implements Edge {
   cursor: String!
   node: IconFamily!
+}
+
+interface IconFamilyInterface implements Node {
+  id: ID! @extractFromObjectDisplayName
 }
 
 """the icon view options"""
@@ -2082,6 +3128,30 @@ type IconViewOptionsConnection implements Connection {
 type IconViewOptionsEdge implements Edge {
   cursor: String!
   node: IconViewOptions!
+}
+
+interface IconViewOptionsInterface implements Node {
+  """the property by which to keep icons arranged"""
+  arrangement: Earr!
+
+  """the background picture of the icon view"""
+  backgroundPicture: File!
+
+  """the size of icons displayed in the icon view"""
+  iconSize: Int!
+  id: ID! @extractFromObjectDisplayName
+
+  """the location of the label in reference to the icon"""
+  labelPosition: Epos!
+
+  """displays a preview of the item in icon view"""
+  showsIconPreview: Boolean!
+
+  """additional info about an item displayed in icon view"""
+  showsItemInfo: Boolean!
+
+  """the size of the text displayed in the icon view"""
+  textSize: Int!
 }
 
 """An inspector window (opened by “Show Info”)"""
@@ -2135,6 +3205,47 @@ type InformationWindowConnection implements Connection {
 type InformationWindowEdge implements Edge {
   cursor: String!
   node: InformationWindow!
+}
+
+interface InformationWindowInterface implements Node {
+  """Does the window have a close box?"""
+  closeable: Boolean!
+
+  """Is the window collapsed"""
+  collapsed: Boolean!
+
+  """the current panel in the information window"""
+  currentPanel: Ipnl!
+
+  """Does the window have a title bar?"""
+  floating: Boolean!
+
+  """the unique id for this window"""
+  id: ID! @extractFromObjectDisplayName
+
+  """the number of the window in the front-to-back layer ordering"""
+  index: Int!
+
+  """Is the window modal?"""
+  modal: Boolean!
+
+  """the name of the window"""
+  name: String!
+
+  """Is the window resizable?"""
+  resizable: Boolean!
+
+  """Does the window have a title bar?"""
+  titled: Boolean!
+
+  """Is the window visible (always true for open Finder windows)?"""
+  visible: Boolean!
+
+  """Is the window zoomable?"""
+  zoomable: Boolean!
+
+  """Is the window zoomed?"""
+  zoomed: Boolean!
 }
 
 """A file containing an internet location"""
@@ -2219,6 +3330,76 @@ type InternetLocationFileEdge implements Edge {
   node: InternetLocationFile!
 }
 
+interface InternetLocationFileInterface implements Node {
+  """the comment of the item, displayed in the “Get Info” window"""
+  comment: String!
+
+  """the date on which the item was created"""
+  creationDate: String!
+
+  """a description of the item"""
+  description: String!
+
+  """the user-visible name of the item"""
+  displayedName: String!
+  everyonesPrivileges: Priv!
+
+  """Is the item's extension hidden from the user?"""
+  extensionHidden: Boolean!
+
+  """the user or group that has special access to the container"""
+  group: String!
+  groupPrivileges: Priv!
+
+  """the icon bitmap of the item"""
+  icon: IconFamily!
+  id: ID! @extractFromObjectDisplayName
+
+  """the index in the front-to-back ordering within its container"""
+  index: Int!
+
+  """the kind of the item"""
+  kind: String!
+
+  """the label of the item"""
+  labelIndex: Int!
+
+  """the internet location"""
+  location: String!
+
+  """Is the file locked?"""
+  locked: Boolean!
+
+  """the date on which the item was last modified"""
+  modificationDate: String!
+
+  """the name of the item"""
+  name: String!
+
+  """the name extension of the item (such as “txt”)"""
+  nameExtension: String!
+
+  """the user that owns the container"""
+  owner: String!
+  ownerPrivileges: Priv!
+
+  """
+  the version of the product (visible at the top of the “Get Info” window)
+  """
+  productVersion: String!
+
+  """Is the file a stationery pad?"""
+  stationery: Boolean!
+
+  """the URL of the item"""
+  url: String!
+
+  """
+  the version of the file (visible at the bottom of the “Get Info” window)
+  """
+  version: String!
+}
+
 enum Ipnl {
   APPLICATION_PANEL
   BURNING_PANEL
@@ -2290,18 +3471,18 @@ type Item implements ItemInterface & Node {
   url: String!
 }
 
-type ItemConnection {
+type ItemConnection implements Connection {
   byId(id: ID!): ItemInterface
   edges: [ItemEdge!]!
   pageInfo: PageInfo!
 }
 
-type ItemEdge {
+type ItemEdge implements Edge {
   cursor: String!
   node: ItemInterface!
 }
 
-interface ItemInterface {
+interface ItemInterface implements Node {
   """the comment of the item, displayed in the “Get Info” window"""
   comment: String!
 
@@ -2324,6 +3505,7 @@ interface ItemInterface {
 
   """the icon bitmap of the item"""
   icon: IconFamily!
+  id: ID! @extractFromObjectDisplayName
 
   """the index in the front-to-back ordering within its container"""
   index: Int!
@@ -2376,6 +3558,16 @@ type LabelEdge implements Edge {
   node: Label!
 }
 
+interface LabelInterface implements Node {
+  id: ID! @extractFromObjectDisplayName
+
+  """the index in the front-to-back ordering within its container"""
+  index: Int!
+
+  """the name associated with the label"""
+  name: String!
+}
+
 """the list view options"""
 type ListViewOptions implements Node {
   """Are folder sizes calculated and displayed in the window?"""
@@ -2408,6 +3600,28 @@ type ListViewOptionsConnection implements Connection {
 type ListViewOptionsEdge implements Edge {
   cursor: String!
   node: ListViewOptions!
+}
+
+interface ListViewOptionsInterface implements Node {
+  """Are folder sizes calculated and displayed in the window?"""
+  calculatesFolderSizes: Boolean!
+  columns(after: ID, first: Int, whose: Condition): ColumnConnection!
+
+  """the size of icons displayed in the list view"""
+  iconSize: Lvic!
+  id: ID! @extractFromObjectDisplayName
+
+  """displays a preview of the item in list view"""
+  showsIconPreview: Boolean!
+
+  """the column that the list view is sorted on"""
+  sortColumn: Column!
+
+  """the size of the text displayed in the list view"""
+  textSize: Int!
+
+  """Are relative dates (e.g., today, yesterday) shown in the list view?"""
+  usesRelativeDates: Boolean!
 }
 
 enum Lvic {
@@ -2485,6 +3699,60 @@ type PackageEdge implements Edge {
   node: Package!
 }
 
+interface PackageInterface implements Node {
+  """the comment of the item, displayed in the “Get Info” window"""
+  comment: String!
+
+  """the date on which the item was created"""
+  creationDate: String!
+
+  """a description of the item"""
+  description: String!
+
+  """the user-visible name of the item"""
+  displayedName: String!
+  everyonesPrivileges: Priv!
+
+  """Is the item's extension hidden from the user?"""
+  extensionHidden: Boolean!
+
+  """the user or group that has special access to the container"""
+  group: String!
+  groupPrivileges: Priv!
+
+  """the icon bitmap of the item"""
+  icon: IconFamily!
+  id: ID! @extractFromObjectDisplayName
+
+  """the index in the front-to-back ordering within its container"""
+  index: Int!
+
+  """the kind of the item"""
+  kind: String!
+
+  """the label of the item"""
+  labelIndex: Int!
+
+  """Is the file locked?"""
+  locked: Boolean!
+
+  """the date on which the item was last modified"""
+  modificationDate: String!
+
+  """the name of the item"""
+  name: String!
+
+  """the name extension of the item (such as “txt”)"""
+  nameExtension: String!
+
+  """the user that owns the container"""
+  owner: String!
+  ownerPrivileges: Priv!
+
+  """the URL of the item"""
+  url: String!
+}
+
 type PageInfo {
   endCursor: String!
   hasNextPage: Boolean!
@@ -2558,6 +3826,53 @@ type PreferencesEdge implements Edge {
   node: Preferences!
 }
 
+interface PreferencesInterface implements Node {
+  """Show name extensions, even for items whose “extension hidden” is true?"""
+  allNameExtensionsShowing: Boolean!
+
+  """the column view options for all windows"""
+  columnViewOptions: ColumnViewOptions!
+
+  """
+  the delay before springing open a container in seconds (from 0.167 to 1.169)
+  """
+  delayBeforeSpringing: Float!
+
+  """Connected servers appear on the desktop?"""
+  desktopShowsConnectedServers: Boolean!
+
+  """External hard disks appear on the desktop?"""
+  desktopShowsExternalHardDisks: Boolean!
+
+  """Hard disks appear on the desktop?"""
+  desktopShowsHardDisks: Boolean!
+
+  """CDs, DVDs, and iPods appear on the desktop?"""
+  desktopShowsRemovableMedia: Boolean!
+
+  """Folders open into new tabs?"""
+  foldersOpenInNewTabs: Boolean!
+
+  """Folders open into new windows?"""
+  foldersOpenInNewWindows: Boolean!
+
+  """Spring open folders after the specified delay?"""
+  foldersSpringOpen: Boolean!
+
+  """the default icon view options"""
+  iconViewOptions: IconViewOptions!
+  id: ID! @extractFromObjectDisplayName
+
+  """the default list view options"""
+  listViewOptions: ListViewOptions!
+
+  """Open new windows in column view?"""
+  newWindowsOpenInColumnView: Boolean!
+
+  """the window that would open if Finder preferences was opened"""
+  window: PreferencesWindow!
+}
+
 """The Finder Preferences window"""
 type PreferencesWindow implements Node & WindowInterface {
   """Does the window have a close box?"""
@@ -2611,6 +3926,47 @@ type PreferencesWindowEdge implements Edge {
   node: PreferencesWindow!
 }
 
+interface PreferencesWindowInterface implements Node {
+  """Does the window have a close box?"""
+  closeable: Boolean!
+
+  """Is the window collapsed"""
+  collapsed: Boolean!
+
+  """The current panel in the Finder preferences window"""
+  currentPanel: Pple!
+
+  """Does the window have a title bar?"""
+  floating: Boolean!
+
+  """the unique id for this window"""
+  id: ID! @extractFromObjectDisplayName
+
+  """the number of the window in the front-to-back layer ordering"""
+  index: Int!
+
+  """Is the window modal?"""
+  modal: Boolean!
+
+  """the name of the window"""
+  name: String!
+
+  """Is the window resizable?"""
+  resizable: Boolean!
+
+  """Does the window have a title bar?"""
+  titled: Boolean!
+
+  """Is the window visible (always true for open Finder windows)?"""
+  visible: Boolean!
+
+  """Is the window zoomable?"""
+  zoomable: Boolean!
+
+  """Is the window zoomed?"""
+  zoomed: Boolean!
+}
+
 enum Priv {
   NONE
   READ_ONLY
@@ -2650,7 +4006,18 @@ type Process implements Node & ProcessInterface {
   visible: Boolean!
 }
 
-interface ProcessInterface {
+type ProcessConnection implements Connection {
+  byId(id: ID!): ProcessInterface
+  edges: [ProcessEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ProcessEdge implements Edge {
+  cursor: String!
+  node: ProcessInterface!
+}
+
+interface ProcessInterface implements Node {
   """
   Is the process high-level event aware (accepts open application, open document, print document, and quit)?
   """
@@ -2666,6 +4033,7 @@ interface ProcessInterface {
   Does the process have a scripting terminology, i.e., can it be scripted?
   """
   hasScriptingTerminology: Boolean!
+  id: ID! @extractFromObjectDisplayName
 
   """the name of the process"""
   name: String!
@@ -2782,6 +4150,89 @@ type TrashObjectConnection implements Connection {
 type TrashObjectEdge implements Edge {
   cursor: String!
   node: TrashObject!
+}
+
+interface TrashObjectInterface implements Node {
+  aliasFiles(after: ID, first: Int, whose: Condition): AliasFileConnection!
+  applicationFiles(after: ID, first: Int, whose: Condition): ApplicationFileConnection!
+  clippings(after: ID, first: Int, whose: Condition): ClippingConnection!
+
+  """the comment of the item, displayed in the “Get Info” window"""
+  comment: String!
+
+  """
+  (NOT AVAILABLE YET) Are the container and all of its children opened as outlines? (can only be set for containers viewed as lists)
+  """
+  completelyExpanded: Boolean!
+  containers(after: ID, first: Int, whose: Condition): ContainerConnection!
+
+  """the date on which the item was created"""
+  creationDate: String!
+
+  """a description of the item"""
+  description: String!
+
+  """the user-visible name of the item"""
+  displayedName: String!
+  documentFiles(after: ID, first: Int, whose: Condition): DocumentFileConnection!
+  everyonesPrivileges: Priv!
+
+  """
+  (NOT AVAILABLE YET) Is the container capable of being expanded as an outline?
+  """
+  expandable: Boolean!
+
+  """
+  (NOT AVAILABLE YET) Is the container opened as an outline? (can only be set for containers viewed as lists)
+  """
+  expanded: Boolean!
+
+  """Is the item's extension hidden from the user?"""
+  extensionHidden: Boolean!
+  files(after: ID, first: Int, whose: Condition): FileConnection!
+  folders(after: ID, first: Int, whose: Condition): FolderConnection!
+
+  """the user or group that has special access to the container"""
+  group: String!
+  groupPrivileges: Priv!
+
+  """the icon bitmap of the item"""
+  icon: IconFamily!
+  id: ID! @extractFromObjectDisplayName
+
+  """the index in the front-to-back ordering within its container"""
+  index: Int!
+  internetLocationFiles(after: ID, first: Int, whose: Condition): InternetLocationFileConnection!
+  items(after: ID, first: Int, whose: Condition): ItemConnection!
+
+  """the kind of the item"""
+  kind: String!
+
+  """the label of the item"""
+  labelIndex: Int!
+
+  """Is the file locked?"""
+  locked: Boolean!
+
+  """the date on which the item was last modified"""
+  modificationDate: String!
+
+  """the name of the item"""
+  name: String!
+
+  """the name extension of the item (such as “txt”)"""
+  nameExtension: String!
+
+  """the user that owns the container"""
+  owner: String!
+  ownerPrivileges: Priv!
+  packages(after: ID, first: Int, whose: Condition): PackageConnection!
+
+  """the URL of the item"""
+  url: String!
+
+  """Display a dialog when emptying the trash?"""
+  warnsBeforeEmptying: Boolean!
 }
 
 """A window"""
@@ -2938,6 +4389,54 @@ type AncestorTreeEdge implements Edge {
   node: AncestorTree!
 }
 
+interface AncestorTreeInterface implements Node {
+  """The ancestor trees of this tree."""
+  ancestorTrees(after: ID, first: Int, whose: Condition): AncestorTreeConnection!
+
+  """
+  All the descendant trees in the user-specified sort ordering, listing each tree, then its children and so forth.
+  """
+  descendantTrees(after: ID, first: Int, whose: Condition): DescendantTreeConnection!
+
+  """This is true if the node is expanded."""
+  expanded: Boolean!
+
+  """
+  The sibling trees of this tree after it in the user-specified sort ordering.
+  """
+  followingSiblings(after: ID, first: Int, whose: Condition): FollowingSiblingConnection!
+
+  """The identifier of object being represented by this tree."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The descendants of this tree that have no children themselves."""
+  leafs(after: ID, first: Int, whose: Condition): LeafConnection!
+
+  """The name of the object being represented by this tree."""
+  name: String!
+
+  """This is true if the node note is expanded."""
+  noteExpanded: Boolean!
+
+  """
+  The sibling trees of this tree before it in the user-specified sort ordering.
+  """
+  precedingSiblings(after: ID, first: Int, whose: Condition): PrecedingSiblingConnection!
+
+  """
+  This is true if the node is selected.  Note that attempts to set this while the node is not visible (collapsed parent, etc.) will silently do nothing.
+  """
+  selected: Boolean!
+
+  """The trees of this tree that are selected in the user interface."""
+  selectedTrees(after: ID, first: Int, whose: Condition): SelectedTreeConnection!
+
+  """
+  The immediate child trees of this tree in the user-specified sort ordering.
+  """
+  trees(after: ID, first: Int, whose: Condition): TreeConnection!
+}
+
 """The application's top-level scripting object."""
 type Application implements Node {
   """
@@ -2990,8 +4489,23 @@ type ApplicationEdge implements Edge {
   node: Application!
 }
 
+interface ApplicationInterface implements Node {
+  documents(after: ID, first: Int, whose: Condition): DocumentConnection!
+
+  """Is this the active application?"""
+  frontmost: Boolean!
+  id: ID! @extractFromObjectDisplayName
+
+  """The name of the application."""
+  name: String!
+
+  """The version number of the application."""
+  version: String!
+  windows(after: ID, first: Int, whose: Condition): WindowConnection!
+}
+
 """Represents an inline text attachment."""
-type Attachment implements Node {
+type Attachment implements AttachmentInterface & Node {
   attachments(after: ID, first: Int, whose: Condition): AttachmentConnection!
   attributeRuns(after: ID, first: Int, whose: Condition): AttributeRunConnection!
   characters(after: ID, first: Int, whose: Condition): CharacterConnection!
@@ -3013,13 +4527,37 @@ type Attachment implements Node {
   words(after: ID, first: Int, whose: Condition): WordConnection!
 }
 
-type AttachmentConnection {
+type AttachmentConnection implements Connection {
+  byId(id: ID!): AttachmentInterface
   edges: [AttachmentEdge!]!
   pageInfo: PageInfo!
 }
 
-type AttachmentEdge {
+type AttachmentEdge implements Edge {
   cursor: String!
+  node: AttachmentInterface!
+}
+
+interface AttachmentInterface implements Node {
+  attachments(after: ID, first: Int, whose: Condition): AttachmentConnection!
+  attributeRuns(after: ID, first: Int, whose: Condition): AttributeRunConnection!
+  characters(after: ID, first: Int, whose: Condition): CharacterConnection!
+  fileAttachments(after: ID, first: Int, whose: Condition): FileAttachmentConnection!
+
+  """The name of the font of the first character."""
+  font: String!
+  id: ID! @extractFromObjectDisplayName
+  paragraphs(after: ID, first: Int, whose: Condition): ParagraphConnection!
+
+  """The size in points of the first character."""
+  size: Int!
+
+  """The style of the text."""
+  style: Style!
+
+  """The plain text contents of the rich text."""
+  text: String!
+  words(after: ID, first: Int, whose: Condition): WordConnection!
 }
 
 """An attribute of a style."""
@@ -3051,6 +4589,25 @@ type AttributeConnection implements Connection {
 type AttributeEdge implements Edge {
   cursor: String!
   node: Attribute!
+}
+
+interface AttributeInterface implements Node {
+  """
+  The style responsible for the effective value in this attributes's style.  This processes the local values, inherited styles and cascade chain.
+  """
+  definingStyle: Style!
+
+  """
+  If true, the containing style defines a local value for this attribute.
+  """
+  hasLocalValue: Boolean!
+  id: ID! @extractFromObjectDisplayName
+
+  """The name of the attribute."""
+  name: String!
+
+  """The style to which the attribute refers."""
+  style: Style!
 }
 
 """
@@ -3087,6 +4644,28 @@ type AttributeRunConnection implements Connection {
 type AttributeRunEdge implements Edge {
   cursor: String!
   node: AttributeRun!
+}
+
+interface AttributeRunInterface implements Node {
+  attachments(after: ID, first: Int, whose: Condition): AttachmentConnection!
+  attributeRuns(after: ID, first: Int, whose: Condition): AttributeRunConnection!
+  characters(after: ID, first: Int, whose: Condition): CharacterConnection!
+  fileAttachments(after: ID, first: Int, whose: Condition): FileAttachmentConnection!
+
+  """The name of the font of the first character."""
+  font: String!
+  id: ID! @extractFromObjectDisplayName
+  paragraphs(after: ID, first: Int, whose: Condition): ParagraphConnection!
+
+  """The size in points of the first character."""
+  size: Int!
+
+  """The style of the text."""
+  style: Style!
+
+  """The plain text contents of the rich text."""
+  text: String!
+  words(after: ID, first: Int, whose: Condition): WordConnection!
 }
 
 """
@@ -3249,6 +4828,152 @@ type AvailableTaskEdge implements Edge {
   node: AvailableTask!
 }
 
+interface AvailableTaskInterface implements Node {
+  """
+  True if the task has a task that must be completed prior to it being actionable.
+  """
+  blocked: Boolean!
+
+  """
+  True if the task is completed. Use the "mark complete" and "mark incomplete" commands to change a task's status.
+  """
+  completed: Boolean!
+
+  """If true, complete when children are completed."""
+  completedByChildren: Boolean!
+
+  """
+  The task's date of completion. This can only be modified on a completed task to backdate the completion date.
+  """
+  completionDate: String
+
+  """
+  The task's project, up however many levels of parent tasks.  Inbox tasks aren't considered contained by their provisionalliy assigned container, so if the task is actually an inbox task, this will be missing value.
+  """
+  containingProject: Project
+
+  """
+  When the task was created.  This can only be set when the object is still in the inserted state.  For objects created in the document, it can be passed with the creation properties.  For objects in a quick entry tree, it can be set until the quick entry panel is saved.
+  """
+  creationDate: String!
+
+  """When the task should become available for action."""
+  deferDate: String
+
+  """
+  True if the task is dropped. Use the "mark dropped" and "mark incomplete" commands to change a task's status.
+  """
+  dropped: Boolean!
+
+  """
+  The date the task was dropped. This can only be modified on a dropped task to backdate the dropped date.
+  """
+  droppedDate: String
+
+  """When the task must be finished."""
+  dueDate: String
+
+  """
+  When the task should become available for action (including inherited).
+  """
+  effectiveDeferDate: String
+
+  """When the task must be finished (including inherited)."""
+  effectiveDueDate: String
+
+  """
+  True if the task is completed, or any of it's containing tasks or project are completed.
+  """
+  effectivelyCompleted: Boolean!
+
+  """
+  True if the task is dropped, or any of it's containing tasks or project are dropped.
+  """
+  effectivelyDropped: Boolean!
+
+  """
+  The estimated time, in whole minutes, that this task will take to finish.
+  """
+  estimatedMinutes: Int
+
+  """True if flagged"""
+  flagged: Boolean!
+  flattenedTasks(after: ID, first: Int, whose: Condition): FlattenedTaskConnection!
+
+  """The identifier of the task."""
+  id: ID! @extractFromObjectDisplayName
+
+  """
+  Returns true if the task itself is an inbox task or if the task is contained by an inbox task.
+  """
+  inInbox: Boolean!
+
+  """When the task was last modified."""
+  modificationDate: String!
+
+  """The name of the task."""
+  name: String!
+
+  """If the task is the next task of its containing project, next is true."""
+  next: Boolean!
+
+  """
+  The next defer date if this task repeats on a fixed schedule and it has a defer date.
+  """
+  nextDeferDate: String
+
+  """
+  The next due date if this task repeats on a fixed schedule and it has a due date.
+  """
+  nextDueDate: String
+
+  """The note of the task."""
+  note: RichText!
+
+  """The number of available direct children of this task."""
+  numberOfAvailableTasks: Int!
+
+  """The number of completed direct children of this task."""
+  numberOfCompletedTasks: Int!
+
+  """The number of direct children of this task."""
+  numberOfTasks: Int!
+
+  """
+  The task holding this task.  If this is missing value, then this is a top level task -- either the root of a project or an inbox item.
+  """
+  parentTask: Task
+
+  """
+  The task's first tag. Setting this will remove the current first tag on the task, if any and move or add the new tag as the first tag on the task. Setting this to missing value will remove the current first tag and leave any other remaining tags.
+  """
+  primaryTag: Tag
+
+  """
+  The repetition interval of the task, or missing value if it does not repeat. This property is deprecated in favor of “repetition rule” and is here only for backwards compatibility with existing scripts.
+  """
+  repetition: RepetitionInterval
+
+  """
+  The repetition rule for this task, or missing value if it does not repeat.
+  """
+  repetitionRule: RepetitionRule
+
+  """If true, any children are sequentially dependent."""
+  sequential: Boolean!
+
+  """
+  When set, the due date and defer date properties will use floating time zones. (Note: if a Task has no due or defer dates assigned, this property will revert to the database’s default setting.)
+  """
+  shouldUseFloatingTimeZone: Boolean!
+
+  """The tags assigned to this task."""
+  tags(after: ID, first: Int, whose: Condition): TagConnection!
+
+  """The tasks having this task as their container."""
+  tasks(after: ID, first: Int, whose: Condition): TaskConnection!
+}
+
 """A built-in perspective."""
 type BuiltinPerspective implements Node & PerspectiveInterface {
   """The identifier of the perspective."""
@@ -3267,6 +4992,14 @@ type BuiltinPerspectiveConnection implements Connection {
 type BuiltinPerspectiveEdge implements Edge {
   cursor: String!
   node: BuiltinPerspective!
+}
+
+interface BuiltinPerspectiveInterface implements Node {
+  """The identifier of the perspective."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The name of the perspective."""
+  name: String!
 }
 
 """This subdivides the text into characters."""
@@ -3301,6 +5034,28 @@ type CharacterConnection implements Connection {
 type CharacterEdge implements Edge {
   cursor: String!
   node: Character!
+}
+
+interface CharacterInterface implements Node {
+  attachments(after: ID, first: Int, whose: Condition): AttachmentConnection!
+  attributeRuns(after: ID, first: Int, whose: Condition): AttributeRunConnection!
+  characters(after: ID, first: Int, whose: Condition): CharacterConnection!
+  fileAttachments(after: ID, first: Int, whose: Condition): FileAttachmentConnection!
+
+  """The name of the font of the first character."""
+  font: String!
+  id: ID! @extractFromObjectDisplayName
+  paragraphs(after: ID, first: Int, whose: Condition): ParagraphConnection!
+
+  """The size in points of the first character."""
+  size: Int!
+
+  """The style of the text."""
+  style: Style!
+
+  """The plain text contents of the rich text."""
+  text: String!
+  words(after: ID, first: Int, whose: Condition): WordConnection!
 }
 
 input Condition {
@@ -3421,6 +5176,98 @@ type ContentTreeEdge implements Edge {
   node: ContentTree!
 }
 
+interface ContentTreeInterface implements Node {
+  """The ancestor trees of this tree."""
+  ancestorTrees(after: ID, first: Int, whose: Condition): AncestorTreeConnection!
+
+  """
+  The list of possible identifiers that can be set as the selected grouping identifier.
+  """
+  availableGroupingIdentifiers: [String!]!
+
+  """
+  The list of possible identifiers that can be set as the selected sorting identifier.
+  """
+  availableSortingIdentifiers: [String!]!
+
+  """
+  The list of possible identifiers that can be set as the selected task duration filter identifier.
+  """
+  availableTaskDurationFilterIdentifiers: [String!]!
+
+  """
+  The list of possible identifiers that can be set as the selected task flagged filter identifier.
+  """
+  availableTaskFlaggedFilterIdentifiers: [String!]!
+
+  """
+  The list of possible identifiers that can be set as the selected task state filter identifier.
+  """
+  availableTaskStateFilterIdentifiers: [String!]!
+
+  """
+  All the descendant trees in the user-specified sort ordering, listing each tree, then its children and so forth.
+  """
+  descendantTrees(after: ID, first: Int, whose: Condition): DescendantTreeConnection!
+
+  """This is true if the node is expanded."""
+  expanded: Boolean!
+
+  """
+  The sibling trees of this tree after it in the user-specified sort ordering.
+  """
+  followingSiblings(after: ID, first: Int, whose: Condition): FollowingSiblingConnection!
+
+  """The identifier of object being represented by this tree."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The descendants of this tree that have no children themselves."""
+  leafs(after: ID, first: Int, whose: Condition): LeafConnection!
+
+  """The name of the object being represented by this tree."""
+  name: String!
+
+  """This is true if the node note is expanded."""
+  noteExpanded: Boolean!
+
+  """
+  The sibling trees of this tree before it in the user-specified sort ordering.
+  """
+  precedingSiblings(after: ID, first: Int, whose: Condition): PrecedingSiblingConnection!
+
+  """
+  This is true if the node is selected.  Note that attempts to set this while the node is not visible (collapsed parent, etc.) will silently do nothing.
+  """
+  selected: Boolean!
+
+  """
+  The currently selected grouping identifier, controlling how the results shown in the content area are grouped.
+  """
+  selectedGroupingIdentifier: String!
+
+  """
+  The currently selected sorting identifier, controlling how the results shown in the content area are ordered.
+  """
+  selectedSortingIdentifier: String!
+
+  """The currently selected task duration filter identifier."""
+  selectedTaskDurationFilterIdentifier: String!
+
+  """The currently selected task flagged filter identifier."""
+  selectedTaskFlaggedFilterIdentifier: String!
+
+  """The currently selected task state filter identifier."""
+  selectedTaskStateFilterIdentifier: String!
+
+  """The trees of this tree that are selected in the user interface."""
+  selectedTrees(after: ID, first: Int, whose: Condition): SelectedTreeConnection!
+
+  """
+  The immediate child trees of this tree in the user-specified sort ordering.
+  """
+  trees(after: ID, first: Int, whose: Condition): TreeConnection!
+}
+
 """A user created perspective."""
 type CustomPerspective implements Node & PerspectiveInterface {
   """The identifier of the perspective."""
@@ -3439,6 +5286,14 @@ type CustomPerspectiveConnection implements Connection {
 type CustomPerspectiveEdge implements Edge {
   cursor: String!
   node: CustomPerspective!
+}
+
+interface CustomPerspectiveInterface implements Node {
+  """The identifier of the perspective."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The name of the perspective."""
+  name: String!
 }
 
 """
@@ -3507,6 +5362,58 @@ type DeprecatedContextEdge implements Edge {
   node: DeprecatedContext!
 }
 
+interface DeprecatedContextInterface implements Node {
+  """
+  If false, tasks associated with this tag will be skipped when determining the next action for a project.
+  """
+  allowsNextAction: Boolean!
+
+  """
+  A count of the number of unblocked and incomplete tasks of this tag and all its active descendent tags.
+  """
+  availableTaskCount: Int!
+  availableTasks(after: ID, first: Int, whose: Condition): AvailableTaskConnection!
+
+  """The containing tag."""
+  container: Tag!
+
+  """Deprecated; use tags."""
+  deprecatedContexts(after: ID, first: Int, whose: Condition): DeprecatedContextConnection!
+
+  """
+  Set if the tag is currently hidden or any of its container tags are hidden.
+  """
+  effectivelyHidden: Boolean!
+  flattenedTags(after: ID, first: Int, whose: Condition): FlattenedTagConnection!
+
+  """Set if the tag is currently hidden."""
+  hidden: Boolean!
+
+  """The identifier of the tag."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The physical location associated with the tag."""
+  location: LocationInformation
+
+  """The name of the tag."""
+  name: String!
+
+  """The note of the tag."""
+  note: RichText!
+
+  """
+  A count of the number of incomplete tasks of this tag and all its active descendent tags.
+  """
+  remainingTaskCount: Int!
+  remainingTasks(after: ID, first: Int, whose: Condition): RemainingTaskConnection!
+
+  """The tags having this tag as their container."""
+  tags(after: ID, first: Int, whose: Condition): TagConnection!
+
+  """The tasks having this tag."""
+  tasks(after: ID, first: Int, whose: Condition): TaskConnection!
+}
+
 """
 All the descendant trees in the user-specified sort ordering, listing each tree, then its children and so forth.
 """
@@ -3567,6 +5474,54 @@ type DescendantTreeConnection implements Connection {
 type DescendantTreeEdge implements Edge {
   cursor: String!
   node: DescendantTree!
+}
+
+interface DescendantTreeInterface implements Node {
+  """The ancestor trees of this tree."""
+  ancestorTrees(after: ID, first: Int, whose: Condition): AncestorTreeConnection!
+
+  """
+  All the descendant trees in the user-specified sort ordering, listing each tree, then its children and so forth.
+  """
+  descendantTrees(after: ID, first: Int, whose: Condition): DescendantTreeConnection!
+
+  """This is true if the node is expanded."""
+  expanded: Boolean!
+
+  """
+  The sibling trees of this tree after it in the user-specified sort ordering.
+  """
+  followingSiblings(after: ID, first: Int, whose: Condition): FollowingSiblingConnection!
+
+  """The identifier of object being represented by this tree."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The descendants of this tree that have no children themselves."""
+  leafs(after: ID, first: Int, whose: Condition): LeafConnection!
+
+  """The name of the object being represented by this tree."""
+  name: String!
+
+  """This is true if the node note is expanded."""
+  noteExpanded: Boolean!
+
+  """
+  The sibling trees of this tree before it in the user-specified sort ordering.
+  """
+  precedingSiblings(after: ID, first: Int, whose: Condition): PrecedingSiblingConnection!
+
+  """
+  This is true if the node is selected.  Note that attempts to set this while the node is not visible (collapsed parent, etc.) will silently do nothing.
+  """
+  selected: Boolean!
+
+  """The trees of this tree that are selected in the user interface."""
+  selectedTrees(after: ID, first: Int, whose: Condition): SelectedTreeConnection!
+
+  """
+  The immediate child trees of this tree in the user-specified sort ordering.
+  """
+  trees(after: ID, first: Int, whose: Condition): TreeConnection!
 }
 
 """A document."""
@@ -3660,6 +5615,16 @@ type DocumentEdge implements Edge {
   node: Document!
 }
 
+interface DocumentInterface implements Node {
+  id: ID! @extractFromObjectDisplayName
+
+  """Has it been modified since the last save?"""
+  modified: Boolean!
+
+  """Its name."""
+  name: String!
+}
+
 """A window of an OmniFocus document."""
 type DocumentWindow implements Node & WindowInterface {
   """Does the window have a close button?"""
@@ -3718,13 +5683,59 @@ type DocumentWindowEdge implements Edge {
   node: DocumentWindow!
 }
 
+interface DocumentWindowInterface implements Node {
+  """Does the window have a close button?"""
+  closeable: Boolean!
+
+  """The tree of objects in the main window content."""
+  content: ContentTree!
+
+  """The document whose contents are displayed in the window."""
+  document: Document!
+
+  """The unique identifier of the window."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The index of the window, ordered front to back."""
+  index: Int!
+
+  """Does the window have a minimize button?"""
+  miniaturizable: Boolean!
+
+  """Is the window minimized right now?"""
+  miniaturized: Boolean!
+
+  """The title of the window."""
+  name: String!
+
+  """The name of a perspective."""
+  perspectiveName: String!
+
+  """Can the window be resized?"""
+  resizable: Boolean!
+
+  """
+  The search term in the toolbar.  If there is no search toolbar item, this will return missing value instead of an empty string and setting it will cause an error.
+  """
+  searchTerm: String!
+
+  """Is the window visible right now?"""
+  visible: Boolean!
+
+  """Does the window have a zoom button?"""
+  zoomable: Boolean!
+
+  """Is the window zoomed right now?"""
+  zoomed: Boolean!
+}
+
 interface Edge {
   cursor: String!
   node: Node!
 }
 
 """A text attachment refering to a plain file."""
-type FileAttachment implements Node {
+type FileAttachment implements AttachmentInterface & Node {
   attachments(after: ID, first: Int, whose: Condition): AttachmentConnection!
   attributeRuns(after: ID, first: Int, whose: Condition): AttributeRunConnection!
   characters(after: ID, first: Int, whose: Condition): CharacterConnection!
@@ -3760,6 +5771,33 @@ type FileAttachmentConnection implements Connection {
 type FileAttachmentEdge implements Edge {
   cursor: String!
   node: FileAttachment!
+}
+
+interface FileAttachmentInterface implements Node {
+  attachments(after: ID, first: Int, whose: Condition): AttachmentConnection!
+  attributeRuns(after: ID, first: Int, whose: Condition): AttributeRunConnection!
+  characters(after: ID, first: Int, whose: Condition): CharacterConnection!
+
+  """
+  If true, the attached file will reside inside the document on the next save.
+  """
+  embedded: Boolean!
+  fileAttachments(after: ID, first: Int, whose: Condition): FileAttachmentConnection!
+
+  """The name of the font of the first character."""
+  font: String!
+  id: ID! @extractFromObjectDisplayName
+  paragraphs(after: ID, first: Int, whose: Condition): ParagraphConnection!
+
+  """The size in points of the first character."""
+  size: Int!
+
+  """The style of the text."""
+  style: Style!
+
+  """The plain text contents of the rich text."""
+  text: String!
+  words(after: ID, first: Int, whose: Condition): WordConnection!
 }
 
 """A flattened list of folders in a document."""
@@ -3812,6 +5850,46 @@ type FlattenedFolderConnection implements Connection {
 type FlattenedFolderEdge implements Edge {
   cursor: String!
   node: FlattenedFolder!
+}
+
+interface FlattenedFolderInterface implements Node {
+  """When the folder was created."""
+  creationDate: String!
+
+  """
+  Set if the folder is currently hidden or any of its container folders are hidden.
+  """
+  effectivelyHidden: Boolean!
+  flattenedFolders(after: ID, first: Int, whose: Condition): FlattenedFolderConnection!
+  flattenedProjects(after: ID, first: Int, whose: Condition): FlattenedProjectConnection!
+
+  """
+  The subset of the sections that are folders; folders having this folder as their container.
+  """
+  folders(after: ID, first: Int, whose: Condition): FolderConnection!
+
+  """Set if the folder is currently hidden."""
+  hidden: Boolean!
+
+  """The identifier of the folder."""
+  id: ID! @extractFromObjectDisplayName
+
+  """When the folder was last modified."""
+  modificationDate: String!
+
+  """The name of the folder."""
+  name: String!
+
+  """The note of the folder."""
+  note: RichText!
+
+  """
+  The subset of the sections that are projects; projects having this folder as their container.
+  """
+  projects(after: ID, first: Int, whose: Condition): ProjectConnection!
+
+  """The projects and folders having this folder as their container."""
+  sections(after: ID, first: Int, whose: Condition): SectionConnection!
 }
 
 """A flattened list of projects under a folder or document."""
@@ -3981,6 +6059,161 @@ type FlattenedProjectEdge implements Edge {
   node: FlattenedProject!
 }
 
+interface FlattenedProjectInterface implements Node {
+  """
+  True if the project has a project that must be completed prior to it being actionable.
+  """
+  blocked: Boolean!
+
+  """
+  True if the project is completed. Use the "mark complete" and "mark incomplete" commands to change a project's status.
+  """
+  completed: Boolean!
+
+  """If true, complete when children are completed."""
+  completedByChildren: Boolean!
+
+  """
+  The project's date of completion. This can only be modified on a completed project to backdate the completion date.
+  """
+  completionDate: String
+
+  """
+  When the project was created.  This can only be set when the object is still in the inserted state.  For objects created in the document, it can be passed with the creation properties.  For objects in a quick entry tree, it can be set until the quick entry panel is saved.
+  """
+  creationDate: String!
+
+  """
+  True if the project is the default holder of sington actions.  Only one project can have this flag set; setting it on a project will clear it on any other project having it.  Setting this to true will set 'singleton action holder' to true if not already so set.
+  """
+  defaultSingletonActionHolder: Boolean!
+
+  """When the project should become available for action."""
+  deferDate: String
+
+  """
+  True if the project is dropped. Use the "mark dropped" and "mark incomplete" commands to change a project's status.
+  """
+  dropped: Boolean!
+
+  """
+  The date the project was dropped. This can only be modified on a dropped project to backdate the dropped date.
+  """
+  droppedDate: String
+
+  """When the project must be finished."""
+  dueDate: String
+
+  """
+  When the project should become available for action (including inherited).
+  """
+  effectiveDeferDate: String
+
+  """When the project must be finished (including inherited)."""
+  effectiveDueDate: String
+
+  """The effective status of the project."""
+  effectiveStatus: ProjectStatus!
+
+  """True if the project is completed"""
+  effectivelyCompleted: Boolean!
+
+  """True if the project is dropped"""
+  effectivelyDropped: Boolean!
+
+  """
+  The estimated time, in whole minutes, that this project will take to finish.
+  """
+  estimatedMinutes: Int
+
+  """True if flagged"""
+  flagged: Boolean!
+
+  """
+  The folder of the project, or missing value if it is contained directly by the document.
+  """
+  folder: Folder
+
+  """The identifier of the project."""
+  id: ID! @extractFromObjectDisplayName
+
+  """When the project was last reviewed."""
+  lastReviewDate: String!
+
+  """When the project was last modified."""
+  modificationDate: String!
+
+  """The name of the project."""
+  name: String!
+
+  """
+  The next defer date if this project repeats on a fixed schedule and it has a defer date.
+  """
+  nextDeferDate: String
+
+  """
+  The next due date if this project repeats on a fixed schedule and it has a due date.
+  """
+  nextDueDate: String
+
+  """
+  When the project should next be reviewed. Setting this to missing value will set the review date based off the last review date and review interval.
+  """
+  nextReviewDate: String
+
+  """The next actionable child of this project."""
+  nextTask: Task
+
+  """The note of the project."""
+  note: RichText!
+
+  """The number of available direct children of this project."""
+  numberOfAvailableTasks: Int!
+
+  """The number of completed direct children of this project."""
+  numberOfCompletedTasks: Int!
+
+  """The number of direct children of this project."""
+  numberOfTasks: Int!
+
+  """
+  The project's first tag. Setting this will remove the current first tag on the project, if any and move or add the new tag as the first tag on the project. Setting this to missing value will remove the current first tag and leave any other remaining tags.
+  """
+  primaryTag: Tag
+
+  """
+  The repetition interval of the project, or missing value if it does not repeat. This property is deprecated in favor of “repetition rule” and is here only for backwards compatibility with existing scripts.
+  """
+  repetition: RepetitionInterval
+
+  """
+  The repetition rule for this project, or missing value if it does not repeat.
+  """
+  repetitionRule: RepetitionRule
+
+  """The review interval for the project."""
+  reviewInterval: RepetitionInterval!
+
+  """
+  The root task of this project, holding the project's name, note, dates and child tasks.
+  """
+  rootTask: Task!
+
+  """If true, any children are sequentially dependent."""
+  sequential: Boolean!
+
+  """
+  When set, the due date and defer date properties will use floating time zones. (Note: if a Task has no due or defer dates assigned, this property will revert to the database’s default setting.)
+  """
+  shouldUseFloatingTimeZone: Boolean!
+
+  """True if the project contains singleton actions."""
+  singletonActionHolder: Boolean!
+
+  """The status of the project."""
+  status: ProjectStatus!
+}
+
 """A flattened list of tags in a document."""
 type FlattenedTag implements Node & TagInterface {
   """
@@ -4043,6 +6276,58 @@ type FlattenedTagConnection implements Connection {
 type FlattenedTagEdge implements Edge {
   cursor: String!
   node: FlattenedTag!
+}
+
+interface FlattenedTagInterface implements Node {
+  """
+  If false, tasks associated with this tag will be skipped when determining the next action for a project.
+  """
+  allowsNextAction: Boolean!
+
+  """
+  A count of the number of unblocked and incomplete tasks of this tag and all its active descendent tags.
+  """
+  availableTaskCount: Int!
+  availableTasks(after: ID, first: Int, whose: Condition): AvailableTaskConnection!
+
+  """The containing tag."""
+  container: Tag!
+
+  """Deprecated; use tags."""
+  deprecatedContexts(after: ID, first: Int, whose: Condition): DeprecatedContextConnection!
+
+  """
+  Set if the tag is currently hidden or any of its container tags are hidden.
+  """
+  effectivelyHidden: Boolean!
+  flattenedTags(after: ID, first: Int, whose: Condition): FlattenedTagConnection!
+
+  """Set if the tag is currently hidden."""
+  hidden: Boolean!
+
+  """The identifier of the tag."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The physical location associated with the tag."""
+  location: LocationInformation
+
+  """The name of the tag."""
+  name: String!
+
+  """The note of the tag."""
+  note: RichText!
+
+  """
+  A count of the number of incomplete tasks of this tag and all its active descendent tags.
+  """
+  remainingTaskCount: Int!
+  remainingTasks(after: ID, first: Int, whose: Condition): RemainingTaskConnection!
+
+  """The tags having this tag as their container."""
+  tags(after: ID, first: Int, whose: Condition): TagConnection!
+
+  """The tasks having this tag."""
+  tasks(after: ID, first: Int, whose: Condition): TaskConnection!
 }
 
 """A flattened list of tasks under a task or document."""
@@ -4203,6 +6488,152 @@ type FlattenedTaskEdge implements Edge {
   node: FlattenedTask!
 }
 
+interface FlattenedTaskInterface implements Node {
+  """
+  True if the task has a task that must be completed prior to it being actionable.
+  """
+  blocked: Boolean!
+
+  """
+  True if the task is completed. Use the "mark complete" and "mark incomplete" commands to change a task's status.
+  """
+  completed: Boolean!
+
+  """If true, complete when children are completed."""
+  completedByChildren: Boolean!
+
+  """
+  The task's date of completion. This can only be modified on a completed task to backdate the completion date.
+  """
+  completionDate: String
+
+  """
+  The task's project, up however many levels of parent tasks.  Inbox tasks aren't considered contained by their provisionalliy assigned container, so if the task is actually an inbox task, this will be missing value.
+  """
+  containingProject: Project
+
+  """
+  When the task was created.  This can only be set when the object is still in the inserted state.  For objects created in the document, it can be passed with the creation properties.  For objects in a quick entry tree, it can be set until the quick entry panel is saved.
+  """
+  creationDate: String!
+
+  """When the task should become available for action."""
+  deferDate: String
+
+  """
+  True if the task is dropped. Use the "mark dropped" and "mark incomplete" commands to change a task's status.
+  """
+  dropped: Boolean!
+
+  """
+  The date the task was dropped. This can only be modified on a dropped task to backdate the dropped date.
+  """
+  droppedDate: String
+
+  """When the task must be finished."""
+  dueDate: String
+
+  """
+  When the task should become available for action (including inherited).
+  """
+  effectiveDeferDate: String
+
+  """When the task must be finished (including inherited)."""
+  effectiveDueDate: String
+
+  """
+  True if the task is completed, or any of it's containing tasks or project are completed.
+  """
+  effectivelyCompleted: Boolean!
+
+  """
+  True if the task is dropped, or any of it's containing tasks or project are dropped.
+  """
+  effectivelyDropped: Boolean!
+
+  """
+  The estimated time, in whole minutes, that this task will take to finish.
+  """
+  estimatedMinutes: Int
+
+  """True if flagged"""
+  flagged: Boolean!
+  flattenedTasks(after: ID, first: Int, whose: Condition): FlattenedTaskConnection!
+
+  """The identifier of the task."""
+  id: ID! @extractFromObjectDisplayName
+
+  """
+  Returns true if the task itself is an inbox task or if the task is contained by an inbox task.
+  """
+  inInbox: Boolean!
+
+  """When the task was last modified."""
+  modificationDate: String!
+
+  """The name of the task."""
+  name: String!
+
+  """If the task is the next task of its containing project, next is true."""
+  next: Boolean!
+
+  """
+  The next defer date if this task repeats on a fixed schedule and it has a defer date.
+  """
+  nextDeferDate: String
+
+  """
+  The next due date if this task repeats on a fixed schedule and it has a due date.
+  """
+  nextDueDate: String
+
+  """The note of the task."""
+  note: RichText!
+
+  """The number of available direct children of this task."""
+  numberOfAvailableTasks: Int!
+
+  """The number of completed direct children of this task."""
+  numberOfCompletedTasks: Int!
+
+  """The number of direct children of this task."""
+  numberOfTasks: Int!
+
+  """
+  The task holding this task.  If this is missing value, then this is a top level task -- either the root of a project or an inbox item.
+  """
+  parentTask: Task
+
+  """
+  The task's first tag. Setting this will remove the current first tag on the task, if any and move or add the new tag as the first tag on the task. Setting this to missing value will remove the current first tag and leave any other remaining tags.
+  """
+  primaryTag: Tag
+
+  """
+  The repetition interval of the task, or missing value if it does not repeat. This property is deprecated in favor of “repetition rule” and is here only for backwards compatibility with existing scripts.
+  """
+  repetition: RepetitionInterval
+
+  """
+  The repetition rule for this task, or missing value if it does not repeat.
+  """
+  repetitionRule: RepetitionRule
+
+  """If true, any children are sequentially dependent."""
+  sequential: Boolean!
+
+  """
+  When set, the due date and defer date properties will use floating time zones. (Note: if a Task has no due or defer dates assigned, this property will revert to the database’s default setting.)
+  """
+  shouldUseFloatingTimeZone: Boolean!
+
+  """The tags assigned to this task."""
+  tags(after: ID, first: Int, whose: Condition): TagConnection!
+
+  """The tasks having this task as their container."""
+  tasks(after: ID, first: Int, whose: Condition): TaskConnection!
+}
+
 """The current focus of a document window."""
 type FocusSections implements Node {
   id: ID! @extractFromObjectDisplayName
@@ -4217,6 +6648,10 @@ type FocusSectionsConnection implements Connection {
 type FocusSectionsEdge implements Edge {
   cursor: String!
   node: FocusSections!
+}
+
+interface FocusSectionsInterface implements Node {
+  id: ID! @extractFromObjectDisplayName
 }
 
 """
@@ -4375,6 +6810,54 @@ type FollowingSiblingEdge implements Edge {
   node: FollowingSibling!
 }
 
+interface FollowingSiblingInterface implements Node {
+  """The ancestor trees of this tree."""
+  ancestorTrees(after: ID, first: Int, whose: Condition): AncestorTreeConnection!
+
+  """
+  All the descendant trees in the user-specified sort ordering, listing each tree, then its children and so forth.
+  """
+  descendantTrees(after: ID, first: Int, whose: Condition): DescendantTreeConnection!
+
+  """This is true if the node is expanded."""
+  expanded: Boolean!
+
+  """
+  The sibling trees of this tree after it in the user-specified sort ordering.
+  """
+  followingSiblings(after: ID, first: Int, whose: Condition): FollowingSiblingConnection!
+
+  """The identifier of object being represented by this tree."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The descendants of this tree that have no children themselves."""
+  leafs(after: ID, first: Int, whose: Condition): LeafConnection!
+
+  """The name of the object being represented by this tree."""
+  name: String!
+
+  """This is true if the node note is expanded."""
+  noteExpanded: Boolean!
+
+  """
+  The sibling trees of this tree before it in the user-specified sort ordering.
+  """
+  precedingSiblings(after: ID, first: Int, whose: Condition): PrecedingSiblingConnection!
+
+  """
+  This is true if the node is selected.  Note that attempts to set this while the node is not visible (collapsed parent, etc.) will silently do nothing.
+  """
+  selected: Boolean!
+
+  """The trees of this tree that are selected in the user interface."""
+  selectedTrees(after: ID, first: Int, whose: Condition): SelectedTreeConnection!
+
+  """
+  The immediate child trees of this tree in the user-specified sort ordering.
+  """
+  trees(after: ID, first: Int, whose: Condition): TreeConnection!
+}
+
 """A day in the forecast sidebar tree."""
 type ForecastDay implements Node {
   """
@@ -4492,6 +6975,63 @@ type ForecastSidebarTreeConnection implements Connection {
 type ForecastSidebarTreeEdge implements Edge {
   cursor: String!
   node: ForecastSidebarTree!
+}
+
+interface ForecastSidebarTreeInterface implements Node {
+  """The ancestor trees of this tree."""
+  ancestorTrees(after: ID, first: Int, whose: Condition): AncestorTreeConnection!
+
+  """
+  The list of possible smart group identifiers that can be set as the selected smart group identifier.
+  """
+  availableSmartGroupIdentifiers: [String!]!
+
+  """
+  All the descendant trees in the user-specified sort ordering, listing each tree, then its children and so forth.
+  """
+  descendantTrees(after: ID, first: Int, whose: Condition): DescendantTreeConnection!
+
+  """This is true if the node is expanded."""
+  expanded: Boolean!
+
+  """
+  The sibling trees of this tree after it in the user-specified sort ordering.
+  """
+  followingSiblings(after: ID, first: Int, whose: Condition): FollowingSiblingConnection!
+  forecastDays(after: ID, first: Int, whose: Condition): ForecastDayConnection!
+
+  """The identifier of object being represented by this tree."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The descendants of this tree that have no children themselves."""
+  leafs(after: ID, first: Int, whose: Condition): LeafConnection!
+
+  """The name of the object being represented by this tree."""
+  name: String!
+
+  """This is true if the node note is expanded."""
+  noteExpanded: Boolean!
+
+  """
+  The sibling trees of this tree before it in the user-specified sort ordering.
+  """
+  precedingSiblings(after: ID, first: Int, whose: Condition): PrecedingSiblingConnection!
+
+  """
+  This is true if the node is selected.  Note that attempts to set this while the node is not visible (collapsed parent, etc.) will silently do nothing.
+  """
+  selected: Boolean!
+
+  """The currently selected smart group identifier."""
+  selectedSmartGroupIdentifier: String
+
+  """The trees of this tree that are selected in the user interface."""
+  selectedTrees(after: ID, first: Int, whose: Condition): SelectedTreeConnection!
+
+  """
+  The immediate child trees of this tree in the user-specified sort ordering.
+  """
+  trees(after: ID, first: Int, whose: Condition): TreeConnection!
 }
 
 """A task that is in the document's inbox"""
@@ -4652,6 +7192,152 @@ type InboxTaskEdge implements Edge {
   node: InboxTask!
 }
 
+interface InboxTaskInterface implements Node {
+  """
+  True if the task has a task that must be completed prior to it being actionable.
+  """
+  blocked: Boolean!
+
+  """
+  True if the task is completed. Use the "mark complete" and "mark incomplete" commands to change a task's status.
+  """
+  completed: Boolean!
+
+  """If true, complete when children are completed."""
+  completedByChildren: Boolean!
+
+  """
+  The task's date of completion. This can only be modified on a completed task to backdate the completion date.
+  """
+  completionDate: String
+
+  """
+  The task's project, up however many levels of parent tasks.  Inbox tasks aren't considered contained by their provisionalliy assigned container, so if the task is actually an inbox task, this will be missing value.
+  """
+  containingProject: Project
+
+  """
+  When the task was created.  This can only be set when the object is still in the inserted state.  For objects created in the document, it can be passed with the creation properties.  For objects in a quick entry tree, it can be set until the quick entry panel is saved.
+  """
+  creationDate: String!
+
+  """When the task should become available for action."""
+  deferDate: String
+
+  """
+  True if the task is dropped. Use the "mark dropped" and "mark incomplete" commands to change a task's status.
+  """
+  dropped: Boolean!
+
+  """
+  The date the task was dropped. This can only be modified on a dropped task to backdate the dropped date.
+  """
+  droppedDate: String
+
+  """When the task must be finished."""
+  dueDate: String
+
+  """
+  When the task should become available for action (including inherited).
+  """
+  effectiveDeferDate: String
+
+  """When the task must be finished (including inherited)."""
+  effectiveDueDate: String
+
+  """
+  True if the task is completed, or any of it's containing tasks or project are completed.
+  """
+  effectivelyCompleted: Boolean!
+
+  """
+  True if the task is dropped, or any of it's containing tasks or project are dropped.
+  """
+  effectivelyDropped: Boolean!
+
+  """
+  The estimated time, in whole minutes, that this task will take to finish.
+  """
+  estimatedMinutes: Int
+
+  """True if flagged"""
+  flagged: Boolean!
+  flattenedTasks(after: ID, first: Int, whose: Condition): FlattenedTaskConnection!
+
+  """The identifier of the task."""
+  id: ID! @extractFromObjectDisplayName
+
+  """
+  Returns true if the task itself is an inbox task or if the task is contained by an inbox task.
+  """
+  inInbox: Boolean!
+
+  """When the task was last modified."""
+  modificationDate: String!
+
+  """The name of the task."""
+  name: String!
+
+  """If the task is the next task of its containing project, next is true."""
+  next: Boolean!
+
+  """
+  The next defer date if this task repeats on a fixed schedule and it has a defer date.
+  """
+  nextDeferDate: String
+
+  """
+  The next due date if this task repeats on a fixed schedule and it has a due date.
+  """
+  nextDueDate: String
+
+  """The note of the task."""
+  note: RichText!
+
+  """The number of available direct children of this task."""
+  numberOfAvailableTasks: Int!
+
+  """The number of completed direct children of this task."""
+  numberOfCompletedTasks: Int!
+
+  """The number of direct children of this task."""
+  numberOfTasks: Int!
+
+  """
+  The task holding this task.  If this is missing value, then this is a top level task -- either the root of a project or an inbox item.
+  """
+  parentTask: Task
+
+  """
+  The task's first tag. Setting this will remove the current first tag on the task, if any and move or add the new tag as the first tag on the task. Setting this to missing value will remove the current first tag and leave any other remaining tags.
+  """
+  primaryTag: Tag
+
+  """
+  The repetition interval of the task, or missing value if it does not repeat. This property is deprecated in favor of “repetition rule” and is here only for backwards compatibility with existing scripts.
+  """
+  repetition: RepetitionInterval
+
+  """
+  The repetition rule for this task, or missing value if it does not repeat.
+  """
+  repetitionRule: RepetitionRule
+
+  """If true, any children are sequentially dependent."""
+  sequential: Boolean!
+
+  """
+  When set, the due date and defer date properties will use floating time zones. (Note: if a Task has no due or defer dates assigned, this property will revert to the database’s default setting.)
+  """
+  shouldUseFloatingTimeZone: Boolean!
+
+  """The tags assigned to this task."""
+  tags(after: ID, first: Int, whose: Condition): TagConnection!
+
+  """The tasks having this task as their container."""
+  tasks(after: ID, first: Int, whose: Condition): TaskConnection!
+}
+
 """The tree in the sidebar representing the Inbox."""
 type InboxTree implements Node & TreeInterface {
   """The ancestor trees of this tree."""
@@ -4710,6 +7396,54 @@ type InboxTreeConnection implements Connection {
 type InboxTreeEdge implements Edge {
   cursor: String!
   node: InboxTree!
+}
+
+interface InboxTreeInterface implements Node {
+  """The ancestor trees of this tree."""
+  ancestorTrees(after: ID, first: Int, whose: Condition): AncestorTreeConnection!
+
+  """
+  All the descendant trees in the user-specified sort ordering, listing each tree, then its children and so forth.
+  """
+  descendantTrees(after: ID, first: Int, whose: Condition): DescendantTreeConnection!
+
+  """This is true if the node is expanded."""
+  expanded: Boolean!
+
+  """
+  The sibling trees of this tree after it in the user-specified sort ordering.
+  """
+  followingSiblings(after: ID, first: Int, whose: Condition): FollowingSiblingConnection!
+
+  """The identifier of object being represented by this tree."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The descendants of this tree that have no children themselves."""
+  leafs(after: ID, first: Int, whose: Condition): LeafConnection!
+
+  """The name of the object being represented by this tree."""
+  name: String!
+
+  """This is true if the node note is expanded."""
+  noteExpanded: Boolean!
+
+  """
+  The sibling trees of this tree before it in the user-specified sort ordering.
+  """
+  precedingSiblings(after: ID, first: Int, whose: Condition): PrecedingSiblingConnection!
+
+  """
+  This is true if the node is selected.  Note that attempts to set this while the node is not visible (collapsed parent, etc.) will silently do nothing.
+  """
+  selected: Boolean!
+
+  """The trees of this tree that are selected in the user interface."""
+  selectedTrees(after: ID, first: Int, whose: Condition): SelectedTreeConnection!
+
+  """
+  The immediate child trees of this tree in the user-specified sort ordering.
+  """
+  trees(after: ID, first: Int, whose: Condition): TreeConnection!
 }
 
 enum IntervalUnit {
@@ -4792,6 +7526,54 @@ type LeafEdge implements Edge {
   node: Leaf!
 }
 
+interface LeafInterface implements Node {
+  """The ancestor trees of this tree."""
+  ancestorTrees(after: ID, first: Int, whose: Condition): AncestorTreeConnection!
+
+  """
+  All the descendant trees in the user-specified sort ordering, listing each tree, then its children and so forth.
+  """
+  descendantTrees(after: ID, first: Int, whose: Condition): DescendantTreeConnection!
+
+  """This is true if the node is expanded."""
+  expanded: Boolean!
+
+  """
+  The sibling trees of this tree after it in the user-specified sort ordering.
+  """
+  followingSiblings(after: ID, first: Int, whose: Condition): FollowingSiblingConnection!
+
+  """The identifier of object being represented by this tree."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The descendants of this tree that have no children themselves."""
+  leafs(after: ID, first: Int, whose: Condition): LeafConnection!
+
+  """The name of the object being represented by this tree."""
+  name: String!
+
+  """This is true if the node note is expanded."""
+  noteExpanded: Boolean!
+
+  """
+  The sibling trees of this tree before it in the user-specified sort ordering.
+  """
+  precedingSiblings(after: ID, first: Int, whose: Condition): PrecedingSiblingConnection!
+
+  """
+  This is true if the node is selected.  Note that attempts to set this while the node is not visible (collapsed parent, etc.) will silently do nothing.
+  """
+  selected: Boolean!
+
+  """The trees of this tree that are selected in the user interface."""
+  selectedTrees(after: ID, first: Int, whose: Condition): SelectedTreeConnection!
+
+  """
+  The immediate child trees of this tree in the user-specified sort ordering.
+  """
+  trees(after: ID, first: Int, whose: Condition): TreeConnection!
+}
+
 """The tree in the sidebar representing the top level library of objects."""
 type LibraryTree implements Node & TreeInterface {
   """The ancestor trees of this tree."""
@@ -4852,6 +7634,54 @@ type LibraryTreeEdge implements Edge {
   node: LibraryTree!
 }
 
+interface LibraryTreeInterface implements Node {
+  """The ancestor trees of this tree."""
+  ancestorTrees(after: ID, first: Int, whose: Condition): AncestorTreeConnection!
+
+  """
+  All the descendant trees in the user-specified sort ordering, listing each tree, then its children and so forth.
+  """
+  descendantTrees(after: ID, first: Int, whose: Condition): DescendantTreeConnection!
+
+  """This is true if the node is expanded."""
+  expanded: Boolean!
+
+  """
+  The sibling trees of this tree after it in the user-specified sort ordering.
+  """
+  followingSiblings(after: ID, first: Int, whose: Condition): FollowingSiblingConnection!
+
+  """The identifier of object being represented by this tree."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The descendants of this tree that have no children themselves."""
+  leafs(after: ID, first: Int, whose: Condition): LeafConnection!
+
+  """The name of the object being represented by this tree."""
+  name: String!
+
+  """This is true if the node note is expanded."""
+  noteExpanded: Boolean!
+
+  """
+  The sibling trees of this tree before it in the user-specified sort ordering.
+  """
+  precedingSiblings(after: ID, first: Int, whose: Condition): PrecedingSiblingConnection!
+
+  """
+  This is true if the node is selected.  Note that attempts to set this while the node is not visible (collapsed parent, etc.) will silently do nothing.
+  """
+  selected: Boolean!
+
+  """The trees of this tree that are selected in the user interface."""
+  selectedTrees(after: ID, first: Int, whose: Condition): SelectedTreeConnection!
+
+  """
+  The immediate child trees of this tree in the user-specified sort ordering.
+  """
+  trees(after: ID, first: Int, whose: Condition): TreeConnection!
+}
+
 type LocationInformation @recordType {
   """Altitude in meters from sea level."""
   altitude: Float!
@@ -4909,6 +7739,11 @@ type NamedStyleEdge implements Edge {
 }
 
 interface NamedStyleInterface implements Node {
+  attributes(after: ID, first: Int, whose: Condition): AttributeConnection!
+
+  """The name of the font of the style."""
+  font: String!
+
   """
   An identifier for the named style that is unique within its document.  Currently this identifier is not persistent between two different sessions of editing the document.
   """
@@ -4916,6 +7751,7 @@ interface NamedStyleInterface implements Node {
 
   """The name of the style.  Must be unique within the containing document."""
   name: String!
+  namedStyles(after: ID, first: Int, whose: Condition): NamedStyleConnection!
 }
 
 interface Node {
@@ -4961,6 +7797,28 @@ type ParagraphConnection implements Connection {
 type ParagraphEdge implements Edge {
   cursor: String!
   node: Paragraph!
+}
+
+interface ParagraphInterface implements Node {
+  attachments(after: ID, first: Int, whose: Condition): AttachmentConnection!
+  attributeRuns(after: ID, first: Int, whose: Condition): AttributeRunConnection!
+  characters(after: ID, first: Int, whose: Condition): CharacterConnection!
+  fileAttachments(after: ID, first: Int, whose: Condition): FileAttachmentConnection!
+
+  """The name of the font of the first character."""
+  font: String!
+  id: ID! @extractFromObjectDisplayName
+  paragraphs(after: ID, first: Int, whose: Condition): ParagraphConnection!
+
+  """The size in points of the first character."""
+  size: Int!
+
+  """The style of the text."""
+  style: Style!
+
+  """The plain text contents of the rich text."""
+  text: String!
+  words(after: ID, first: Int, whose: Condition): WordConnection!
 }
 
 """A perspective."""
@@ -5051,6 +7909,54 @@ type PrecedingSiblingConnection implements Connection {
 type PrecedingSiblingEdge implements Edge {
   cursor: String!
   node: PrecedingSibling!
+}
+
+interface PrecedingSiblingInterface implements Node {
+  """The ancestor trees of this tree."""
+  ancestorTrees(after: ID, first: Int, whose: Condition): AncestorTreeConnection!
+
+  """
+  All the descendant trees in the user-specified sort ordering, listing each tree, then its children and so forth.
+  """
+  descendantTrees(after: ID, first: Int, whose: Condition): DescendantTreeConnection!
+
+  """This is true if the node is expanded."""
+  expanded: Boolean!
+
+  """
+  The sibling trees of this tree after it in the user-specified sort ordering.
+  """
+  followingSiblings(after: ID, first: Int, whose: Condition): FollowingSiblingConnection!
+
+  """The identifier of object being represented by this tree."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The descendants of this tree that have no children themselves."""
+  leafs(after: ID, first: Int, whose: Condition): LeafConnection!
+
+  """The name of the object being represented by this tree."""
+  name: String!
+
+  """This is true if the node note is expanded."""
+  noteExpanded: Boolean!
+
+  """
+  The sibling trees of this tree before it in the user-specified sort ordering.
+  """
+  precedingSiblings(after: ID, first: Int, whose: Condition): PrecedingSiblingConnection!
+
+  """
+  This is true if the node is selected.  Note that attempts to set this while the node is not visible (collapsed parent, etc.) will silently do nothing.
+  """
+  selected: Boolean!
+
+  """The trees of this tree that are selected in the user interface."""
+  selectedTrees(after: ID, first: Int, whose: Condition): SelectedTreeConnection!
+
+  """
+  The immediate child trees of this tree in the user-specified sort ordering.
+  """
+  trees(after: ID, first: Int, whose: Condition): TreeConnection!
 }
 
 """Application preference"""
@@ -5485,6 +8391,64 @@ type QuickEntryTreeEdge implements Edge {
   node: QuickEntryTree!
 }
 
+interface QuickEntryTreeInterface implements Node {
+  """The ancestor trees of this tree."""
+  ancestorTrees(after: ID, first: Int, whose: Condition): AncestorTreeConnection!
+
+  """Deprecated; use tags."""
+  deprecatedContexts(after: ID, first: Int, whose: Condition): DeprecatedContextConnection!
+
+  """
+  All the descendant trees in the user-specified sort ordering, listing each tree, then its children and so forth.
+  """
+  descendantTrees(after: ID, first: Int, whose: Condition): DescendantTreeConnection!
+
+  """This is true if the node is expanded."""
+  expanded: Boolean!
+  folders(after: ID, first: Int, whose: Condition): FolderConnection!
+
+  """
+  The sibling trees of this tree after it in the user-specified sort ordering.
+  """
+  followingSiblings(after: ID, first: Int, whose: Condition): FollowingSiblingConnection!
+
+  """The identifier of object being represented by this tree."""
+  id: ID! @extractFromObjectDisplayName
+  inboxTasks(after: ID, first: Int, whose: Condition): InboxTaskConnection!
+
+  """The descendants of this tree that have no children themselves."""
+  leafs(after: ID, first: Int, whose: Condition): LeafConnection!
+
+  """The name of the object being represented by this tree."""
+  name: String!
+
+  """This is true if the node note is expanded."""
+  noteExpanded: Boolean!
+
+  """
+  The sibling trees of this tree before it in the user-specified sort ordering.
+  """
+  precedingSiblings(after: ID, first: Int, whose: Condition): PrecedingSiblingConnection!
+  projects(after: ID, first: Int, whose: Condition): ProjectConnection!
+
+  """
+  This is true if the node is selected.  Note that attempts to set this while the node is not visible (collapsed parent, etc.) will silently do nothing.
+  """
+  selected: Boolean!
+
+  """The trees of this tree that are selected in the user interface."""
+  selectedTrees(after: ID, first: Int, whose: Condition): SelectedTreeConnection!
+  tags(after: ID, first: Int, whose: Condition): TagConnection!
+
+  """
+  The immediate child trees of this tree in the user-specified sort ordering.
+  """
+  trees(after: ID, first: Int, whose: Condition): TreeConnection!
+
+  """Whether the quick entry panel is currently visible."""
+  visible: Boolean!
+}
+
 """
 A task that is not complete, though it may be blocked.  This is simply a filter on the existing tasks and should be considred a read-only element.  These cannot be created directly; instead create a normal task.
 """
@@ -5645,6 +8609,152 @@ type RemainingTaskEdge implements Edge {
   node: RemainingTask!
 }
 
+interface RemainingTaskInterface implements Node {
+  """
+  True if the task has a task that must be completed prior to it being actionable.
+  """
+  blocked: Boolean!
+
+  """
+  True if the task is completed. Use the "mark complete" and "mark incomplete" commands to change a task's status.
+  """
+  completed: Boolean!
+
+  """If true, complete when children are completed."""
+  completedByChildren: Boolean!
+
+  """
+  The task's date of completion. This can only be modified on a completed task to backdate the completion date.
+  """
+  completionDate: String
+
+  """
+  The task's project, up however many levels of parent tasks.  Inbox tasks aren't considered contained by their provisionalliy assigned container, so if the task is actually an inbox task, this will be missing value.
+  """
+  containingProject: Project
+
+  """
+  When the task was created.  This can only be set when the object is still in the inserted state.  For objects created in the document, it can be passed with the creation properties.  For objects in a quick entry tree, it can be set until the quick entry panel is saved.
+  """
+  creationDate: String!
+
+  """When the task should become available for action."""
+  deferDate: String
+
+  """
+  True if the task is dropped. Use the "mark dropped" and "mark incomplete" commands to change a task's status.
+  """
+  dropped: Boolean!
+
+  """
+  The date the task was dropped. This can only be modified on a dropped task to backdate the dropped date.
+  """
+  droppedDate: String
+
+  """When the task must be finished."""
+  dueDate: String
+
+  """
+  When the task should become available for action (including inherited).
+  """
+  effectiveDeferDate: String
+
+  """When the task must be finished (including inherited)."""
+  effectiveDueDate: String
+
+  """
+  True if the task is completed, or any of it's containing tasks or project are completed.
+  """
+  effectivelyCompleted: Boolean!
+
+  """
+  True if the task is dropped, or any of it's containing tasks or project are dropped.
+  """
+  effectivelyDropped: Boolean!
+
+  """
+  The estimated time, in whole minutes, that this task will take to finish.
+  """
+  estimatedMinutes: Int
+
+  """True if flagged"""
+  flagged: Boolean!
+  flattenedTasks(after: ID, first: Int, whose: Condition): FlattenedTaskConnection!
+
+  """The identifier of the task."""
+  id: ID! @extractFromObjectDisplayName
+
+  """
+  Returns true if the task itself is an inbox task or if the task is contained by an inbox task.
+  """
+  inInbox: Boolean!
+
+  """When the task was last modified."""
+  modificationDate: String!
+
+  """The name of the task."""
+  name: String!
+
+  """If the task is the next task of its containing project, next is true."""
+  next: Boolean!
+
+  """
+  The next defer date if this task repeats on a fixed schedule and it has a defer date.
+  """
+  nextDeferDate: String
+
+  """
+  The next due date if this task repeats on a fixed schedule and it has a due date.
+  """
+  nextDueDate: String
+
+  """The note of the task."""
+  note: RichText!
+
+  """The number of available direct children of this task."""
+  numberOfAvailableTasks: Int!
+
+  """The number of completed direct children of this task."""
+  numberOfCompletedTasks: Int!
+
+  """The number of direct children of this task."""
+  numberOfTasks: Int!
+
+  """
+  The task holding this task.  If this is missing value, then this is a top level task -- either the root of a project or an inbox item.
+  """
+  parentTask: Task
+
+  """
+  The task's first tag. Setting this will remove the current first tag on the task, if any and move or add the new tag as the first tag on the task. Setting this to missing value will remove the current first tag and leave any other remaining tags.
+  """
+  primaryTag: Tag
+
+  """
+  The repetition interval of the task, or missing value if it does not repeat. This property is deprecated in favor of “repetition rule” and is here only for backwards compatibility with existing scripts.
+  """
+  repetition: RepetitionInterval
+
+  """
+  The repetition rule for this task, or missing value if it does not repeat.
+  """
+  repetitionRule: RepetitionRule
+
+  """If true, any children are sequentially dependent."""
+  sequential: Boolean!
+
+  """
+  When set, the due date and defer date properties will use floating time zones. (Note: if a Task has no due or defer dates assigned, this property will revert to the database’s default setting.)
+  """
+  shouldUseFloatingTimeZone: Boolean!
+
+  """The tags assigned to this task."""
+  tags(after: ID, first: Int, whose: Condition): TagConnection!
+
+  """The tasks having this task as their container."""
+  tasks(after: ID, first: Int, whose: Condition): TaskConnection!
+}
+
 type RepetitionInterval @recordType {
   """
   If fixed, the next repetition will be relative to a fixed calendar.  If sliding, the next repetition will be calculated when needed.
@@ -5771,6 +8881,54 @@ type SelectedTreeEdge implements Edge {
   node: SelectedTree!
 }
 
+interface SelectedTreeInterface implements Node {
+  """The ancestor trees of this tree."""
+  ancestorTrees(after: ID, first: Int, whose: Condition): AncestorTreeConnection!
+
+  """
+  All the descendant trees in the user-specified sort ordering, listing each tree, then its children and so forth.
+  """
+  descendantTrees(after: ID, first: Int, whose: Condition): DescendantTreeConnection!
+
+  """This is true if the node is expanded."""
+  expanded: Boolean!
+
+  """
+  The sibling trees of this tree after it in the user-specified sort ordering.
+  """
+  followingSiblings(after: ID, first: Int, whose: Condition): FollowingSiblingConnection!
+
+  """The identifier of object being represented by this tree."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The descendants of this tree that have no children themselves."""
+  leafs(after: ID, first: Int, whose: Condition): LeafConnection!
+
+  """The name of the object being represented by this tree."""
+  name: String!
+
+  """This is true if the node note is expanded."""
+  noteExpanded: Boolean!
+
+  """
+  The sibling trees of this tree before it in the user-specified sort ordering.
+  """
+  precedingSiblings(after: ID, first: Int, whose: Condition): PrecedingSiblingConnection!
+
+  """
+  This is true if the node is selected.  Note that attempts to set this while the node is not visible (collapsed parent, etc.) will silently do nothing.
+  """
+  selected: Boolean!
+
+  """The trees of this tree that are selected in the user interface."""
+  selectedTrees(after: ID, first: Int, whose: Condition): SelectedTreeConnection!
+
+  """
+  The immediate child trees of this tree in the user-specified sort ordering.
+  """
+  trees(after: ID, first: Int, whose: Condition): TreeConnection!
+}
+
 """Document setting"""
 type Setting implements Node {
   """The identifier of the setting."""
@@ -5850,14 +9008,71 @@ type SidebarTree implements Node & SidebarTreeInterface & TreeInterface {
   trees(after: ID, first: Int, whose: Condition): TreeConnection!
 }
 
-interface SidebarTreeInterface {
+type SidebarTreeConnection implements Connection {
+  byId(id: ID!): SidebarTreeInterface
+  edges: [SidebarTreeEdge!]!
+  pageInfo: PageInfo!
+}
+
+type SidebarTreeEdge implements Edge {
+  cursor: String!
+  node: SidebarTreeInterface!
+}
+
+interface SidebarTreeInterface implements Node {
+  """The ancestor trees of this tree."""
+  ancestorTrees(after: ID, first: Int, whose: Condition): AncestorTreeConnection!
+
   """
   The list of possible smart group identifiers that can be set as the selected smart group identifier.
   """
   availableSmartGroupIdentifiers: [String!]!
 
+  """
+  All the descendant trees in the user-specified sort ordering, listing each tree, then its children and so forth.
+  """
+  descendantTrees(after: ID, first: Int, whose: Condition): DescendantTreeConnection!
+
+  """This is true if the node is expanded."""
+  expanded: Boolean!
+
+  """
+  The sibling trees of this tree after it in the user-specified sort ordering.
+  """
+  followingSiblings(after: ID, first: Int, whose: Condition): FollowingSiblingConnection!
+
+  """The identifier of object being represented by this tree."""
+  id: ID! @extractFromObjectDisplayName
+
+  """The descendants of this tree that have no children themselves."""
+  leafs(after: ID, first: Int, whose: Condition): LeafConnection!
+
+  """The name of the object being represented by this tree."""
+  name: String!
+
+  """This is true if the node note is expanded."""
+  noteExpanded: Boolean!
+
+  """
+  The sibling trees of this tree before it in the user-specified sort ordering.
+  """
+  precedingSiblings(after: ID, first: Int, whose: Condition): PrecedingSiblingConnection!
+
+  """
+  This is true if the node is selected.  Note that attempts to set this while the node is not visible (collapsed parent, etc.) will silently do nothing.
+  """
+  selected: Boolean!
+
   """The currently selected smart group identifier."""
   selectedSmartGroupIdentifier: String
+
+  """The trees of this tree that are selected in the user interface."""
+  selectedTrees(after: ID, first: Int, whose: Condition): SelectedTreeConnection!
+
+  """
+  The immediate child trees of this tree in the user-specified sort ordering.
+  """
+  trees(after: ID, first: Int, whose: Condition): TreeConnection!
 }
 
 """A style object."""
@@ -5870,11 +9085,23 @@ type Style implements Node & StyleInterface {
   namedStyles(after: ID, first: Int, whose: Condition): NamedStyleConnection!
 }
 
-interface StyleInterface {
+type StyleConnection implements Connection {
+  byId(id: ID!): StyleInterface
+  edges: [StyleEdge!]!
+  pageInfo: PageInfo!
+}
+
+type StyleEdge implements Edge {
+  cursor: String!
+  node: StyleInterface!
+}
+
+interface StyleInterface implements Node {
   attributes(after: ID, first: Int, whose: Condition): AttributeConnection!
 
   """The name of the font of the style."""
   font: String!
+  id: ID! @extractFromObjectDisplayName
   namedStyles(after: ID, first: Int, whose: Condition): NamedStyleConnection!
 }
 
@@ -6522,5 +9749,27 @@ type WordConnection implements Connection {
 type WordEdge implements Edge {
   cursor: String!
   node: Word!
+}
+
+interface WordInterface implements Node {
+  attachments(after: ID, first: Int, whose: Condition): AttachmentConnection!
+  attributeRuns(after: ID, first: Int, whose: Condition): AttributeRunConnection!
+  characters(after: ID, first: Int, whose: Condition): CharacterConnection!
+  fileAttachments(after: ID, first: Int, whose: Condition): FileAttachmentConnection!
+
+  """The name of the font of the first character."""
+  font: String!
+  id: ID! @extractFromObjectDisplayName
+  paragraphs(after: ID, first: Int, whose: Condition): ParagraphConnection!
+
+  """The size in points of the first character."""
+  size: Int!
+
+  """The style of the text."""
+  style: Style!
+
+  """The plain text contents of the rich text."""
+  text: String!
+  words(after: ID, first: Int, whose: Condition): WordConnection!
 }
 `;

@@ -27,7 +27,7 @@ const complementId = (fields: FieldDefinitionNode[]): FieldDefinitionNode[] => {
 
 export class ClassBuilder {
   private c: ClassDefinition;
-  fields: FieldDefinitionNode[];
+  private fields: FieldDefinitionNode[];
   constructor(c: ClassDefinition) {
     this.c = c;
     this.fields = collectFieldsDefinitions(this.c);
@@ -36,10 +36,10 @@ export class ClassBuilder {
   private getClassName = () => this.c.$.name;
   private getInherits = () => this.c.$.inherits;
   private getInterfaceName = () => `${this.getBaseTypeName()}Interface`;
-  private getInterfaced = (): InterfaceTypeDefinitionNode => {
+  private getInterfaced = (fields: FieldDefinitionNode[]): InterfaceTypeDefinitionNode => {
     return {
       kind: Kind.INTERFACE_TYPE_DEFINITION,
-      fields: this.fields,
+      fields,
       name: name(this.getInterfaceName(), { pascalCase: true }),
       interfaces: [named(NodeInterface.name.value)],
     };
@@ -105,6 +105,6 @@ export class ClassBuilder {
         interfaces: [CONNECTION_TYPE_NAME],
       }
     );
-    return [connectionDef, edgeDef, classDef, this.getInterfaced()];
+    return [connectionDef, edgeDef, classDef, this.getInterfaced(fields)];
   };
 }
