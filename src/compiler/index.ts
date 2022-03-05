@@ -37,15 +37,19 @@ type RenderableField = {
   definition: FieldDefinitionNode;
 };
 
-const bundle = (strings: TemplateStringsArray, ...placeholders: string[]) => {
+type RenderResult = { body: string };
+
+const bundle = (strings: TemplateStringsArray, ...placeholders: (string | RenderResult)[]): RenderResult => {
   let result = "";
   for (let i = 0; i < placeholders.length; i++) {
     result += strings[i];
-    result += placeholders[i];
+    const elm = placeholders[i];
+
+    result += typeof elm === "string" ? elm : elm.body;
   }
   result += strings[strings.length - 1];
 
-  return result;
+  return { body: result };
 };
 
 const extractIntArgument = (field: FieldNode, argName: string) => {
@@ -80,7 +84,7 @@ const renderField = (
   ctx: CurrentContext,
   f: RenderableField,
   opts: Partial<{ isRecordType: boolean; isEnum: boolean }>
-): string => {
+): RenderResult => {
   const name = f.field.name.value;
   // TODO: check type
   if (name === "cursor") {
@@ -176,12 +180,15 @@ const mustFindTypeDefinition = (
   throw new Error("unsupported type definition kind");
 };
 
-const renderObject = (ctx: CurrentContext, object: RenderableObject): string => {
+const renderObject = (ctx: CurrentContext, object: RenderableObject): RenderResult => {
   if (object.typeNode.kind === Kind.NON_NULL_TYPE) {
     return renderNonNullObject(ctx, { ...object, typeNode: object.typeNode.type });
   }
 
-  return bundle`${object.parentName} ? ${renderNonNullObject(ctx, { ...object, typeNode: object.typeNode })}: undefined`;
+  return bundle`${object.parentName} ? ${renderNonNullObject(ctx, {
+    ...object,
+    typeNode: object.typeNode,
+  })}: undefined`;
 };
 
 const renderConnection = (
@@ -238,28 +245,35 @@ const renderFragmentSpread = (ctx: CurrentContext, field: FragmentSpreadNode, pa
   );
 };
 
-const renderFields = (ctx: CurrentContext, object: RenderableObject, withReflection?: boolean): string => {
+const renderFields = (ctx: CurrentContext, object: RenderableObject, withReflection?: boolean): RenderResult => {
   const objectDef = mustFindTypeDefinition(ctx, object.typeNode);
   const isRecordType = hasDirective(objectDef, "recordType");
 
   const reflectionRequired =
     withReflection !== undefined ? withReflection : objectDef.kind === Kind.INTERFACE_TYPE_DEFINITION;
 
-  return object.selectedFields
-    .map((field) => {
-      if (field.kind === Kind.INLINE_FRAGMENT) {
-        return renderInlineFragment(ctx, field, object.parentName);
-      }
-      if (field.kind === Kind.FRAGMENT_SPREAD) {
-        return renderFragmentSpread(ctx, field, object.parentName);
-      }
-      const definition = objectDef.fields?.find((def) => def.name.value === field.name.value);
-      assertSome(definition);
-      return renderField(ctx, { parentName: object.parentName, field, definition }, { isRecordType });
-    })
-    .concat(reflectionRequired ? `__typename: extractClass(${object.parentName}),` : "")
-    .sort()
-    .join("");
+  const fields = object.selectedFields.map((field) => {
+    if (field.kind === Kind.INLINE_FRAGMENT) {
+      return renderInlineFragment(ctx, field, object.parentName);
+    }
+    if (field.kind === Kind.FRAGMENT_SPREAD) {
+      return renderFragmentSpread(ctx, field, object.parentName);
+    }
+    const definition = objectDef.fields?.find((def) => def.name.value === field.name.value);
+    assertSome(definition);
+    return renderField(ctx, { parentName: object.parentName, field, definition }, { isRecordType });
+  });
+
+  if (reflectionRequired) {
+    fields.push(bundle`__typename: extractClass(${object.parentName}),`);
+  }
+
+  return {
+    body: fields
+      .map((f) => f.body)
+      .sort()
+      .join(""),
+  };
 };
 
 export const compile = (
@@ -291,9 +305,11 @@ export const compile = (
   const rootName = rootObjName ?? "app";
   const convert = rootObjName ? "" : `const ${rootName} = Application("${appName}");`;
 
-  return `${library};${vars};${convert};JSON.stringify({ result: ${renderObject(info, {
+  const res = renderObject(info, {
     selectedFields,
     typeNode,
     parentName: rootName,
-  })}})`;
+  });
+
+  return `${library};${vars};${convert};JSON.stringify({ result: ${res.body}})`;
 };
