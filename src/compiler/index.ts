@@ -268,10 +268,6 @@ export const compile = (
   info: Pick<GraphQLResolveInfo, "operation" | "fragments" | "variableValues" | "schema">,
   rootObjName?: string
 ) => {
-  const vars = Object.entries(info.variableValues)
-    .map(([k, v]) => `const ${k} = ${JSON.stringify(v)};`)
-    .join("\n");
-
   const field = info.operation.selectionSet.selections[0];
   if (field.kind !== Kind.FIELD || field.selectionSet === undefined) {
     /* istanbul ignore next */
@@ -299,6 +295,10 @@ export const compile = (
   });
 
   const library = buildLibrary(res.dependencies.functions);
+  const vars = Object.entries(info.variableValues)
+    .filter(([k, _]) => res.dependencies.variables.has(k))
+    .map(([k, v]) => `const ${k} = ${JSON.stringify(v)};`)
+    .join("\n");
 
   return `${library};${vars};${convert};JSON.stringify({ result: ${res.body}})`;
 };
