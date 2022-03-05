@@ -182,7 +182,7 @@ const renderConnection = (
   object: RenderableObject,
   opts: { pageParam: { first: number | undefined; after: string | undefined }; whose: string }
 ) => {
-  const allNodes = `${object.parentName}${opts.whose}()`;
+  const allNodes = bundle`${object.parentName}${opts.whose}()`;
   let nodes: RenderResult<AvailableKeys> | string = `${ALL_NODES_VAR_NAME}`;
   if (opts.pageParam.first !== undefined || opts.pageParam.after !== undefined) {
     nodes = bundle`${FUNCS.paginate}(${nodes}, ${JSON.stringify(opts.pageParam)}, ${FUNCS.extractId})`;

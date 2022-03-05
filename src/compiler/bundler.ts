@@ -12,7 +12,7 @@ type FunctionDependency<FK extends string> = {
   name: FK;
 };
 
-export const bundle = <FK extends string>(
+export const bundle = <FK extends string = never>(
   strings: TemplateStringsArray,
   ...placeholders: (string | RenderResult<FK> | FunctionDependency<FK>)[]
 ): RenderResult<FK> => {
