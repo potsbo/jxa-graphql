@@ -227,7 +227,24 @@ JSON.stringify({
 
 ## Development
 
-- test first
+Since AppleScript specification is hard to grasp and different applications require different features,
+it is impossible to support every functionalities that is potentially required in the future.
+This is why JXA Graphql follows these development policy described below.
+
+### Test First
+
+Or in other words, 100% test coverage.
+
+### YAGNI
+
+It is ok to write code that `throw`s when the input is formed in unwanted way.
+Test First principle make it easier to refactor anytime.
+
+### Done Is Better Than Perfect
+
+This library is still in experiment and a lot of its design can be subject to change anytime.
+Because of this fact, sophisticated architecture should not be required.
+This implement it and consider better design later.
 
 ## Release
 
