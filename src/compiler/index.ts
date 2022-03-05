@@ -37,6 +37,17 @@ type RenderableField = {
   definition: FieldDefinitionNode;
 };
 
+const bundle = (strings: TemplateStringsArray, ...placeholders: string[]) => {
+  let result = "";
+  for (let i = 0; i < placeholders.length; i++) {
+    result += strings[i];
+    result += placeholders[i];
+  }
+  result += strings[strings.length - 1];
+
+  return result;
+};
+
 const extractIntArgument = (field: FieldNode, argName: string) => {
   const val = field.arguments?.find(
     (a): a is ArgumentNode & { value: IntValueNode } => a.name.value === argName && a.value.kind === Kind.INT
@@ -73,19 +84,19 @@ const renderField = (
   const name = f.field.name.value;
   // TODO: check type
   if (name === "cursor") {
-    return `cursor: extractId(${f.parentName}),`;
+    return bundle`cursor: extractId(${f.parentName}),`;
   }
   if (name === "hasPreviousPage") {
-    return `hasPreviousPage: extractId(${NODES_VAR_NAME}[0]) !== extractId(${ALL_NODES_VAR_NAME}[0]),`;
+    return bundle`hasPreviousPage: extractId(${NODES_VAR_NAME}[0]) !== extractId(${ALL_NODES_VAR_NAME}[0]),`;
   }
   if (name === "hasNextPage") {
-    return `hasNextPage: extractId(${NODES_VAR_NAME}[${NODES_VAR_NAME}.length - 1]) !== extractId(${ALL_NODES_VAR_NAME}[${ALL_NODES_VAR_NAME}.length - 1]),`;
+    return bundle`hasNextPage: extractId(${NODES_VAR_NAME}[${NODES_VAR_NAME}.length - 1]) !== extractId(${ALL_NODES_VAR_NAME}[${ALL_NODES_VAR_NAME}.length - 1]),`;
   }
   if (name === "startCursor") {
-    return `startCursor: extractId(${NODES_VAR_NAME}[0]),`;
+    return bundle`startCursor: extractId(${NODES_VAR_NAME}[0]),`;
   }
   if (name === "endCursor") {
-    return `endCursor: extractId(${NODES_VAR_NAME}[${NODES_VAR_NAME}.length - 1]),`;
+    return bundle`endCursor: extractId(${NODES_VAR_NAME}[${NODES_VAR_NAME}.length - 1]),`;
   }
 
   if (f.field.selectionSet) {
@@ -95,18 +106,22 @@ const renderField = (
     };
 
     if (hasInterface(ctx, f.definition, "Node") && name === "node") {
-      return `${name}: ${renderObject(ctx, { ...renderableObject, parentName: f.parentName })},`;
+      return bundle`${name}: ${renderObject(ctx, { ...renderableObject, parentName: f.parentName })},`;
     }
 
     if (hasInterface(ctx, f.definition, "Edge")) {
-      return `${name}: ${renderObject(ctx, { ...renderableObject, parentName: NODES_VAR_NAME })},`;
+      return bundle`${name}: ${renderObject(ctx, { ...renderableObject, parentName: NODES_VAR_NAME })},`;
     }
 
     if (hasInterface(ctx, f.definition, "Connection")) {
       const pageParam = extractPaginationArgs(f.field);
       const whose = buildWhoseFilter(ctx, f.field);
       const child = `${f.parentName}.${name}`;
-      return `${name}: ${renderConnection(ctx, { ...renderableObject, parentName: child }, { whose, pageParam })},`;
+      return bundle`${name}: ${renderConnection(
+        ctx,
+        { ...renderableObject, parentName: child },
+        { whose, pageParam }
+      )},`;
     }
 
     const args: string[] = [];
@@ -123,19 +138,19 @@ const renderField = (
       throw `Non variable argument found ${a.kind}`;
     });
 
-    return `${name}: ${renderObject(ctx, {
+    return bundle`${name}: ${renderObject(ctx, {
       ...renderableObject,
       parentName: `${f.parentName}.${name}(${args.join(",")})`,
     })},`;
   }
 
   if (hasDirective(f.definition, "extractFromObjectDisplayName")) {
-    return `${name}: extractId(${f.parentName}),`;
+    return bundle`${name}: extractId(${f.parentName}),`;
   }
 
   const isEnum = isEnumValue(ctx, f.definition);
   const suffix = isEnum ? `()?.toUpperCase().replaceAll(" ", "_")` : opts.isRecordType ? "" : "()";
-  return `${name}: ${f.parentName}.${f.field.name.value}${suffix},`;
+  return bundle`${name}: ${f.parentName}.${f.field.name.value}${suffix},`;
 };
 
 const isEnumValue = (ctx: CurrentContext, f: FieldDefinitionNode): boolean => {
@@ -166,7 +181,7 @@ const renderObject = (ctx: CurrentContext, object: RenderableObject): string => 
     return renderNonNullObject(ctx, { ...object, typeNode: object.typeNode.type });
   }
 
-  return `${object.parentName} ? ${renderNonNullObject(ctx, { ...object, typeNode: object.typeNode })}: undefined`;
+  return bundle`${object.parentName} ? ${renderNonNullObject(ctx, { ...object, typeNode: object.typeNode })}: undefined`;
 };
 
 const renderConnection = (
@@ -180,7 +195,7 @@ const renderConnection = (
     nodes = `paginate(${nodes}, ${JSON.stringify(opts.pageParam)}, extractId)`;
   }
 
-  return `
+  return bundle`
     (() => {
       const ${ALL_NODES_VAR_NAME} = ${allNodes};
       const ${NODES_VAR_NAME} = ${nodes};
@@ -193,18 +208,18 @@ const renderConnection = (
 
 const renderNonNullObject = (ctx: CurrentContext, object: RenderableObject<NonNullTypeNode["type"]>) => {
   if (object.typeNode.kind === Kind.LIST_TYPE) {
-    return `${object.parentName}.map((elm) => {
+    return bundle`${object.parentName}.map((elm) => {
       return { ${renderFields(ctx, { ...object, parentName: "elm" })} };
     })`;
   }
 
-  return `{ ${renderFields(ctx, object)} }`;
+  return bundle`{ ${renderFields(ctx, object)} }`;
 };
 
 const renderInlineFragment = (ctx: CurrentContext, field: InlineFragmentNode, parentName: string) => {
   const typeNode = field.typeCondition;
   assertSome(typeNode);
-  return `...(() => {
+  return bundle`...(() => {
     return extractClass(${parentName}) === "${typeNode.name.value}"
       ? {
         ${renderFields(ctx, { parentName, selectedFields: field.selectionSet.selections, typeNode }, false)}
