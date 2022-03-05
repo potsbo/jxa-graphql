@@ -46,7 +46,20 @@ type RenderResult = {
   };
 };
 
-const bundle = (strings: TemplateStringsArray, ...placeholders: (string | RenderResult)[]): RenderResult => {
+type FunctionDependency = {
+  kind: "FunctionDependency";
+  name: "extractId";
+};
+
+const EXTRACT_ID = {
+  kind: "FunctionDependency",
+  name: "extractId",
+} as const;
+
+const bundle = (
+  strings: TemplateStringsArray,
+  ...placeholders: (string | RenderResult | FunctionDependency)[]
+): RenderResult => {
   let result = "";
   const dependencies = {
     variables: new Set<string>(),
@@ -56,7 +69,23 @@ const bundle = (strings: TemplateStringsArray, ...placeholders: (string | Render
     result += strings[i];
     const elm = placeholders[i];
 
-    result += typeof elm === "string" ? elm : elm.body;
+    if (typeof elm === "string") {
+      result += elm;
+      continue;
+    }
+
+    if (elm.kind === "FunctionDependency") {
+      result += elm.name;
+      dependencies.functions.add(elm.name);
+      continue;
+    }
+
+    if (elm.kind === "RenderResult") {
+      result += elm.body;
+      dependencies.functions = new Set([...dependencies.functions, ...elm.dependencies.functions]);
+      dependencies.variables = new Set([...dependencies.variables, ...elm.dependencies.variables]);
+      continue;
+    }
   }
   result += strings[strings.length - 1];
 
@@ -114,19 +143,19 @@ const renderField = (
   const name = f.field.name.value;
   // TODO: check type
   if (name === "cursor") {
-    return bundle`cursor: extractId(${f.parentName}),`;
+    return bundle`cursor: ${EXTRACT_ID}(${f.parentName}),`;
   }
   if (name === "hasPreviousPage") {
-    return bundle`hasPreviousPage: extractId(${NODES_VAR_NAME}[0]) !== extractId(${ALL_NODES_VAR_NAME}[0]),`;
+    return bundle`hasPreviousPage: ${EXTRACT_ID}(${NODES_VAR_NAME}[0]) !== ${EXTRACT_ID}(${ALL_NODES_VAR_NAME}[0]),`;
   }
   if (name === "hasNextPage") {
-    return bundle`hasNextPage: extractId(${NODES_VAR_NAME}[${NODES_VAR_NAME}.length - 1]) !== extractId(${ALL_NODES_VAR_NAME}[${ALL_NODES_VAR_NAME}.length - 1]),`;
+    return bundle`hasNextPage: ${EXTRACT_ID}(${NODES_VAR_NAME}[${NODES_VAR_NAME}.length - 1]) !== ${EXTRACT_ID}(${ALL_NODES_VAR_NAME}[${ALL_NODES_VAR_NAME}.length - 1]),`;
   }
   if (name === "startCursor") {
-    return bundle`startCursor: extractId(${NODES_VAR_NAME}[0]),`;
+    return bundle`startCursor: ${EXTRACT_ID}(${NODES_VAR_NAME}[0]),`;
   }
   if (name === "endCursor") {
-    return bundle`endCursor: extractId(${NODES_VAR_NAME}[${NODES_VAR_NAME}.length - 1]),`;
+    return bundle`endCursor: ${EXTRACT_ID}(${NODES_VAR_NAME}[${NODES_VAR_NAME}.length - 1]),`;
   }
 
   if (f.field.selectionSet) {
@@ -175,7 +204,7 @@ const renderField = (
   }
 
   if (hasDirective(f.definition, "extractFromObjectDisplayName")) {
-    return bundle`${name}: extractId(${f.parentName}),`;
+    return bundle`${name}: ${EXTRACT_ID}(${f.parentName}),`;
   }
 
   const isEnum = isEnumValue(ctx, f.definition);
@@ -223,9 +252,9 @@ const renderConnection = (
   opts: { pageParam: { first: number | undefined; after: string | undefined }; whose: string }
 ) => {
   const allNodes = `${object.parentName}${opts.whose}()`;
-  let nodes = ALL_NODES_VAR_NAME;
+  let nodes = bundle`${ALL_NODES_VAR_NAME}`;
   if (opts.pageParam.first !== undefined || opts.pageParam.after !== undefined) {
-    nodes = `paginate(${nodes}, ${JSON.stringify(opts.pageParam)}, extractId)`;
+    nodes = bundle`paginate(${nodes}, ${JSON.stringify(opts.pageParam)}, ${EXTRACT_ID})`;
   }
 
   return bundle`
