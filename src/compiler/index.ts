@@ -46,14 +46,21 @@ type RenderResult = {
   };
 };
 
-type FunctionDependency = {
-  kind: "FunctionDependency";
-  name: "extractId";
-};
+type FunctionDependency = typeof EXTRACT_ID | typeof EXTRACT_CLASS | typeof PAGINATE;
 
 const EXTRACT_ID = {
   kind: "FunctionDependency",
   name: "extractId",
+} as const;
+
+const EXTRACT_CLASS = {
+  kind: "FunctionDependency",
+  name: "extractClass",
+} as const;
+
+const PAGINATE = {
+  kind: "FunctionDependency",
+  name: "paginate",
 } as const;
 
 const bundle = (
@@ -254,7 +261,7 @@ const renderConnection = (
   const allNodes = `${object.parentName}${opts.whose}()`;
   let nodes = bundle`${ALL_NODES_VAR_NAME}`;
   if (opts.pageParam.first !== undefined || opts.pageParam.after !== undefined) {
-    nodes = bundle`paginate(${nodes}, ${JSON.stringify(opts.pageParam)}, ${EXTRACT_ID})`;
+    nodes = bundle`${PAGINATE}(${nodes}, ${JSON.stringify(opts.pageParam)}, ${EXTRACT_ID})`;
   }
 
   return bundle`
@@ -282,7 +289,7 @@ const renderInlineFragment = (ctx: CurrentContext, field: InlineFragmentNode, pa
   const typeNode = field.typeCondition;
   assertSome(typeNode);
   return bundle`...(() => {
-    return extractClass(${parentName}) === "${typeNode.name.value}"
+    return ${EXTRACT_CLASS}(${parentName}) === "${typeNode.name.value}"
       ? {
         ${renderFields(ctx, { parentName, selectedFields: field.selectionSet.selections, typeNode }, false)}
          __typename: "${typeNode.name.value}",
@@ -320,7 +327,7 @@ const renderFields = (ctx: CurrentContext, object: RenderableObject, withReflect
   });
 
   if (reflectionRequired) {
-    fields.push(bundle`__typename: extractClass(${object.parentName}),`);
+    fields.push(bundle`__typename: ${EXTRACT_CLASS}(${object.parentName}),`);
   }
 
   return join(fields);
