@@ -117,6 +117,7 @@ const renderField = (
     let args: VariableDependency | string = "";
     if (f.field.arguments !== undefined) {
       if (f.field.arguments.length > 1) {
+        /* istanbul ignore next */
         throw new Error(`Can not pass multiple arguments to field ${f.field.name}`);
       }
       const arg = f.field.arguments[0];
