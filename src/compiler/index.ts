@@ -37,10 +37,20 @@ type RenderableField = {
   definition: FieldDefinitionNode;
 };
 
-type RenderResult = { body: string };
+type RenderResult = {
+  body: string;
+  dependencies: {
+    variables: Set<string>;
+    functions: Set<string>;
+  };
+};
 
 const bundle = (strings: TemplateStringsArray, ...placeholders: (string | RenderResult)[]): RenderResult => {
   let result = "";
+  const dependencies = {
+    variables: new Set<string>(),
+    functions: new Set<string>(),
+  };
   for (let i = 0; i < placeholders.length; i++) {
     result += strings[i];
     const elm = placeholders[i];
@@ -49,17 +59,22 @@ const bundle = (strings: TemplateStringsArray, ...placeholders: (string | Render
   }
   result += strings[strings.length - 1];
 
-  return { body: result };
+  return { body: result, dependencies };
 };
 
 const join = (results: RenderResult[]): RenderResult => {
+  const dependencies = {
+    variables: results.map((r) => r.dependencies.variables).reduce((acum, cur) => new Set([...acum, ...cur])),
+    functions: results.map((r) => r.dependencies.functions).reduce((acum, cur) => new Set([...acum, ...cur])),
+  };
   return {
     body: results
       .sort((a, b) => a.body.localeCompare(b.body))
       .map((f) => f.body)
       .join(""),
+    dependencies,
   };
-}
+};
 
 const extractIntArgument = (field: FieldNode, argName: string) => {
   const val = field.arguments?.find(
@@ -277,7 +292,7 @@ const renderFields = (ctx: CurrentContext, object: RenderableObject, withReflect
     fields.push(bundle`__typename: extractClass(${object.parentName}),`);
   }
 
-  return join(fields)
+  return join(fields);
 };
 
 export const compile = (
