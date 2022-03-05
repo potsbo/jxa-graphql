@@ -1,10 +1,11 @@
 import { runJXACode } from "@jxa/run";
-import { ApolloServer, ServerInfo } from "apollo-server";
+import { ApolloServer } from "apollo-server";
 import { build } from "./converter";
 import { buildRootValue } from "./rootValue";
 import { basename } from "path";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
+import { printSchema } from "graphql";
 
 const startServer = async (options: Readonly<{ appPath: string; port: number }>) => {
   const typeDefs = await build(options.appPath);
@@ -16,7 +17,7 @@ const startServer = async (options: Readonly<{ appPath: string; port: number }>)
 };
 
 export const run = (process: NodeJS.Process) => {
-  return new Promise<ServerInfo>((resolve) => {
+  return new Promise<unknown>((resolve) => {
     yargs
       .command(
         "serve <appPath>",
@@ -39,6 +40,22 @@ export const run = (process: NodeJS.Process) => {
           const info = await startServer(argv);
           process.stdout.write(`🚀  Server ready at ${info.url}`);
           resolve(info);
+        }
+      )
+      .command(
+        "schema <appPath>",
+        "print GraphQL schema for the given Application",
+        (yargs) => {
+          return yargs.positional("appPath", {
+            describe: "Application path",
+            demandOption: true,
+            type: "string",
+          });
+        },
+        async (argv) => {
+          const schema = await build(argv.appPath);
+          process.stdout.write(printSchema(schema));
+          resolve({});
         }
       )
       .demandCommand(1)
