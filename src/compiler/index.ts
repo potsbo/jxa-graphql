@@ -17,7 +17,7 @@ import {
   FragmentSpreadNode,
 } from "graphql";
 import { unwrapType } from "../graphql-utils";
-import { library } from "./jxalib";
+import { AvailableKeys, buildLibrary } from "./jxalib";
 import { buildWhoseFilter } from "./whose";
 
 const NODES_VAR_NAME = "nodes";
@@ -42,7 +42,7 @@ type RenderResult = {
   body: string;
   dependencies: {
     variables: Set<string>;
-    functions: Set<string>;
+    functions: Set<AvailableKeys>;
   };
 };
 
@@ -70,7 +70,7 @@ const bundle = (
   let result = "";
   const dependencies = {
     variables: new Set<string>(),
-    functions: new Set<string>(),
+    functions: new Set<AvailableKeys>(),
   };
   for (let i = 0; i < placeholders.length; i++) {
     result += strings[i];
@@ -367,6 +367,8 @@ export const compile = (
     typeNode,
     parentName: rootName,
   });
+
+  const library = buildLibrary(res.dependencies.functions)
 
   return `${library};${vars};${convert};JSON.stringify({ result: ${res.body}})`;
 };

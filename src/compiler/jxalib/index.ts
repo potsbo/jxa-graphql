@@ -1,3 +1,16 @@
+const AVAILABLES = {
+  extractClass,
+  extractId,
+  paginate,
+} as const;
+
+export type AvailableKeys = keyof typeof AVAILABLES;
+
+export const buildLibrary = (dependencies: Set<AvailableKeys>) => {
+  const keys = Array.from(dependencies.values()).sort();
+  return keys.map((k) => AVAILABLES[k].toString()).join("\n");
+};
+
 export const library = `
 ${extractClass.toString()}
 ${extractId.toString()}
