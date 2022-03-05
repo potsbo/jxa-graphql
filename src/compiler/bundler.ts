@@ -1,4 +1,4 @@
-export type RenderResult<FK extends string> = {
+export type RenderResult<FK extends string = never> = {
   kind: "RenderResult";
   body: string;
   dependencies: {
@@ -12,9 +12,14 @@ type FunctionDependency<FK extends string> = {
   name: FK;
 };
 
-export const bundle = <FK extends string>(
+export type VariableDependency = {
+  kind: "VariableDependency";
+  name: string;
+};
+
+export const bundle = <FK extends string = never>(
   strings: TemplateStringsArray,
-  ...placeholders: (string | RenderResult<FK> | FunctionDependency<FK>)[]
+  ...placeholders: (string | RenderResult<FK> | FunctionDependency<FK> | VariableDependency | null)[]
 ): RenderResult<FK> => {
   let result = "";
   const dependencies = {
@@ -25,8 +30,18 @@ export const bundle = <FK extends string>(
     result += strings[i];
     const elm = placeholders[i];
 
+    if (elm === null) {
+      continue;
+    }
+
     if (typeof elm === "string") {
       result += elm;
+      continue;
+    }
+
+    if (elm.kind === "VariableDependency") {
+      result += elm.name;
+      dependencies.variables.add(elm.name);
       continue;
     }
 

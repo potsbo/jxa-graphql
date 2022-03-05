@@ -11,7 +11,7 @@ test("normal field", () => {
       name: { kind: Kind.NAME, value: "anyname" },
     }
   );
-  expect(res).toEqual("");
+  expect(res).toEqual(null);
 });
 
 test("field missing", () => {
@@ -123,7 +123,7 @@ test("normal field", () => {
   const filter = buildWhoseFilter(
     { variableValues: { onlyFlagged: false, onlyAvailable: false, withEffectiveDueDate: false } },
     f
-  );
+  )?.body;
   expect(format("_" + filter, { parser: "babel" })).toMatchInlineSnapshot(`
     "_.whose({ effectivelyCompleted: { _equals: false } });
     "
@@ -167,7 +167,7 @@ test("nesting deep", () => {
     }
   `;
   const f = (q.definitions[0] as OperationDefinitionNode).selectionSet.selections[0] as FieldNode;
-  const filter = buildWhoseFilter({ variableValues: { defaultStringValue: "someString" } }, f);
+  const filter = buildWhoseFilter({ variableValues: { defaultStringValue: "someString" } }, f)?.body;
   expect(format("_" + filter, { parser: "babel" })).toMatchInlineSnapshot(`
     "_.whose({
       _and: [
@@ -219,7 +219,7 @@ test("real use case", () => {
   const filter = buildWhoseFilter(
     { variableValues: { onlyFlagged: true, withEffectiveDueDate: true, onlyAvailable: true } },
     f
-  );
+  )?.body;
   expect(format("_" + filter, { parser: "babel" })).toMatchInlineSnapshot(`
     "_.whose({
       _and: [
