@@ -38,6 +38,7 @@ type RenderableField = {
 };
 
 type RenderResult = {
+  kind: "RenderResult";
   body: string;
   dependencies: {
     variables: Set<string>;
@@ -59,7 +60,7 @@ const bundle = (strings: TemplateStringsArray, ...placeholders: (string | Render
   }
   result += strings[strings.length - 1];
 
-  return { body: result, dependencies };
+  return { kind: "RenderResult", body: result, dependencies };
 };
 
 const join = (results: RenderResult[]): RenderResult => {
@@ -68,6 +69,7 @@ const join = (results: RenderResult[]): RenderResult => {
     functions: results.map((r) => r.dependencies.functions).reduce((acum, cur) => new Set([...acum, ...cur])),
   };
   return {
+    kind: "RenderResult",
     body: results
       .sort((a, b) => a.body.localeCompare(b.body))
       .map((f) => f.body)
