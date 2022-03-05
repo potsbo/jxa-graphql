@@ -12,9 +12,14 @@ type FunctionDependency<FK extends string> = {
   name: FK;
 };
 
+export type VariableDependency = {
+  kind: "VariableDependency";
+  name: string;
+};
+
 export const bundle = <FK extends string = never>(
   strings: TemplateStringsArray,
-  ...placeholders: (string | RenderResult<FK> | FunctionDependency<FK> | null)[]
+  ...placeholders: (string | RenderResult<FK> | FunctionDependency<FK> | VariableDependency | null)[]
 ): RenderResult<FK> => {
   let result = "";
   const dependencies = {
@@ -24,13 +29,19 @@ export const bundle = <FK extends string = never>(
   for (let i = 0; i < placeholders.length; i++) {
     result += strings[i];
     const elm = placeholders[i];
-    
+
     if (elm === null) {
       continue;
     }
 
     if (typeof elm === "string") {
       result += elm;
+      continue;
+    }
+
+    if (elm.kind === "VariableDependency") {
+      result += elm.name;
+      dependencies.variables.add(elm.name);
       continue;
     }
 

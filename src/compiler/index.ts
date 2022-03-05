@@ -17,7 +17,7 @@ import {
   FragmentSpreadNode,
 } from "graphql";
 import { unwrapType } from "../graphql-utils";
-import { bundle, join, RenderResult } from "./bundler";
+import { bundle, join, RenderResult, VariableDependency } from "./bundler";
 import { AvailableKeys, buildLibrary, FUNCS } from "./jxalib";
 import { buildWhoseFilter } from "./whose";
 
@@ -27,13 +27,13 @@ const ALL_NODES_VAR_NAME = "allNodes";
 type CurrentContext = Pick<GraphQLResolveInfo, "fragments" | "schema" | "variableValues">;
 
 type RenderableObject<T extends TypeNode = TypeNode> = {
-  parentName: string;
+  parentName: RenderResult | string;
   selectedFields: readonly SelectionNode[];
   typeNode: T;
 };
 
 type RenderableField = {
-  parentName: string;
+  parentName: RenderResult | string;
   field: FieldNode;
   definition: FieldDefinitionNode;
 };
@@ -106,7 +106,7 @@ const renderField = (
     if (hasInterface(ctx, f.definition, "Connection")) {
       const pageParam = extractPaginationArgs(f.field);
       const whose = buildWhoseFilter(ctx, f.field);
-      const child = `${f.parentName}.${name}`;
+      const child = bundle`${f.parentName}.${name}`;
       return bundle`${name}: ${renderConnection(
         ctx,
         { ...renderableObject, parentName: child },
@@ -114,23 +114,25 @@ const renderField = (
       )},`;
     }
 
-    const args: string[] = [];
-    f.field.arguments?.forEach((a) => {
-      if (a.value.kind === Kind.VARIABLE) {
-        args.push(a.value.name.value);
-        return;
+    let args: VariableDependency | string = "";
+    if (f.field.arguments !== undefined) {
+      if (f.field.arguments.length > 1) {
+        throw new Error(`Can not pass multiple arguments to field ${f.field.name}`);
       }
-      if (a.value.kind === Kind.STRING) {
-        args.push(`"${a.value.value}"`);
-        return;
+      const arg = f.field.arguments[0];
+      if (arg !== undefined) {
+        if (arg.value.kind === Kind.STRING) {
+          args = JSON.stringify(arg.value.value);
+        }
+        if (arg.value.kind === Kind.VARIABLE) {
+          args = { kind: "VariableDependency", name: arg.value.name.value };
+        }
       }
-      /* istanbul ignore next */
-      throw `Non variable argument found ${a.kind}`;
-    });
+    }
 
     return bundle`${name}: ${renderObject(ctx, {
       ...renderableObject,
-      parentName: `${f.parentName}.${name}(${args.join(",")})`,
+      parentName: bundle`${f.parentName}.${name}(${args})`,
     })},`;
   }
 
@@ -209,7 +211,7 @@ const renderNonNullObject = (ctx: CurrentContext, object: RenderableObject<NonNu
   return bundle`{ ${renderFields(ctx, object)} }`;
 };
 
-const renderInlineFragment = (ctx: CurrentContext, field: InlineFragmentNode, parentName: string) => {
+const renderInlineFragment = (ctx: CurrentContext, field: InlineFragmentNode, parentName: string | RenderResult) => {
   const typeNode = field.typeCondition;
   assertSome(typeNode);
   return bundle`...(() => {
@@ -222,7 +224,7 @@ const renderInlineFragment = (ctx: CurrentContext, field: InlineFragmentNode, pa
   })(),`;
 };
 
-const renderFragmentSpread = (ctx: CurrentContext, field: FragmentSpreadNode, parentName: string) => {
+const renderFragmentSpread = (ctx: CurrentContext, field: FragmentSpreadNode, parentName: string | RenderResult) => {
   const fs = ctx.fragments[field.name.value];
   return renderFields(
     ctx,
