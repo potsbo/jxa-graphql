@@ -52,6 +52,15 @@ const bundle = (strings: TemplateStringsArray, ...placeholders: (string | Render
   return { body: result };
 };
 
+const join = (results: RenderResult[]): RenderResult => {
+  return {
+    body: results
+      .sort((a, b) => a.body.localeCompare(b.body))
+      .map((f) => f.body)
+      .join(""),
+  };
+}
+
 const extractIntArgument = (field: FieldNode, argName: string) => {
   const val = field.arguments?.find(
     (a): a is ArgumentNode & { value: IntValueNode } => a.name.value === argName && a.value.kind === Kind.INT
@@ -268,12 +277,7 @@ const renderFields = (ctx: CurrentContext, object: RenderableObject, withReflect
     fields.push(bundle`__typename: extractClass(${object.parentName}),`);
   }
 
-  return {
-    body: fields
-      .map((f) => f.body)
-      .sort()
-      .join(""),
-  };
+  return join(fields)
 };
 
 export const compile = (

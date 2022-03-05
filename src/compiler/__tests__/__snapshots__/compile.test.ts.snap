@@ -273,6 +273,7 @@ JSON.stringify({
                     edges: nodes.map((elm) => {
                       return {
                         node: {
+                          __typename: extractClass(elm),
                           ...(() => {
                             return extractClass(elm) === \\"Folder\\"
                               ? {
@@ -289,7 +290,6 @@ JSON.stringify({
                                 }
                               : {};
                           })(),
-                          __typename: extractClass(elm),
                         },
                       };
                     }),
@@ -538,6 +538,7 @@ JSON.stringify({
           edges: nodes.map((elm) => {
             return {
               node: {
+                __typename: extractClass(elm),
                 ...(() => {
                   return extractClass(elm) === \\"Folder\\"
                     ? {
@@ -558,7 +559,6 @@ JSON.stringify({
                       }
                     : {};
                 })(),
-                __typename: extractClass(elm),
               },
             };
           }),
