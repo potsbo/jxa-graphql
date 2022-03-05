@@ -1,4 +1,4 @@
-export type RenderResult<FK extends string> = {
+export type RenderResult<FK extends string = never> = {
   kind: "RenderResult";
   body: string;
   dependencies: {
@@ -14,7 +14,7 @@ type FunctionDependency<FK extends string> = {
 
 export const bundle = <FK extends string = never>(
   strings: TemplateStringsArray,
-  ...placeholders: (string | RenderResult<FK> | FunctionDependency<FK>)[]
+  ...placeholders: (string | RenderResult<FK> | FunctionDependency<FK> | null)[]
 ): RenderResult<FK> => {
   let result = "";
   const dependencies = {
@@ -24,6 +24,10 @@ export const bundle = <FK extends string = never>(
   for (let i = 0; i < placeholders.length; i++) {
     result += strings[i];
     const elm = placeholders[i];
+    
+    if (elm === null) {
+      continue;
+    }
 
     if (typeof elm === "string") {
       result += elm;

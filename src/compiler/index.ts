@@ -180,7 +180,7 @@ const renderObject = (ctx: CurrentContext, object: RenderableObject): RenderResu
 const renderConnection = (
   ctx: CurrentContext,
   object: RenderableObject,
-  opts: { pageParam: { first: number | undefined; after: string | undefined }; whose: string }
+  opts: { pageParam: { first: number | undefined; after: string | undefined }; whose: RenderResult | null }
 ) => {
   const allNodes = bundle`${object.parentName}${opts.whose}()`;
   let nodes: RenderResult<AvailableKeys> | string = `${ALL_NODES_VAR_NAME}`;

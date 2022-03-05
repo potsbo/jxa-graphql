@@ -1,4 +1,5 @@
 import { FieldNode, GraphQLResolveInfo, Kind, ObjectValueNode } from "graphql";
+import { bundle } from "./bundler";
 
 const WHOSE_ARG_NAME = "whose";
 const OPERANDS_KEY = "operands";
@@ -206,13 +207,13 @@ const compileCondition = (whose: Condition): string => {
   return `{ ${whose.field}: { ${whose.operator}: ${whose.value}}}`;
 };
 
-const compileWhoseParam = (whose: Condition | null): string => {
+const compileWhoseParam = (whose: Condition | null) => {
   const reduced = reduce(whose);
   if (reduced === null) {
-    return "";
+    return null;
   }
 
-  return `.whose(${compileCondition(reduced)})`;
+  return bundle`.whose(${compileCondition(reduced)})`;
 };
 
 export const buildWhoseFilter = (ctx: Pick<GraphQLResolveInfo, "variableValues">, f: FieldNode) => {
