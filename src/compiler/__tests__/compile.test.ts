@@ -224,3 +224,32 @@ test("typename", async () => {
 
   expect(prettier.format(compile("OmniFocus", exeContext as any), { parser: "babel" })).toMatchSnapshot();
 });
+
+test("explicit typename", async () => {
+  const document = gql`
+    query {
+      application {
+        defaultDocument {
+          sections {
+            edges {
+              node {
+                id
+                __typename
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  const exeContext = buildExecutionContext({
+    schema: await schema,
+    document: document,
+  });
+  if (!validateExecontext(exeContext)) {
+    console.log(exeContext);
+  }
+
+  expect(prettier.format(compile("OmniFocus", exeContext as any), { parser: "babel" })).toMatchSnapshot();
+});
