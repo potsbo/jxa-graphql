@@ -42,18 +42,6 @@ function extractId(obj) {
   }
   return ret !== \\"\\" ? ret : null;
 }
-function paginate(nodes, { first, after }, getId) {
-  const afterIndex =
-    after === undefined
-      ? undefined
-      : nodes.findIndex((n) => getId(n) === after);
-  if (afterIndex === -1) {
-    return [];
-  }
-  const start = afterIndex === undefined ? 0 : afterIndex + 1;
-  const end = first !== undefined ? start + first : undefined;
-  return nodes.slice(start, end);
-}
 const app = Application(\\"OmniFocus\\");
 JSON.stringify({
   result: {
@@ -122,18 +110,6 @@ function extractId(obj) {
     ret = \`\${ret}\${c}\`;
   }
   return ret !== \\"\\" ? ret : null;
-}
-function paginate(nodes, { first, after }, getId) {
-  const afterIndex =
-    after === undefined
-      ? undefined
-      : nodes.findIndex((n) => getId(n) === after);
-  if (afterIndex === -1) {
-    return [];
-  }
-  const start = afterIndex === undefined ? 0 : afterIndex + 1;
-  const end = first !== undefined ? start + first : undefined;
-  return nodes.slice(start, end);
 }
 const projectId = \\"foobar\\";
 const app = Application(\\"OmniFocus\\");
@@ -206,53 +182,6 @@ exports[`query with inline fragment 1`] = `
     .map((w) => \`\${w[0].toUpperCase()}\${w.slice(1)}\`)
     .join(\\"\\");
 }
-function extractId(obj) {
-  const spec = Automation.getDisplayString(obj);
-  if (spec === undefined) {
-    return null;
-  }
-  let inParen = false;
-  let inStr = false;
-  let ret = \\"\\";
-  let nextEscape = null;
-  for (let i = 0; i < spec.length; i++) {
-    const c = spec[i];
-    const inEscape = nextEscape === i;
-    if (c === \\"\\\\\\\\\\") {
-      nextEscape = i + 1;
-      continue;
-    }
-    if (!inEscape && c === '\\"') {
-      inStr = !inStr;
-      continue;
-    }
-    if (!inStr) {
-      if (c === \\"(\\") {
-        inParen = true;
-        ret = \\"\\";
-        continue;
-      }
-      if (c === \\")\\") {
-        inParen = false;
-        continue;
-      }
-    }
-    ret = \`\${ret}\${c}\`;
-  }
-  return ret !== \\"\\" ? ret : null;
-}
-function paginate(nodes, { first, after }, getId) {
-  const afterIndex =
-    after === undefined
-      ? undefined
-      : nodes.findIndex((n) => getId(n) === after);
-  if (afterIndex === -1) {
-    return [];
-  }
-  const start = afterIndex === undefined ? 0 : afterIndex + 1;
-  const end = first !== undefined ? start + first : undefined;
-  return nodes.slice(start, end);
-}
 const app = Application(\\"OmniFocus\\");
 JSON.stringify({
   result: {
@@ -273,6 +202,7 @@ JSON.stringify({
                     edges: nodes.map((elm) => {
                       return {
                         node: {
+                          __typename: extractClass(elm),
                           ...(() => {
                             return extractClass(elm) === \\"Folder\\"
                               ? {
@@ -289,7 +219,6 @@ JSON.stringify({
                                 }
                               : {};
                           })(),
-                          __typename: extractClass(elm),
                         },
                       };
                     }),
@@ -307,13 +236,7 @@ JSON.stringify({
 `;
 
 exports[`query with pageInfo 1`] = `
-"function extractClass(obj) {
-  const s = ObjectSpecifier.classOf(eval(Automation.getDisplayString(obj)));
-  return (s.match(/[a-zA-Z0-9]+/g) || [])
-    .map((w) => \`\${w[0].toUpperCase()}\${w.slice(1)}\`)
-    .join(\\"\\");
-}
-function extractId(obj) {
+"function extractId(obj) {
   const spec = Automation.getDisplayString(obj);
   if (spec === undefined) {
     return null;
@@ -430,18 +353,6 @@ function extractId(obj) {
   }
   return ret !== \\"\\" ? ret : null;
 }
-function paginate(nodes, { first, after }, getId) {
-  const afterIndex =
-    after === undefined
-      ? undefined
-      : nodes.findIndex((n) => getId(n) === after);
-  if (afterIndex === -1) {
-    return [];
-  }
-  const start = afterIndex === undefined ? 0 : afterIndex + 1;
-  const end = first !== undefined ? start + first : undefined;
-  return nodes.slice(start, end);
-}
 const app = Application(\\"OmniFocus\\");
 JSON.stringify({
   result: {
@@ -480,53 +391,6 @@ exports[`typename 1`] = `
     .map((w) => \`\${w[0].toUpperCase()}\${w.slice(1)}\`)
     .join(\\"\\");
 }
-function extractId(obj) {
-  const spec = Automation.getDisplayString(obj);
-  if (spec === undefined) {
-    return null;
-  }
-  let inParen = false;
-  let inStr = false;
-  let ret = \\"\\";
-  let nextEscape = null;
-  for (let i = 0; i < spec.length; i++) {
-    const c = spec[i];
-    const inEscape = nextEscape === i;
-    if (c === \\"\\\\\\\\\\") {
-      nextEscape = i + 1;
-      continue;
-    }
-    if (!inEscape && c === '\\"') {
-      inStr = !inStr;
-      continue;
-    }
-    if (!inStr) {
-      if (c === \\"(\\") {
-        inParen = true;
-        ret = \\"\\";
-        continue;
-      }
-      if (c === \\")\\") {
-        inParen = false;
-        continue;
-      }
-    }
-    ret = \`\${ret}\${c}\`;
-  }
-  return ret !== \\"\\" ? ret : null;
-}
-function paginate(nodes, { first, after }, getId) {
-  const afterIndex =
-    after === undefined
-      ? undefined
-      : nodes.findIndex((n) => getId(n) === after);
-  if (afterIndex === -1) {
-    return [];
-  }
-  const start = afterIndex === undefined ? 0 : afterIndex + 1;
-  const end = first !== undefined ? start + first : undefined;
-  return nodes.slice(start, end);
-}
 const app = Application(\\"OmniFocus\\");
 JSON.stringify({
   result: {
@@ -538,6 +402,7 @@ JSON.stringify({
           edges: nodes.map((elm) => {
             return {
               node: {
+                __typename: extractClass(elm),
                 ...(() => {
                   return extractClass(elm) === \\"Folder\\"
                     ? {
@@ -558,7 +423,6 @@ JSON.stringify({
                       }
                     : {};
                 })(),
-                __typename: extractClass(elm),
               },
             };
           }),
