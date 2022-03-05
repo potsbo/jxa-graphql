@@ -17,7 +17,8 @@ import {
   FragmentSpreadNode,
 } from "graphql";
 import { unwrapType } from "../graphql-utils";
-import { AvailableKeys, buildLibrary } from "./jxalib";
+import { bundle, join, RenderResult } from "./bundler";
+import { AvailableKeys, buildLibrary, FUNCS } from "./jxalib";
 import { buildWhoseFilter } from "./whose";
 
 const NODES_VAR_NAME = "nodes";
@@ -35,83 +36,6 @@ type RenderableField = {
   parentName: string;
   field: FieldNode;
   definition: FieldDefinitionNode;
-};
-
-type RenderResult = {
-  kind: "RenderResult";
-  body: string;
-  dependencies: {
-    variables: Set<string>;
-    functions: Set<AvailableKeys>;
-  };
-};
-
-type FunctionDependency = typeof EXTRACT_ID | typeof EXTRACT_CLASS | typeof PAGINATE;
-
-const EXTRACT_ID = {
-  kind: "FunctionDependency",
-  name: "extractId",
-} as const;
-
-const EXTRACT_CLASS = {
-  kind: "FunctionDependency",
-  name: "extractClass",
-} as const;
-
-const PAGINATE = {
-  kind: "FunctionDependency",
-  name: "paginate",
-} as const;
-
-const bundle = (
-  strings: TemplateStringsArray,
-  ...placeholders: (string | RenderResult | FunctionDependency)[]
-): RenderResult => {
-  let result = "";
-  const dependencies = {
-    variables: new Set<string>(),
-    functions: new Set<AvailableKeys>(),
-  };
-  for (let i = 0; i < placeholders.length; i++) {
-    result += strings[i];
-    const elm = placeholders[i];
-
-    if (typeof elm === "string") {
-      result += elm;
-      continue;
-    }
-
-    if (elm.kind === "FunctionDependency") {
-      result += elm.name;
-      dependencies.functions.add(elm.name);
-      continue;
-    }
-
-    if (elm.kind === "RenderResult") {
-      result += elm.body;
-      dependencies.functions = new Set([...dependencies.functions, ...elm.dependencies.functions]);
-      dependencies.variables = new Set([...dependencies.variables, ...elm.dependencies.variables]);
-      continue;
-    }
-  }
-  result += strings[strings.length - 1];
-
-  return { kind: "RenderResult", body: result, dependencies };
-};
-
-const join = (results: RenderResult[]): RenderResult => {
-  const dependencies = {
-    variables: results.map((r) => r.dependencies.variables).reduce((acum, cur) => new Set([...acum, ...cur])),
-    functions: results.map((r) => r.dependencies.functions).reduce((acum, cur) => new Set([...acum, ...cur])),
-  };
-  return {
-    kind: "RenderResult",
-    body: results
-      .sort((a, b) => a.body.localeCompare(b.body))
-      .map((f) => f.body)
-      .join(""),
-    dependencies,
-  };
 };
 
 const extractIntArgument = (field: FieldNode, argName: string) => {
@@ -146,23 +70,23 @@ const renderField = (
   ctx: CurrentContext,
   f: RenderableField,
   opts: Partial<{ isRecordType: boolean; isEnum: boolean }>
-): RenderResult => {
+): RenderResult<AvailableKeys> => {
   const name = f.field.name.value;
   // TODO: check type
   if (name === "cursor") {
-    return bundle`cursor: ${EXTRACT_ID}(${f.parentName}),`;
+    return bundle`cursor: ${FUNCS.extractId}(${f.parentName}),`;
   }
   if (name === "hasPreviousPage") {
-    return bundle`hasPreviousPage: ${EXTRACT_ID}(${NODES_VAR_NAME}[0]) !== ${EXTRACT_ID}(${ALL_NODES_VAR_NAME}[0]),`;
+    return bundle`hasPreviousPage: ${FUNCS.extractId}(${NODES_VAR_NAME}[0]) !== ${FUNCS.extractId}(${ALL_NODES_VAR_NAME}[0]),`;
   }
   if (name === "hasNextPage") {
-    return bundle`hasNextPage: ${EXTRACT_ID}(${NODES_VAR_NAME}[${NODES_VAR_NAME}.length - 1]) !== ${EXTRACT_ID}(${ALL_NODES_VAR_NAME}[${ALL_NODES_VAR_NAME}.length - 1]),`;
+    return bundle`hasNextPage: ${FUNCS.extractId}(${NODES_VAR_NAME}[${NODES_VAR_NAME}.length - 1]) !== ${FUNCS.extractId}(${ALL_NODES_VAR_NAME}[${ALL_NODES_VAR_NAME}.length - 1]),`;
   }
   if (name === "startCursor") {
-    return bundle`startCursor: ${EXTRACT_ID}(${NODES_VAR_NAME}[0]),`;
+    return bundle`startCursor: ${FUNCS.extractId}(${NODES_VAR_NAME}[0]),`;
   }
   if (name === "endCursor") {
-    return bundle`endCursor: ${EXTRACT_ID}(${NODES_VAR_NAME}[${NODES_VAR_NAME}.length - 1]),`;
+    return bundle`endCursor: ${FUNCS.extractId}(${NODES_VAR_NAME}[${NODES_VAR_NAME}.length - 1]),`;
   }
 
   if (f.field.selectionSet) {
@@ -211,7 +135,7 @@ const renderField = (
   }
 
   if (hasDirective(f.definition, "extractFromObjectDisplayName")) {
-    return bundle`${name}: ${EXTRACT_ID}(${f.parentName}),`;
+    return bundle`${name}: ${FUNCS.extractId}(${f.parentName}),`;
   }
 
   const isEnum = isEnumValue(ctx, f.definition);
@@ -242,7 +166,7 @@ const mustFindTypeDefinition = (
   throw new Error("unsupported type definition kind");
 };
 
-const renderObject = (ctx: CurrentContext, object: RenderableObject): RenderResult => {
+const renderObject = (ctx: CurrentContext, object: RenderableObject): RenderResult<AvailableKeys> => {
   if (object.typeNode.kind === Kind.NON_NULL_TYPE) {
     return renderNonNullObject(ctx, { ...object, typeNode: object.typeNode.type });
   }
@@ -259,9 +183,9 @@ const renderConnection = (
   opts: { pageParam: { first: number | undefined; after: string | undefined }; whose: string }
 ) => {
   const allNodes = `${object.parentName}${opts.whose}()`;
-  let nodes = bundle`${ALL_NODES_VAR_NAME}`;
+  let nodes: RenderResult<AvailableKeys> | string = `${ALL_NODES_VAR_NAME}`;
   if (opts.pageParam.first !== undefined || opts.pageParam.after !== undefined) {
-    nodes = bundle`${PAGINATE}(${nodes}, ${JSON.stringify(opts.pageParam)}, ${EXTRACT_ID})`;
+    nodes = bundle`${FUNCS.paginate}(${nodes}, ${JSON.stringify(opts.pageParam)}, ${FUNCS.extractId})`;
   }
 
   return bundle`
@@ -289,7 +213,7 @@ const renderInlineFragment = (ctx: CurrentContext, field: InlineFragmentNode, pa
   const typeNode = field.typeCondition;
   assertSome(typeNode);
   return bundle`...(() => {
-    return ${EXTRACT_CLASS}(${parentName}) === "${typeNode.name.value}"
+    return ${FUNCS.extractClass}(${parentName}) === "${typeNode.name.value}"
       ? {
         ${renderFields(ctx, { parentName, selectedFields: field.selectionSet.selections, typeNode }, false)}
          __typename: "${typeNode.name.value}",
@@ -307,7 +231,11 @@ const renderFragmentSpread = (ctx: CurrentContext, field: FragmentSpreadNode, pa
   );
 };
 
-const renderFields = (ctx: CurrentContext, object: RenderableObject, withReflection?: boolean): RenderResult => {
+const renderFields = (
+  ctx: CurrentContext,
+  object: RenderableObject,
+  withReflection?: boolean
+): RenderResult<AvailableKeys> => {
   const objectDef = mustFindTypeDefinition(ctx, object.typeNode);
   const isRecordType = hasDirective(objectDef, "recordType");
 
@@ -327,7 +255,7 @@ const renderFields = (ctx: CurrentContext, object: RenderableObject, withReflect
   });
 
   if (reflectionRequired) {
-    fields.push(bundle`__typename: ${EXTRACT_CLASS}(${object.parentName}),`);
+    fields.push(bundle`__typename: ${FUNCS.extractClass}(${object.parentName}),`);
   }
 
   return join(fields);
@@ -368,7 +296,7 @@ export const compile = (
     parentName: rootName,
   });
 
-  const library = buildLibrary(res.dependencies.functions)
+  const library = buildLibrary(res.dependencies.functions);
 
   return `${library};${vars};${convert};JSON.stringify({ result: ${res.body}})`;
 };

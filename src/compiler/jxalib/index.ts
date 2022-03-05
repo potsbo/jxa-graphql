@@ -17,6 +17,21 @@ ${extractId.toString()}
 ${paginate.toString()}
 `;
 
+export const FUNCS = {
+  extractClass: {
+    kind: "FunctionDependency",
+    name: "extractClass",
+  },
+  extractId: {
+    kind: "FunctionDependency",
+    name: "extractId",
+  },
+  paginate: {
+    kind: "FunctionDependency",
+    name: "paginate",
+  },
+} as const;
+
 declare const Automation: {
   getDisplayString: (obj: unknown) => string | undefined;
 };
