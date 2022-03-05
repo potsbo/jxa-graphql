@@ -378,7 +378,7 @@ interface MailAlarmInterface implements Node {
 }
 
 interface Node {
-  id: ID!
+  id: ID! @extractFromObjectDisplayName
 }
 
 \\"\\"\\"

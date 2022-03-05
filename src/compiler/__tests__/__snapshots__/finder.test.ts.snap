@@ -1,0 +1,77 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`specifier support 1`] = `
+"function extractClass(obj) {
+  const s = ObjectSpecifier.classOf(eval(Automation.getDisplayString(obj)));
+  return (s.match(/[a-zA-Z0-9]+/g) || [])
+    .map((w) => \`\${w[0].toUpperCase()}\${w.slice(1)}\`)
+    .join(\\"\\");
+}
+function extractId(obj) {
+  const spec = Automation.getDisplayString(obj);
+  if (spec === undefined) {
+    return null;
+  }
+  let inParen = false;
+  let inStr = false;
+  let ret = \\"\\";
+  let nextEscape = null;
+  for (let i = 0; i < spec.length; i++) {
+    const c = spec[i];
+    const inEscape = nextEscape === i;
+    if (c === \\"\\\\\\\\\\") {
+      nextEscape = i + 1;
+      continue;
+    }
+    if (!inEscape && c === '\\"') {
+      inStr = !inStr;
+      continue;
+    }
+    if (!inStr) {
+      if (c === \\"(\\") {
+        inParen = true;
+        ret = \\"\\";
+        continue;
+      }
+      if (c === \\")\\") {
+        inParen = false;
+        continue;
+      }
+    }
+    ret = \`\${ret}\${c}\`;
+  }
+  return ret !== \\"\\" ? ret : null;
+}
+const app = Application(\\"Finder\\");
+JSON.stringify({
+  result: {
+    home: {
+      files: (() => {
+        const allNodes = app.home().files();
+        const nodes = allNodes;
+        return {
+          edges: nodes.map((elm) => {
+            return {
+              node: {
+                __typename: extractClass(elm),
+                ...(() => {
+                  return extractClass(elm) === \\"AliasFile\\"
+                    ? {
+                        originalItem: {
+                          __typename: extractClass(elm.originalItem()),
+                          id: extractId(elm.originalItem()),
+                        },
+                        __typename: \\"AliasFile\\",
+                      }
+                    : {};
+                })(),
+              },
+            };
+          }),
+        };
+      })(),
+    },
+  },
+});
+"
+`;
