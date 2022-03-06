@@ -6,7 +6,6 @@ exports[`query for Connection 1`] = `
   if (spec === undefined) {
     return null;
   }
-  let inParen = false;
   let inStr = false;
   let ret = \\"\\";
   let nextEscape = null;
@@ -23,12 +22,10 @@ exports[`query for Connection 1`] = `
     }
     if (!inStr) {
       if (c === \\"(\\") {
-        inParen = true;
         ret = \\"\\";
         continue;
       }
       if (c === \\")\\") {
-        inParen = false;
         continue;
       }
     }

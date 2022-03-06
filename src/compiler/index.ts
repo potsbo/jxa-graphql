@@ -16,8 +16,6 @@ import {
   InlineFragmentNode,
   FragmentSpreadNode,
 } from "graphql";
-import { name } from "../converter/name";
-import { nonNull } from "../converter/types";
 import { unwrapType } from "../graphql-utils";
 import { bundle, join, RenderResult, VariableDependency } from "./bundler";
 import { AvailableKeys, buildLibrary, FUNCS } from "./jxalib";
@@ -303,8 +301,7 @@ export const compile = (
 
   const library = buildLibrary(res.dependencies.functions);
   const vars = Object.entries(info.variableValues)
-    .filter(([k, _]) => res.dependencies.variables.has(k))
-    .map(([k, v]) => `const ${k} = ${JSON.stringify(v)};`)
+    .map(([k, v]) => (res.dependencies.variables.has(k) ? `const ${k} = ${JSON.stringify(v)};` : ""))
     .join("\n");
 
   return `${library};${vars};${convert};JSON.stringify({ result: ${res.body}})`;
