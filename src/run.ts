@@ -42,7 +42,10 @@ export const run = (process: NodeJS.Process) => {
               process.stdout.write(`🚀  Server ready at ${info.url}`);
               resolve(info);
             })
-            .catch((err) => console.error(err));
+            .catch((err) => {
+              /* istanbul ignore next */
+              console.error(err);
+            });
         }
       )
       .command(
@@ -61,7 +64,10 @@ export const run = (process: NodeJS.Process) => {
               process.stdout.write(printSchema(schema));
               resolve({});
             })
-            .catch((err) => console.error(err));
+            .catch((err) => {
+              /* istanbul ignore next */
+              console.error(err);
+            });
         }
       )
       .demandCommand(1)
