@@ -1,3 +1,4 @@
+import { assertSome } from "@graphql-tools/utils";
 import { FieldNode, Kind, OperationDefinitionNode } from "graphql";
 import gql from "graphql-tag";
 import { format } from "prettier";
@@ -124,6 +125,7 @@ test("normal field", () => {
     { variableValues: { onlyFlagged: false, onlyAvailable: false, withEffectiveDueDate: false } },
     f
   )?.body;
+  assertSome(filter);
   expect(format("_" + filter, { parser: "babel" })).toMatchInlineSnapshot(`
     "_.whose({ effectivelyCompleted: { _equals: false } });
     "
@@ -168,6 +170,7 @@ test("nesting deep", () => {
   `;
   const f = (q.definitions[0] as OperationDefinitionNode).selectionSet.selections[0] as FieldNode;
   const filter = buildWhoseFilter({ variableValues: { defaultStringValue: "someString" } }, f)?.body;
+  assertSome(filter);
   expect(format("_" + filter, { parser: "babel" })).toMatchInlineSnapshot(`
     "_.whose({
       _and: [
@@ -220,6 +223,7 @@ test("real use case", () => {
     { variableValues: { onlyFlagged: true, withEffectiveDueDate: true, onlyAvailable: true } },
     f
   )?.body;
+  assertSome(filter);
   expect(format("_" + filter, { parser: "babel" })).toMatchInlineSnapshot(`
     "_.whose({
       _and: [
