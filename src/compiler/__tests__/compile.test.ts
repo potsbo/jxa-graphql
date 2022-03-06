@@ -184,10 +184,10 @@ test("query with fragment", async () => {
     variableValues: { projectId: "foobar" },
   });
   if (!validateExecontext(exeContext)) {
-    console.log(exeContext);
+    fail();
   }
 
-  expect(prettier.format(compile("OmniFocus", exeContext as any), { parser: "babel" })).toMatchSnapshot();
+  expect(prettier.format(compile("OmniFocus", exeContext), { parser: "babel" })).toMatchSnapshot();
 });
 
 test("typename", async () => {
@@ -219,10 +219,10 @@ test("typename", async () => {
     document: document,
   });
   if (!validateExecontext(exeContext)) {
-    console.log(exeContext);
+    fail();
   }
 
-  expect(prettier.format(compile("OmniFocus", exeContext as any), { parser: "babel" })).toMatchSnapshot();
+  expect(prettier.format(compile("OmniFocus", exeContext), { parser: "babel" })).toMatchSnapshot();
 });
 
 test("explicit typename", async () => {
@@ -248,8 +248,8 @@ test("explicit typename", async () => {
     document: document,
   });
   if (!validateExecontext(exeContext)) {
-    console.log(exeContext);
+    fail();
   }
 
-  expect(prettier.format(compile("OmniFocus", exeContext as any), { parser: "babel" })).toMatchSnapshot();
+  expect(prettier.format(compile("OmniFocus", exeContext), { parser: "babel" })).toMatchSnapshot();
 });

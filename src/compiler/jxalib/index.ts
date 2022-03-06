@@ -38,18 +38,18 @@ declare const Automation: {
 declare const ObjectSpecifier: {
   classOf: (obj: unknown) => string | undefined;
 };
-
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 function extractClass(obj: unknown) {
   const s = ObjectSpecifier.classOf(eval(Automation.getDisplayString(obj)!))!;
   return (s.match(/[a-zA-Z0-9]+/g) || []).map((w) => `${w[0].toUpperCase()}${w.slice(1)}`).join("");
 }
+/* eslint-enable @typescript-eslint/no-non-null-assertion */
 
 function extractId(obj: unknown) {
   const spec = Automation.getDisplayString(obj);
   if (spec === undefined) {
     return null;
   }
-  let inParen = false;
   let inStr = false;
   let ret = "";
   let nextEscape = null;
@@ -68,12 +68,10 @@ function extractId(obj: unknown) {
 
     if (!inStr) {
       if (c === "(") {
-        inParen = true;
         ret = "";
         continue;
       }
       if (c === ")") {
-        inParen = false;
         continue;
       }
     }
