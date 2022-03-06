@@ -1,0 +1,580 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Calendar - schema 1`] = `
+"directive @extractFromObjectDisplayName on FIELD_DEFINITION
+
+directive @recordType on OBJECT
+
+\\"\\"\\"The application's top-level scripting object.\\"\\"\\"
+type Application implements Node {
+  calendars(after: ID, first: Int, whose: Condition): CalendarConnection!
+  documents(after: ID, first: Int, whose: Condition): DocumentConnection!
+
+  \\"\\"\\"Is this the active application?\\"\\"\\"
+  frontmost: Boolean!
+  id: ID! @extractFromObjectDisplayName
+
+  \\"\\"\\"The name of the application.\\"\\"\\"
+  name: String!
+
+  \\"\\"\\"The version number of the application.\\"\\"\\"
+  version: String!
+  windows(after: ID, first: Int, whose: Condition): WindowConnection!
+}
+
+type ApplicationConnection implements Connection {
+  byId(id: ID!): Application
+  edges: [ApplicationEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ApplicationEdge implements Edge {
+  cursor: String!
+  node: Application!
+}
+
+interface ApplicationInterface implements Node {
+  documents(after: ID, first: Int, whose: Condition): DocumentConnection!
+
+  \\"\\"\\"Is this the active application?\\"\\"\\"
+  frontmost: Boolean!
+  id: ID! @extractFromObjectDisplayName
+
+  \\"\\"\\"The name of the application.\\"\\"\\"
+  name: String!
+
+  \\"\\"\\"The version number of the application.\\"\\"\\"
+  version: String!
+  windows(after: ID, first: Int, whose: Condition): WindowConnection!
+}
+
+\\"\\"\\"This class represents a attendee.\\"\\"\\"
+type Attendee implements Node {
+  \\"\\"\\"The first and last name of the attendee.\\"\\"\\"
+  displayName: String!
+
+  \\"\\"\\"e-mail of the attendee.\\"\\"\\"
+  email: String!
+  id: ID! @extractFromObjectDisplayName
+
+  \\"\\"\\"The invitation status for the attendee.\\"\\"\\"
+  participationStatus: ParticipationStatus!
+}
+
+type AttendeeConnection implements Connection {
+  byId(id: ID!): Attendee
+  edges: [AttendeeEdge!]!
+  pageInfo: PageInfo!
+}
+
+type AttendeeEdge implements Edge {
+  cursor: String!
+  node: Attendee!
+}
+
+interface AttendeeInterface implements Node {
+  \\"\\"\\"The first and last name of the attendee.\\"\\"\\"
+  displayName: String!
+
+  \\"\\"\\"e-mail of the attendee.\\"\\"\\"
+  email: String!
+  id: ID! @extractFromObjectDisplayName
+
+  \\"\\"\\"The invitation status for the attendee.\\"\\"\\"
+  participationStatus: ParticipationStatus!
+}
+
+\\"\\"\\"This class represents a calendar.\\"\\"\\"
+type Calendar implements Node {
+  \\"\\"\\"This is the calendar description.\\"\\"\\"
+  description: String!
+  events(after: ID, first: Int, whose: Condition): EventConnection!
+
+  \\"\\"\\"An unique calendar key\\"\\"\\"
+  id: ID! @extractFromObjectDisplayName
+
+  \\"\\"\\"This is the calendar title.\\"\\"\\"
+  name: String!
+
+  \\"\\"\\"This is the calendar title.\\"\\"\\"
+  title: String!
+
+  \\"\\"\\"This is the calendar title.\\"\\"\\"
+  writable: Boolean!
+}
+
+type CalendarConnection implements Connection {
+  byId(id: ID!): Calendar
+  edges: [CalendarEdge!]!
+  pageInfo: PageInfo!
+}
+
+type CalendarEdge implements Edge {
+  cursor: String!
+  node: Calendar!
+}
+
+interface CalendarInterface implements Node {
+  \\"\\"\\"This is the calendar description.\\"\\"\\"
+  description: String!
+  events(after: ID, first: Int, whose: Condition): EventConnection!
+
+  \\"\\"\\"An unique calendar key\\"\\"\\"
+  id: ID! @extractFromObjectDisplayName
+
+  \\"\\"\\"This is the calendar title.\\"\\"\\"
+  name: String!
+
+  \\"\\"\\"This is the calendar title.\\"\\"\\"
+  title: String!
+
+  \\"\\"\\"This is the calendar title.\\"\\"\\"
+  writable: Boolean!
+}
+
+input Condition {
+  enabled: Boolean! = true
+  field: String
+  operands: [Condition!]
+  operator: String! = \\"=\\"
+  value: String! = \\"true\\"
+}
+
+interface Connection {
+  byId(id: ID!): Node
+  edges: [Edge!]!
+  pageInfo: PageInfo!
+}
+
+\\"\\"\\"This class represents a message alarm.\\"\\"\\"
+type DisplayAlarm implements Node {
+  id: ID! @extractFromObjectDisplayName
+
+  \\"\\"\\"An absolute alarm date.\\"\\"\\"
+  triggerDate: String!
+
+  \\"\\"\\"
+  The interval in minutes between the event and the alarm: (positive for alarm that trigger after the event date or negative for alarms that trigger before).
+  \\"\\"\\"
+  triggerInterval: Int!
+}
+
+type DisplayAlarmConnection implements Connection {
+  byId(id: ID!): DisplayAlarm
+  edges: [DisplayAlarmEdge!]!
+  pageInfo: PageInfo!
+}
+
+type DisplayAlarmEdge implements Edge {
+  cursor: String!
+  node: DisplayAlarm!
+}
+
+interface DisplayAlarmInterface implements Node {
+  id: ID! @extractFromObjectDisplayName
+
+  \\"\\"\\"An absolute alarm date.\\"\\"\\"
+  triggerDate: String!
+
+  \\"\\"\\"
+  The interval in minutes between the event and the alarm: (positive for alarm that trigger after the event date or negative for alarms that trigger before).
+  \\"\\"\\"
+  triggerInterval: Int!
+}
+
+\\"\\"\\"A document.\\"\\"\\"
+type Document implements Node {
+  id: ID! @extractFromObjectDisplayName
+
+  \\"\\"\\"Has it been modified since the last save?\\"\\"\\"
+  modified: Boolean!
+
+  \\"\\"\\"Its name.\\"\\"\\"
+  name: String!
+}
+
+type DocumentConnection implements Connection {
+  byId(id: ID!): Document
+  edges: [DocumentEdge!]!
+  pageInfo: PageInfo!
+}
+
+type DocumentEdge implements Edge {
+  cursor: String!
+  node: Document!
+}
+
+interface DocumentInterface implements Node {
+  id: ID! @extractFromObjectDisplayName
+
+  \\"\\"\\"Has it been modified since the last save?\\"\\"\\"
+  modified: Boolean!
+
+  \\"\\"\\"Its name.\\"\\"\\"
+  name: String!
+}
+
+interface Edge {
+  cursor: String!
+  node: Node!
+}
+
+\\"\\"\\"This class represents an event.\\"\\"\\"
+type Event implements Node {
+  \\"\\"\\"True if the event is an all-day event\\"\\"\\"
+  alldayEvent: Boolean!
+  attendees(after: ID, first: Int, whose: Condition): AttendeeConnection!
+
+  \\"\\"\\"The events notes.\\"\\"\\"
+  description: String!
+  displayAlarms(after: ID, first: Int, whose: Condition): DisplayAlarmConnection!
+
+  \\"\\"\\"The event end date.\\"\\"\\"
+  endDate: String!
+
+  \\"\\"\\"The exception dates.\\"\\"\\"
+  excludedDates: [String!]!
+
+  \\"\\"\\"An unique event key.\\"\\"\\"
+  id: ID! @extractFromObjectDisplayName
+
+  \\"\\"\\"This is the event location.\\"\\"\\"
+  location: String!
+  mailAlarms(after: ID, first: Int, whose: Condition): MailAlarmConnection!
+  openFileAlarms(after: ID, first: Int, whose: Condition): OpenFileAlarmConnection!
+
+  \\"\\"\\"
+  The iCalendar (RFC 2445) string describing the event recurrence, if defined
+  \\"\\"\\"
+  recurrence: String!
+
+  \\"\\"\\"The event version.\\"\\"\\"
+  sequence: Int!
+  soundAlarms(after: ID, first: Int, whose: Condition): SoundAlarmConnection!
+
+  \\"\\"\\"The event modification date.\\"\\"\\"
+  stampDate: String!
+
+  \\"\\"\\"The event start date.\\"\\"\\"
+  startDate: String!
+
+  \\"\\"\\"The event status.\\"\\"\\"
+  status: EventStatus!
+
+  \\"\\"\\"This is the event summary.\\"\\"\\"
+  summary: String!
+
+  \\"\\"\\"The URL associated to the event.\\"\\"\\"
+  url: String!
+}
+
+type EventConnection implements Connection {
+  byId(id: ID!): Event
+  edges: [EventEdge!]!
+  pageInfo: PageInfo!
+}
+
+type EventEdge implements Edge {
+  cursor: String!
+  node: Event!
+}
+
+interface EventInterface implements Node {
+  \\"\\"\\"True if the event is an all-day event\\"\\"\\"
+  alldayEvent: Boolean!
+  attendees(after: ID, first: Int, whose: Condition): AttendeeConnection!
+
+  \\"\\"\\"The events notes.\\"\\"\\"
+  description: String!
+  displayAlarms(after: ID, first: Int, whose: Condition): DisplayAlarmConnection!
+
+  \\"\\"\\"The event end date.\\"\\"\\"
+  endDate: String!
+
+  \\"\\"\\"The exception dates.\\"\\"\\"
+  excludedDates: [String!]!
+
+  \\"\\"\\"An unique event key.\\"\\"\\"
+  id: ID! @extractFromObjectDisplayName
+
+  \\"\\"\\"This is the event location.\\"\\"\\"
+  location: String!
+  mailAlarms(after: ID, first: Int, whose: Condition): MailAlarmConnection!
+  openFileAlarms(after: ID, first: Int, whose: Condition): OpenFileAlarmConnection!
+
+  \\"\\"\\"
+  The iCalendar (RFC 2445) string describing the event recurrence, if defined
+  \\"\\"\\"
+  recurrence: String!
+
+  \\"\\"\\"The event version.\\"\\"\\"
+  sequence: Int!
+  soundAlarms(after: ID, first: Int, whose: Condition): SoundAlarmConnection!
+
+  \\"\\"\\"The event modification date.\\"\\"\\"
+  stampDate: String!
+
+  \\"\\"\\"The event start date.\\"\\"\\"
+  startDate: String!
+
+  \\"\\"\\"The event status.\\"\\"\\"
+  status: EventStatus!
+
+  \\"\\"\\"This is the event summary.\\"\\"\\"
+  summary: String!
+
+  \\"\\"\\"The URL associated to the event.\\"\\"\\"
+  url: String!
+}
+
+enum EventStatus {
+  \\"\\"\\"A cancelled event\\"\\"\\"
+  CANCELLED
+
+  \\"\\"\\"A confirmed event\\"\\"\\"
+  CONFIRMED
+
+  \\"\\"\\"An event without status\\"\\"\\"
+  NONE
+
+  \\"\\"\\"A tentative event\\"\\"\\"
+  TENTATIVE
+}
+
+\\"\\"\\"This class represents a mail alarm.\\"\\"\\"
+type MailAlarm implements Node {
+  id: ID! @extractFromObjectDisplayName
+
+  \\"\\"\\"An absolute alarm date.\\"\\"\\"
+  triggerDate: String!
+
+  \\"\\"\\"
+  The interval in minutes between the event and the alarm: (positive for alarm that trigger after the event date or negative for alarms that trigger before).
+  \\"\\"\\"
+  triggerInterval: Int!
+}
+
+type MailAlarmConnection implements Connection {
+  byId(id: ID!): MailAlarm
+  edges: [MailAlarmEdge!]!
+  pageInfo: PageInfo!
+}
+
+type MailAlarmEdge implements Edge {
+  cursor: String!
+  node: MailAlarm!
+}
+
+interface MailAlarmInterface implements Node {
+  id: ID! @extractFromObjectDisplayName
+
+  \\"\\"\\"An absolute alarm date.\\"\\"\\"
+  triggerDate: String!
+
+  \\"\\"\\"
+  The interval in minutes between the event and the alarm: (positive for alarm that trigger after the event date or negative for alarms that trigger before).
+  \\"\\"\\"
+  triggerInterval: Int!
+}
+
+interface Node {
+  id: ID! @extractFromObjectDisplayName
+}
+
+\\"\\"\\"
+This class represents an 'open file' alarm. Starting with OS X 10.14, it is not possible to create new open file alarms or view URLs for existing open file alarms. Trying to save or modify an open file alarm will result in a save error. Editing other aspects of events or reminders that have existing open file alarms is allowed as long as the alarm isn't modified.
+\\"\\"\\"
+type OpenFileAlarm implements Node {
+  \\"\\"\\"The (POSIX) path to be opened by the alarm\\"\\"\\"
+  filepath: String!
+  id: ID! @extractFromObjectDisplayName
+
+  \\"\\"\\"An absolute alarm date.\\"\\"\\"
+  triggerDate: String!
+
+  \\"\\"\\"
+  The interval in minutes between the event and the alarm: (positive for alarm that trigger after the event date or negative for alarms that trigger before).
+  \\"\\"\\"
+  triggerInterval: Int!
+}
+
+type OpenFileAlarmConnection implements Connection {
+  byId(id: ID!): OpenFileAlarm
+  edges: [OpenFileAlarmEdge!]!
+  pageInfo: PageInfo!
+}
+
+type OpenFileAlarmEdge implements Edge {
+  cursor: String!
+  node: OpenFileAlarm!
+}
+
+interface OpenFileAlarmInterface implements Node {
+  \\"\\"\\"The (POSIX) path to be opened by the alarm\\"\\"\\"
+  filepath: String!
+  id: ID! @extractFromObjectDisplayName
+
+  \\"\\"\\"An absolute alarm date.\\"\\"\\"
+  triggerDate: String!
+
+  \\"\\"\\"
+  The interval in minutes between the event and the alarm: (positive for alarm that trigger after the event date or negative for alarms that trigger before).
+  \\"\\"\\"
+  triggerInterval: Int!
+}
+
+type PageInfo {
+  endCursor: String!
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String!
+}
+
+enum ParticipationStatus {
+  \\"\\"\\"Invitation has been accepted\\"\\"\\"
+  ACCEPTED
+
+  \\"\\"\\"Invitation has been declined\\"\\"\\"
+  DECLINED
+
+  \\"\\"\\"Invitation has been tentatively accepted\\"\\"\\"
+  TENTATIVE
+
+  \\"\\"\\"No anwser yet\\"\\"\\"
+  UNKNOWN
+}
+
+type Query {
+  application: Application!
+}
+
+\\"\\"\\"This class represents a sound alarm.\\"\\"\\"
+type SoundAlarm implements Node {
+  id: ID! @extractFromObjectDisplayName
+
+  \\"\\"\\"The (POSIX) path to the sound file to be used for the alarm\\"\\"\\"
+  soundFile: String!
+
+  \\"\\"\\"The system sound name to be used for the alarm\\"\\"\\"
+  soundName: String!
+
+  \\"\\"\\"An absolute alarm date.\\"\\"\\"
+  triggerDate: String!
+
+  \\"\\"\\"
+  The interval in minutes between the event and the alarm: (positive for alarm that trigger after the event date or negative for alarms that trigger before).
+  \\"\\"\\"
+  triggerInterval: Int!
+}
+
+type SoundAlarmConnection implements Connection {
+  byId(id: ID!): SoundAlarm
+  edges: [SoundAlarmEdge!]!
+  pageInfo: PageInfo!
+}
+
+type SoundAlarmEdge implements Edge {
+  cursor: String!
+  node: SoundAlarm!
+}
+
+interface SoundAlarmInterface implements Node {
+  id: ID! @extractFromObjectDisplayName
+
+  \\"\\"\\"The (POSIX) path to the sound file to be used for the alarm\\"\\"\\"
+  soundFile: String!
+
+  \\"\\"\\"The system sound name to be used for the alarm\\"\\"\\"
+  soundName: String!
+
+  \\"\\"\\"An absolute alarm date.\\"\\"\\"
+  triggerDate: String!
+
+  \\"\\"\\"
+  The interval in minutes between the event and the alarm: (positive for alarm that trigger after the event date or negative for alarms that trigger before).
+  \\"\\"\\"
+  triggerInterval: Int!
+}
+
+\\"\\"\\"A window.\\"\\"\\"
+type Window implements Node {
+  \\"\\"\\"Does the window have a close button?\\"\\"\\"
+  closeable: Boolean!
+
+  \\"\\"\\"The document whose contents are displayed in the window.\\"\\"\\"
+  document: Document!
+
+  \\"\\"\\"The unique identifier of the window.\\"\\"\\"
+  id: ID! @extractFromObjectDisplayName
+
+  \\"\\"\\"The index of the window, ordered front to back.\\"\\"\\"
+  index: Int!
+
+  \\"\\"\\"Does the window have a minimize button?\\"\\"\\"
+  miniaturizable: Boolean!
+
+  \\"\\"\\"Is the window minimized right now?\\"\\"\\"
+  miniaturized: Boolean!
+
+  \\"\\"\\"The title of the window.\\"\\"\\"
+  name: String!
+
+  \\"\\"\\"Can the window be resized?\\"\\"\\"
+  resizable: Boolean!
+
+  \\"\\"\\"Is the window visible right now?\\"\\"\\"
+  visible: Boolean!
+
+  \\"\\"\\"Does the window have a zoom button?\\"\\"\\"
+  zoomable: Boolean!
+
+  \\"\\"\\"Is the window zoomed right now?\\"\\"\\"
+  zoomed: Boolean!
+}
+
+type WindowConnection implements Connection {
+  byId(id: ID!): Window
+  edges: [WindowEdge!]!
+  pageInfo: PageInfo!
+}
+
+type WindowEdge implements Edge {
+  cursor: String!
+  node: Window!
+}
+
+interface WindowInterface implements Node {
+  \\"\\"\\"Does the window have a close button?\\"\\"\\"
+  closeable: Boolean!
+
+  \\"\\"\\"The document whose contents are displayed in the window.\\"\\"\\"
+  document: Document!
+
+  \\"\\"\\"The unique identifier of the window.\\"\\"\\"
+  id: ID! @extractFromObjectDisplayName
+
+  \\"\\"\\"The index of the window, ordered front to back.\\"\\"\\"
+  index: Int!
+
+  \\"\\"\\"Does the window have a minimize button?\\"\\"\\"
+  miniaturizable: Boolean!
+
+  \\"\\"\\"Is the window minimized right now?\\"\\"\\"
+  miniaturized: Boolean!
+
+  \\"\\"\\"The title of the window.\\"\\"\\"
+  name: String!
+
+  \\"\\"\\"Can the window be resized?\\"\\"\\"
+  resizable: Boolean!
+
+  \\"\\"\\"Is the window visible right now?\\"\\"\\"
+  visible: Boolean!
+
+  \\"\\"\\"Does the window have a zoom button?\\"\\"\\"
+  zoomable: Boolean!
+
+  \\"\\"\\"Is the window zoomed right now?\\"\\"\\"
+  zoomed: Boolean!
+}"
+`;

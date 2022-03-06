@@ -1,4 +1,4 @@
-import { assertSome } from "@graphql-tools/utils";
+import { assertSome, isSome } from "@graphql-tools/utils";
 import {
   FieldNode,
   GraphQLResolveInfo,
@@ -16,6 +16,8 @@ import {
   InlineFragmentNode,
   FragmentSpreadNode,
 } from "graphql";
+import { name } from "../converter/name";
+import { nonNull } from "../converter/types";
 import { unwrapType } from "../graphql-utils";
 import { bundle, join, RenderResult, VariableDependency } from "./bundler";
 import { AvailableKeys, buildLibrary, FUNCS } from "./jxalib";
@@ -117,6 +119,7 @@ const renderField = (
     let args: VariableDependency | string = "";
     if (f.field.arguments !== undefined) {
       if (f.field.arguments.length > 1) {
+        /* istanbul ignore next */
         throw new Error(`Can not pass multiple arguments to field ${f.field.name}`);
       }
       const arg = f.field.arguments[0];
@@ -241,7 +244,7 @@ const renderFields = (
   const objectDef = mustFindTypeDefinition(ctx, object.typeNode);
   const isRecordType = hasDirective(objectDef, "recordType");
 
-  const reflectionRequired =
+  let reflectionRequired =
     withReflection !== undefined ? withReflection : objectDef.kind === Kind.INTERFACE_TYPE_DEFINITION;
 
   const fields = object.selectedFields.map((field) => {
@@ -250,6 +253,10 @@ const renderFields = (
     }
     if (field.kind === Kind.FRAGMENT_SPREAD) {
       return renderFragmentSpread(ctx, field, object.parentName);
+    }
+    if (field.name.value === "__typename") {
+      reflectionRequired = true;
+      return null;
     }
     const definition = objectDef.fields?.find((def) => def.name.value === field.name.value);
     assertSome(definition);
@@ -260,7 +267,7 @@ const renderFields = (
     fields.push(bundle`__typename: ${FUNCS.extractClass}(${object.parentName}),`);
   }
 
-  return join(fields);
+  return join(fields.filter(isSome));
 };
 
 export const compile = (

@@ -1,6 +1,6 @@
 {
   "name": "jxa-graphql",
-  "version": "0.0.9",
+  "version": "0.0.12",
   "main": "lib/index.js",
   "bin": "lib/cmd.js",
   "files": [

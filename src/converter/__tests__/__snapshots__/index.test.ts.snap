@@ -378,7 +378,7 @@ interface MailAlarmInterface implements Node {
 }
 
 interface Node {
-  id: ID!
+  id: ID! @extractFromObjectDisplayName
 }
 
 """
@@ -589,11 +589,17 @@ type AliasFile implements FileInterface & ItemInterface & Node {
   """the comment of the item, displayed in the “Get Info” window"""
   comment: String!
 
+  """the container of the item"""
+  container: Node!
+
   """the date on which the item was created"""
   creationDate: String!
 
   """a description of the item"""
   description: String!
+
+  """the disk on which the item is stored"""
+  disk: Node!
 
   """the user-visible name of the item"""
   displayedName: String!
@@ -613,6 +619,9 @@ type AliasFile implements FileInterface & ItemInterface & Node {
   """the index in the front-to-back ordering within its container"""
   index: Int!
 
+  """the information window for the item"""
+  informationWindow: Node!
+
   """the kind of the item"""
   kind: String!
 
@@ -630,6 +639,9 @@ type AliasFile implements FileInterface & ItemInterface & Node {
 
   """the name extension of the item (such as “txt”)"""
   nameExtension: String!
+
+  """the original item pointed to by the alias"""
+  originalItem: Node!
 
   """the user that owns the container"""
   owner: String!
@@ -667,11 +679,17 @@ interface AliasFileInterface implements Node {
   """the comment of the item, displayed in the “Get Info” window"""
   comment: String!
 
+  """the container of the item"""
+  container: Node!
+
   """the date on which the item was created"""
   creationDate: String!
 
   """a description of the item"""
   description: String!
+
+  """the disk on which the item is stored"""
+  disk: Node!
 
   """the user-visible name of the item"""
   displayedName: String!
@@ -691,6 +709,9 @@ interface AliasFileInterface implements Node {
   """the index in the front-to-back ordering within its container"""
   index: Int!
 
+  """the information window for the item"""
+  informationWindow: Node!
+
   """the kind of the item"""
   kind: String!
 
@@ -708,6 +729,9 @@ interface AliasFileInterface implements Node {
 
   """the name extension of the item (such as “txt”)"""
   nameExtension: String!
+
+  """the original item pointed to by the alias"""
+  originalItem: Node!
 
   """the user that owns the container"""
   owner: String!
@@ -756,6 +780,9 @@ interface AliasListInterface implements Node {
 type Application implements Node {
   aliasFiles(after: ID, first: Int, whose: Condition): AliasFileConnection!
   applicationFiles(after: ID, first: Int, whose: Condition): ApplicationFileConnection!
+
+  """(NOT AVAILABLE YET) the Finder’s clipboard window"""
+  clipboard: Node!
   clippingWindows(after: ID, first: Int, whose: Condition): ClippingWindowConnection!
   clippings(after: ID, first: Int, whose: Condition): ClippingConnection!
 
@@ -783,6 +810,11 @@ type Application implements Node {
   """the home directory"""
   home: Folder!
   id: ID! @extractFromObjectDisplayName
+
+  """
+  the container in which a new folder would appear if “New Folder” was selected
+  """
+  insertionLocation: Node!
   internetLocationFiles(after: ID, first: Int, whose: Condition): InternetLocationFileConnection!
   items(after: ID, first: Int, whose: Condition): ItemConnection!
 
@@ -792,6 +824,9 @@ type Application implements Node {
 
   """the version of the System software running on this computer"""
   productVersion: String!
+
+  """the selection in the frontmost Finder window"""
+  selection: Node!
 
   """the startup disk"""
   startupDisk: Disk!
@@ -828,11 +863,17 @@ type ApplicationFile implements FileInterface & ItemInterface & Node {
   """the comment of the item, displayed in the “Get Info” window"""
   comment: String!
 
+  """the container of the item"""
+  container: Node!
+
   """the date on which the item was created"""
   creationDate: String!
 
   """a description of the item"""
   description: String!
+
+  """the disk on which the item is stored"""
+  disk: Node!
 
   """the user-visible name of the item"""
   displayedName: String!
@@ -858,6 +899,9 @@ type ApplicationFile implements FileInterface & ItemInterface & Node {
 
   """the index in the front-to-back ordering within its container"""
   index: Int!
+
+  """the information window for the item"""
+  informationWindow: Node!
 
   """the kind of the item"""
   kind: String!
@@ -938,11 +982,17 @@ interface ApplicationFileInterface implements Node {
   """the comment of the item, displayed in the “Get Info” window"""
   comment: String!
 
+  """the container of the item"""
+  container: Node!
+
   """the date on which the item was created"""
   creationDate: String!
 
   """a description of the item"""
   description: String!
+
+  """the disk on which the item is stored"""
+  disk: Node!
 
   """the user-visible name of the item"""
   displayedName: String!
@@ -968,6 +1018,9 @@ interface ApplicationFileInterface implements Node {
 
   """the index in the front-to-back ordering within its container"""
   index: Int!
+
+  """the information window for the item"""
+  informationWindow: Node!
 
   """the kind of the item"""
   kind: String!
@@ -1031,6 +1084,9 @@ interface ApplicationFileInterface implements Node {
 interface ApplicationInterface implements Node {
   aliasFiles(after: ID, first: Int, whose: Condition): AliasFileConnection!
   applicationFiles(after: ID, first: Int, whose: Condition): ApplicationFileConnection!
+
+  """(NOT AVAILABLE YET) the Finder’s clipboard window"""
+  clipboard: Node!
   clippingWindows(after: ID, first: Int, whose: Condition): ClippingWindowConnection!
   clippings(after: ID, first: Int, whose: Condition): ClippingConnection!
 
@@ -1055,6 +1111,11 @@ interface ApplicationInterface implements Node {
   """the home directory"""
   home: Folder!
   id: ID! @extractFromObjectDisplayName
+
+  """
+  the container in which a new folder would appear if “New Folder” was selected
+  """
+  insertionLocation: Node!
   internetLocationFiles(after: ID, first: Int, whose: Condition): InternetLocationFileConnection!
   items(after: ID, first: Int, whose: Condition): ItemConnection!
 
@@ -1064,6 +1125,9 @@ interface ApplicationInterface implements Node {
 
   """the version of the System software running on this computer"""
   productVersion: String!
+
+  """the selection in the frontmost Finder window"""
+  selection: Node!
 
   """the startup disk"""
   startupDisk: Disk!
@@ -1091,6 +1155,9 @@ type ApplicationProcess implements Node & ProcessInterface {
 
   """the application file from which this process was launched"""
   applicationFile: ApplicationFile!
+
+  """the file from which the process was launched"""
+  file: Node!
 
   """Is the process the frontmost process?"""
   frontmost: Boolean!
@@ -1137,6 +1204,9 @@ interface ApplicationProcessInterface implements Node {
   """the application file from which this process was launched"""
   applicationFile: ApplicationFile!
 
+  """the file from which the process was launched"""
+  file: Node!
+
   """Is the process the frontmost process?"""
   frontmost: Boolean!
 
@@ -1161,14 +1231,23 @@ interface ApplicationProcessInterface implements Node {
 
 """A clipping"""
 type Clipping implements FileInterface & ItemInterface & Node {
+  """(NOT AVAILABLE YET) the clipping window for this clipping"""
+  clippingWindow: Node!
+
   """the comment of the item, displayed in the “Get Info” window"""
   comment: String!
+
+  """the container of the item"""
+  container: Node!
 
   """the date on which the item was created"""
   creationDate: String!
 
   """a description of the item"""
   description: String!
+
+  """the disk on which the item is stored"""
+  disk: Node!
 
   """the user-visible name of the item"""
   displayedName: String!
@@ -1187,6 +1266,9 @@ type Clipping implements FileInterface & ItemInterface & Node {
 
   """the index in the front-to-back ordering within its container"""
   index: Int!
+
+  """the information window for the item"""
+  informationWindow: Node!
 
   """the kind of the item"""
   kind: String!
@@ -1239,14 +1321,23 @@ type ClippingEdge implements Edge {
 }
 
 interface ClippingInterface implements Node {
+  """(NOT AVAILABLE YET) the clipping window for this clipping"""
+  clippingWindow: Node!
+
   """the comment of the item, displayed in the “Get Info” window"""
   comment: String!
+
+  """the container of the item"""
+  container: Node!
 
   """the date on which the item was created"""
   creationDate: String!
 
   """a description of the item"""
   description: String!
+
+  """the disk on which the item is stored"""
+  disk: Node!
 
   """the user-visible name of the item"""
   displayedName: String!
@@ -1265,6 +1356,9 @@ interface ClippingInterface implements Node {
 
   """the index in the front-to-back ordering within its container"""
   index: Int!
+
+  """the information window for the item"""
+  informationWindow: Node!
 
   """the kind of the item"""
   kind: String!
@@ -1508,11 +1602,17 @@ type ComputerObject implements ItemInterface & Node {
   """the comment of the item, displayed in the “Get Info” window"""
   comment: String!
 
+  """the container of the item"""
+  container: Node!
+
   """the date on which the item was created"""
   creationDate: String!
 
   """a description of the item"""
   description: String!
+
+  """the disk on which the item is stored"""
+  disk: Node!
 
   """the user-visible name of the item"""
   displayedName: String!
@@ -1531,6 +1631,9 @@ type ComputerObject implements ItemInterface & Node {
 
   """the index in the front-to-back ordering within its container"""
   index: Int!
+
+  """the information window for the item"""
+  informationWindow: Node!
 
   """the kind of the item"""
   kind: String!
@@ -1573,11 +1676,17 @@ interface ComputerObjectInterface implements Node {
   """the comment of the item, displayed in the “Get Info” window"""
   comment: String!
 
+  """the container of the item"""
+  container: Node!
+
   """the date on which the item was created"""
   creationDate: String!
 
   """a description of the item"""
   description: String!
+
+  """the disk on which the item is stored"""
+  disk: Node!
 
   """the user-visible name of the item"""
   displayedName: String!
@@ -1596,6 +1705,9 @@ interface ComputerObjectInterface implements Node {
 
   """the index in the front-to-back ordering within its container"""
   index: Int!
+
+  """the information window for the item"""
+  informationWindow: Node!
 
   """the kind of the item"""
   kind: String!
@@ -1650,6 +1762,12 @@ type Container implements ContainerInterface & ItemInterface & Node {
   (NOT AVAILABLE YET) Are the container and all of its children opened as outlines? (can only be set for containers viewed as lists)
   """
   completelyExpanded: Boolean!
+
+  """the container of the item"""
+  container: Node!
+
+  """the container window for this folder"""
+  containerWindow: Node!
   containers(after: ID, first: Int, whose: Condition): ContainerConnection!
 
   """the date on which the item was created"""
@@ -1658,9 +1776,17 @@ type Container implements ContainerInterface & ItemInterface & Node {
   """a description of the item"""
   description: String!
 
+  """the disk on which the item is stored"""
+  disk: Node!
+
   """the user-visible name of the item"""
   displayedName: String!
   documentFiles(after: ID, first: Int, whose: Condition): DocumentFileConnection!
+
+  """
+  the entire contents of the container, including the contents of its children
+  """
+  entireContents: Node!
   everyonesPrivileges: Priv!
 
   """
@@ -1688,6 +1814,9 @@ type Container implements ContainerInterface & ItemInterface & Node {
 
   """the index in the front-to-back ordering within its container"""
   index: Int!
+
+  """the information window for the item"""
+  informationWindow: Node!
   internetLocationFiles(after: ID, first: Int, whose: Condition): InternetLocationFileConnection!
   items(after: ID, first: Int, whose: Condition): ItemConnection!
 
@@ -1741,6 +1870,12 @@ interface ContainerInterface implements Node {
   (NOT AVAILABLE YET) Are the container and all of its children opened as outlines? (can only be set for containers viewed as lists)
   """
   completelyExpanded: Boolean!
+
+  """the container of the item"""
+  container: Node!
+
+  """the container window for this folder"""
+  containerWindow: Node!
   containers(after: ID, first: Int, whose: Condition): ContainerConnection!
 
   """the date on which the item was created"""
@@ -1749,9 +1884,17 @@ interface ContainerInterface implements Node {
   """a description of the item"""
   description: String!
 
+  """the disk on which the item is stored"""
+  disk: Node!
+
   """the user-visible name of the item"""
   displayedName: String!
   documentFiles(after: ID, first: Int, whose: Condition): DocumentFileConnection!
+
+  """
+  the entire contents of the container, including the contents of its children
+  """
+  entireContents: Node!
   everyonesPrivileges: Priv!
 
   """
@@ -1779,6 +1922,9 @@ interface ContainerInterface implements Node {
 
   """the index in the front-to-back ordering within its container"""
   index: Int!
+
+  """the information window for the item"""
+  informationWindow: Node!
   internetLocationFiles(after: ID, first: Int, whose: Condition): InternetLocationFileConnection!
   items(after: ID, first: Int, whose: Condition): ItemConnection!
 
@@ -1818,6 +1964,12 @@ type DeskAccessoryProcess implements Node & ProcessInterface {
 
   """Does the process accept remote events?"""
   acceptsRemoteEvents: Boolean!
+
+  """the desk accessory file from which this process was launched"""
+  deskAccessoryFile: Node!
+
+  """the file from which the process was launched"""
+  file: Node!
 
   """Is the process the frontmost process?"""
   frontmost: Boolean!
@@ -1861,6 +2013,12 @@ interface DeskAccessoryProcessInterface implements Node {
   """Does the process accept remote events?"""
   acceptsRemoteEvents: Boolean!
 
+  """the desk accessory file from which this process was launched"""
+  deskAccessoryFile: Node!
+
+  """the file from which the process was launched"""
+  file: Node!
+
   """Is the process the frontmost process?"""
   frontmost: Boolean!
 
@@ -1896,6 +2054,12 @@ type DesktopObject implements ContainerInterface & ItemInterface & Node {
   (NOT AVAILABLE YET) Are the container and all of its children opened as outlines? (can only be set for containers viewed as lists)
   """
   completelyExpanded: Boolean!
+
+  """the container of the item"""
+  container: Node!
+
+  """the container window for this folder"""
+  containerWindow: Node!
   containers(after: ID, first: Int, whose: Condition): ContainerConnection!
 
   """the date on which the item was created"""
@@ -1903,11 +2067,19 @@ type DesktopObject implements ContainerInterface & ItemInterface & Node {
 
   """a description of the item"""
   description: String!
+
+  """the disk on which the item is stored"""
+  disk: Node!
   disks(after: ID, first: Int, whose: Condition): DiskConnection!
 
   """the user-visible name of the item"""
   displayedName: String!
   documentFiles(after: ID, first: Int, whose: Condition): DocumentFileConnection!
+
+  """
+  the entire contents of the container, including the contents of its children
+  """
+  entireContents: Node!
   everyonesPrivileges: Priv!
 
   """
@@ -1935,6 +2107,9 @@ type DesktopObject implements ContainerInterface & ItemInterface & Node {
 
   """the index in the front-to-back ordering within its container"""
   index: Int!
+
+  """the information window for the item"""
+  informationWindow: Node!
   internetLocationFiles(after: ID, first: Int, whose: Condition): InternetLocationFileConnection!
   items(after: ID, first: Int, whose: Condition): ItemConnection!
 
@@ -1988,6 +2163,12 @@ interface DesktopObjectInterface implements Node {
   (NOT AVAILABLE YET) Are the container and all of its children opened as outlines? (can only be set for containers viewed as lists)
   """
   completelyExpanded: Boolean!
+
+  """the container of the item"""
+  container: Node!
+
+  """the container window for this folder"""
+  containerWindow: Node!
   containers(after: ID, first: Int, whose: Condition): ContainerConnection!
 
   """the date on which the item was created"""
@@ -1995,11 +2176,19 @@ interface DesktopObjectInterface implements Node {
 
   """a description of the item"""
   description: String!
+
+  """the disk on which the item is stored"""
+  disk: Node!
   disks(after: ID, first: Int, whose: Condition): DiskConnection!
 
   """the user-visible name of the item"""
   displayedName: String!
   documentFiles(after: ID, first: Int, whose: Condition): DocumentFileConnection!
+
+  """
+  the entire contents of the container, including the contents of its children
+  """
+  entireContents: Node!
   everyonesPrivileges: Priv!
 
   """
@@ -2027,6 +2216,9 @@ interface DesktopObjectInterface implements Node {
 
   """the index in the front-to-back ordering within its container"""
   index: Int!
+
+  """the information window for the item"""
+  informationWindow: Node!
   internetLocationFiles(after: ID, first: Int, whose: Condition): InternetLocationFileConnection!
   items(after: ID, first: Int, whose: Condition): ItemConnection!
 
@@ -2104,6 +2296,9 @@ type DesktopWindow implements FinderWindowInterface & Node & WindowInterface {
   """Is the window's status bar visible?"""
   statusbarVisible: Boolean!
 
+  """the container at which this file viewer is targeted"""
+  target: Node!
+
   """Does the window have a title bar?"""
   titled: Boolean!
 
@@ -2177,6 +2372,9 @@ interface DesktopWindowInterface implements Node {
   """Is the window's status bar visible?"""
   statusbarVisible: Boolean!
 
+  """the container at which this file viewer is targeted"""
+  target: Node!
+
   """Does the window have a title bar?"""
   titled: Boolean!
 
@@ -2206,6 +2404,12 @@ type Disk implements ContainerInterface & ItemInterface & Node {
   (NOT AVAILABLE YET) Are the container and all of its children opened as outlines? (can only be set for containers viewed as lists)
   """
   completelyExpanded: Boolean!
+
+  """the container of the item"""
+  container: Node!
+
+  """the container window for this folder"""
+  containerWindow: Node!
   containers(after: ID, first: Int, whose: Condition): ContainerConnection!
 
   """the date on which the item was created"""
@@ -2214,12 +2418,20 @@ type Disk implements ContainerInterface & ItemInterface & Node {
   """a description of the item"""
   description: String!
 
+  """the disk on which the item is stored"""
+  disk: Node!
+
   """the user-visible name of the item"""
   displayedName: String!
   documentFiles(after: ID, first: Int, whose: Condition): DocumentFileConnection!
 
   """Can the media be ejected (floppies, CDs, and so on)?"""
   ejectable: Boolean!
+
+  """
+  the entire contents of the container, including the contents of its children
+  """
+  entireContents: Node!
   everyonesPrivileges: Priv!
 
   """
@@ -2257,6 +2469,9 @@ type Disk implements ContainerInterface & ItemInterface & Node {
 
   """the index in the front-to-back ordering within its container"""
   index: Int!
+
+  """the information window for the item"""
+  informationWindow: Node!
   internetLocationFiles(after: ID, first: Int, whose: Condition): InternetLocationFileConnection!
   items(after: ID, first: Int, whose: Condition): ItemConnection!
 
@@ -2319,6 +2534,12 @@ interface DiskInterface implements Node {
   (NOT AVAILABLE YET) Are the container and all of its children opened as outlines? (can only be set for containers viewed as lists)
   """
   completelyExpanded: Boolean!
+
+  """the container of the item"""
+  container: Node!
+
+  """the container window for this folder"""
+  containerWindow: Node!
   containers(after: ID, first: Int, whose: Condition): ContainerConnection!
 
   """the date on which the item was created"""
@@ -2327,12 +2548,20 @@ interface DiskInterface implements Node {
   """a description of the item"""
   description: String!
 
+  """the disk on which the item is stored"""
+  disk: Node!
+
   """the user-visible name of the item"""
   displayedName: String!
   documentFiles(after: ID, first: Int, whose: Condition): DocumentFileConnection!
 
   """Can the media be ejected (floppies, CDs, and so on)?"""
   ejectable: Boolean!
+
+  """
+  the entire contents of the container, including the contents of its children
+  """
+  entireContents: Node!
   everyonesPrivileges: Priv!
 
   """
@@ -2370,6 +2599,9 @@ interface DiskInterface implements Node {
 
   """the index in the front-to-back ordering within its container"""
   index: Int!
+
+  """the information window for the item"""
+  informationWindow: Node!
   internetLocationFiles(after: ID, first: Int, whose: Condition): InternetLocationFileConnection!
   items(after: ID, first: Int, whose: Condition): ItemConnection!
 
@@ -2414,11 +2646,17 @@ type DocumentFile implements FileInterface & ItemInterface & Node {
   """the comment of the item, displayed in the “Get Info” window"""
   comment: String!
 
+  """the container of the item"""
+  container: Node!
+
   """the date on which the item was created"""
   creationDate: String!
 
   """a description of the item"""
   description: String!
+
+  """the disk on which the item is stored"""
+  disk: Node!
 
   """the user-visible name of the item"""
   displayedName: String!
@@ -2437,6 +2675,9 @@ type DocumentFile implements FileInterface & ItemInterface & Node {
 
   """the index in the front-to-back ordering within its container"""
   index: Int!
+
+  """the information window for the item"""
+  informationWindow: Node!
 
   """the kind of the item"""
   kind: String!
@@ -2492,11 +2733,17 @@ interface DocumentFileInterface implements Node {
   """the comment of the item, displayed in the “Get Info” window"""
   comment: String!
 
+  """the container of the item"""
+  container: Node!
+
   """the date on which the item was created"""
   creationDate: String!
 
   """a description of the item"""
   description: String!
+
+  """the disk on which the item is stored"""
+  disk: Node!
 
   """the user-visible name of the item"""
   displayedName: String!
@@ -2515,6 +2762,9 @@ interface DocumentFileInterface implements Node {
 
   """the index in the front-to-back ordering within its container"""
   index: Int!
+
+  """the information window for the item"""
+  informationWindow: Node!
 
   """the kind of the item"""
   kind: String!
@@ -2625,11 +2875,17 @@ type File implements FileInterface & ItemInterface & Node {
   """the comment of the item, displayed in the “Get Info” window"""
   comment: String!
 
+  """the container of the item"""
+  container: Node!
+
   """the date on which the item was created"""
   creationDate: String!
 
   """a description of the item"""
   description: String!
+
+  """the disk on which the item is stored"""
+  disk: Node!
 
   """the user-visible name of the item"""
   displayedName: String!
@@ -2648,6 +2904,9 @@ type File implements FileInterface & ItemInterface & Node {
 
   """the index in the front-to-back ordering within its container"""
   index: Int!
+
+  """the information window for the item"""
+  informationWindow: Node!
 
   """the kind of the item"""
   kind: String!
@@ -2703,11 +2962,17 @@ interface FileInterface implements Node {
   """the comment of the item, displayed in the “Get Info” window"""
   comment: String!
 
+  """the container of the item"""
+  container: Node!
+
   """the date on which the item was created"""
   creationDate: String!
 
   """a description of the item"""
   description: String!
+
+  """the disk on which the item is stored"""
+  disk: Node!
 
   """the user-visible name of the item"""
   displayedName: String!
@@ -2726,6 +2991,9 @@ interface FileInterface implements Node {
 
   """the index in the front-to-back ordering within its container"""
   index: Int!
+
+  """the information window for the item"""
+  informationWindow: Node!
 
   """the kind of the item"""
   kind: String!
@@ -2813,6 +3081,9 @@ type FinderWindow implements FinderWindowInterface & Node & WindowInterface {
   """Is the window's status bar visible?"""
   statusbarVisible: Boolean!
 
+  """the container at which this file viewer is targeted"""
+  target: Node!
+
   """Does the window have a title bar?"""
   titled: Boolean!
 
@@ -2886,6 +3157,9 @@ interface FinderWindowInterface implements Node {
   """Is the window's status bar visible?"""
   statusbarVisible: Boolean!
 
+  """the container at which this file viewer is targeted"""
+  target: Node!
+
   """Does the window have a title bar?"""
   titled: Boolean!
 
@@ -2915,6 +3189,12 @@ type Folder implements ContainerInterface & ItemInterface & Node {
   (NOT AVAILABLE YET) Are the container and all of its children opened as outlines? (can only be set for containers viewed as lists)
   """
   completelyExpanded: Boolean!
+
+  """the container of the item"""
+  container: Node!
+
+  """the container window for this folder"""
+  containerWindow: Node!
   containers(after: ID, first: Int, whose: Condition): ContainerConnection!
 
   """the date on which the item was created"""
@@ -2923,9 +3203,17 @@ type Folder implements ContainerInterface & ItemInterface & Node {
   """a description of the item"""
   description: String!
 
+  """the disk on which the item is stored"""
+  disk: Node!
+
   """the user-visible name of the item"""
   displayedName: String!
   documentFiles(after: ID, first: Int, whose: Condition): DocumentFileConnection!
+
+  """
+  the entire contents of the container, including the contents of its children
+  """
+  entireContents: Node!
   everyonesPrivileges: Priv!
 
   """
@@ -2953,6 +3241,9 @@ type Folder implements ContainerInterface & ItemInterface & Node {
 
   """the index in the front-to-back ordering within its container"""
   index: Int!
+
+  """the information window for the item"""
+  informationWindow: Node!
   internetLocationFiles(after: ID, first: Int, whose: Condition): InternetLocationFileConnection!
   items(after: ID, first: Int, whose: Condition): ItemConnection!
 
@@ -3006,6 +3297,12 @@ interface FolderInterface implements Node {
   (NOT AVAILABLE YET) Are the container and all of its children opened as outlines? (can only be set for containers viewed as lists)
   """
   completelyExpanded: Boolean!
+
+  """the container of the item"""
+  container: Node!
+
+  """the container window for this folder"""
+  containerWindow: Node!
   containers(after: ID, first: Int, whose: Condition): ContainerConnection!
 
   """the date on which the item was created"""
@@ -3014,9 +3311,17 @@ interface FolderInterface implements Node {
   """a description of the item"""
   description: String!
 
+  """the disk on which the item is stored"""
+  disk: Node!
+
   """the user-visible name of the item"""
   displayedName: String!
   documentFiles(after: ID, first: Int, whose: Condition): DocumentFileConnection!
+
+  """
+  the entire contents of the container, including the contents of its children
+  """
+  entireContents: Node!
   everyonesPrivileges: Priv!
 
   """
@@ -3044,6 +3349,9 @@ interface FolderInterface implements Node {
 
   """the index in the front-to-back ordering within its container"""
   index: Int!
+
+  """the information window for the item"""
+  informationWindow: Node!
   internetLocationFiles(after: ID, first: Int, whose: Condition): InternetLocationFileConnection!
   items(after: ID, first: Int, whose: Condition): ItemConnection!
 
@@ -3174,6 +3482,9 @@ type InformationWindow implements Node & WindowInterface {
   """the number of the window in the front-to-back layer ordering"""
   index: Int!
 
+  """the item from which this window was opened"""
+  item: Node!
+
   """Is the window modal?"""
   modal: Boolean!
 
@@ -3226,6 +3537,9 @@ interface InformationWindowInterface implements Node {
   """the number of the window in the front-to-back layer ordering"""
   index: Int!
 
+  """the item from which this window was opened"""
+  item: Node!
+
   """Is the window modal?"""
   modal: Boolean!
 
@@ -3253,11 +3567,17 @@ type InternetLocationFile implements FileInterface & ItemInterface & Node {
   """the comment of the item, displayed in the “Get Info” window"""
   comment: String!
 
+  """the container of the item"""
+  container: Node!
+
   """the date on which the item was created"""
   creationDate: String!
 
   """a description of the item"""
   description: String!
+
+  """the disk on which the item is stored"""
+  disk: Node!
 
   """the user-visible name of the item"""
   displayedName: String!
@@ -3276,6 +3596,9 @@ type InternetLocationFile implements FileInterface & ItemInterface & Node {
 
   """the index in the front-to-back ordering within its container"""
   index: Int!
+
+  """the information window for the item"""
+  informationWindow: Node!
 
   """the kind of the item"""
   kind: String!
@@ -3334,11 +3657,17 @@ interface InternetLocationFileInterface implements Node {
   """the comment of the item, displayed in the “Get Info” window"""
   comment: String!
 
+  """the container of the item"""
+  container: Node!
+
   """the date on which the item was created"""
   creationDate: String!
 
   """a description of the item"""
   description: String!
+
+  """the disk on which the item is stored"""
+  disk: Node!
 
   """the user-visible name of the item"""
   displayedName: String!
@@ -3357,6 +3686,9 @@ interface InternetLocationFileInterface implements Node {
 
   """the index in the front-to-back ordering within its container"""
   index: Int!
+
+  """the information window for the item"""
+  informationWindow: Node!
 
   """the kind of the item"""
   kind: String!
@@ -3421,11 +3753,17 @@ type Item implements ItemInterface & Node {
   """the comment of the item, displayed in the “Get Info” window"""
   comment: String!
 
+  """the container of the item"""
+  container: Node!
+
   """the date on which the item was created"""
   creationDate: String!
 
   """a description of the item"""
   description: String!
+
+  """the disk on which the item is stored"""
+  disk: Node!
 
   """the user-visible name of the item"""
   displayedName: String!
@@ -3444,6 +3782,9 @@ type Item implements ItemInterface & Node {
 
   """the index in the front-to-back ordering within its container"""
   index: Int!
+
+  """the information window for the item"""
+  informationWindow: Node!
 
   """the kind of the item"""
   kind: String!
@@ -3486,11 +3827,17 @@ interface ItemInterface implements Node {
   """the comment of the item, displayed in the “Get Info” window"""
   comment: String!
 
+  """the container of the item"""
+  container: Node!
+
   """the date on which the item was created"""
   creationDate: String!
 
   """a description of the item"""
   description: String!
+
+  """the disk on which the item is stored"""
+  disk: Node!
 
   """the user-visible name of the item"""
   displayedName: String!
@@ -3509,6 +3856,9 @@ interface ItemInterface implements Node {
 
   """the index in the front-to-back ordering within its container"""
   index: Int!
+
+  """the information window for the item"""
+  informationWindow: Node!
 
   """the kind of the item"""
   kind: String!
@@ -3630,7 +3980,7 @@ enum Lvic {
 }
 
 interface Node {
-  id: ID!
+  id: ID! @extractFromObjectDisplayName
 }
 
 """A package"""
@@ -3638,11 +3988,17 @@ type Package implements ItemInterface & Node {
   """the comment of the item, displayed in the “Get Info” window"""
   comment: String!
 
+  """the container of the item"""
+  container: Node!
+
   """the date on which the item was created"""
   creationDate: String!
 
   """a description of the item"""
   description: String!
+
+  """the disk on which the item is stored"""
+  disk: Node!
 
   """the user-visible name of the item"""
   displayedName: String!
@@ -3661,6 +4017,9 @@ type Package implements ItemInterface & Node {
 
   """the index in the front-to-back ordering within its container"""
   index: Int!
+
+  """the information window for the item"""
+  informationWindow: Node!
 
   """the kind of the item"""
   kind: String!
@@ -3703,11 +4062,17 @@ interface PackageInterface implements Node {
   """the comment of the item, displayed in the “Get Info” window"""
   comment: String!
 
+  """the container of the item"""
+  container: Node!
+
   """the date on which the item was created"""
   creationDate: String!
 
   """a description of the item"""
   description: String!
+
+  """the disk on which the item is stored"""
+  disk: Node!
 
   """the user-visible name of the item"""
   displayedName: String!
@@ -3726,6 +4091,9 @@ interface PackageInterface implements Node {
 
   """the index in the front-to-back ordering within its container"""
   index: Int!
+
+  """the information window for the item"""
+  informationWindow: Node!
 
   """the kind of the item"""
   kind: String!
@@ -3808,6 +4176,9 @@ type Preferences implements Node {
   """the default list view options"""
   listViewOptions: ListViewOptions!
 
+  """target location for a newly-opened Finder window"""
+  newWindowTarget: Node!
+
   """Open new windows in column view?"""
   newWindowsOpenInColumnView: Boolean!
 
@@ -3865,6 +4236,9 @@ interface PreferencesInterface implements Node {
 
   """the default list view options"""
   listViewOptions: ListViewOptions!
+
+  """target location for a newly-opened Finder window"""
+  newWindowTarget: Node!
 
   """Open new windows in column view?"""
   newWindowsOpenInColumnView: Boolean!
@@ -3984,6 +4358,9 @@ type Process implements Node & ProcessInterface {
   """Does the process accept remote events?"""
   acceptsRemoteEvents: Boolean!
 
+  """the file from which the process was launched"""
+  file: Node!
+
   """Is the process the frontmost process?"""
   frontmost: Boolean!
 
@@ -4025,6 +4402,9 @@ interface ProcessInterface implements Node {
 
   """Does the process accept remote events?"""
   acceptsRemoteEvents: Boolean!
+
+  """the file from which the process was launched"""
+  file: Node!
 
   """Is the process the frontmost process?"""
   frontmost: Boolean!
@@ -4070,6 +4450,12 @@ type TrashObject implements ContainerInterface & ItemInterface & Node {
   (NOT AVAILABLE YET) Are the container and all of its children opened as outlines? (can only be set for containers viewed as lists)
   """
   completelyExpanded: Boolean!
+
+  """the container of the item"""
+  container: Node!
+
+  """the container window for this folder"""
+  containerWindow: Node!
   containers(after: ID, first: Int, whose: Condition): ContainerConnection!
 
   """the date on which the item was created"""
@@ -4078,9 +4464,17 @@ type TrashObject implements ContainerInterface & ItemInterface & Node {
   """a description of the item"""
   description: String!
 
+  """the disk on which the item is stored"""
+  disk: Node!
+
   """the user-visible name of the item"""
   displayedName: String!
   documentFiles(after: ID, first: Int, whose: Condition): DocumentFileConnection!
+
+  """
+  the entire contents of the container, including the contents of its children
+  """
+  entireContents: Node!
   everyonesPrivileges: Priv!
 
   """
@@ -4108,6 +4502,9 @@ type TrashObject implements ContainerInterface & ItemInterface & Node {
 
   """the index in the front-to-back ordering within its container"""
   index: Int!
+
+  """the information window for the item"""
+  informationWindow: Node!
   internetLocationFiles(after: ID, first: Int, whose: Condition): InternetLocationFileConnection!
   items(after: ID, first: Int, whose: Condition): ItemConnection!
 
@@ -4164,6 +4561,12 @@ interface TrashObjectInterface implements Node {
   (NOT AVAILABLE YET) Are the container and all of its children opened as outlines? (can only be set for containers viewed as lists)
   """
   completelyExpanded: Boolean!
+
+  """the container of the item"""
+  container: Node!
+
+  """the container window for this folder"""
+  containerWindow: Node!
   containers(after: ID, first: Int, whose: Condition): ContainerConnection!
 
   """the date on which the item was created"""
@@ -4172,9 +4575,17 @@ interface TrashObjectInterface implements Node {
   """a description of the item"""
   description: String!
 
+  """the disk on which the item is stored"""
+  disk: Node!
+
   """the user-visible name of the item"""
   displayedName: String!
   documentFiles(after: ID, first: Int, whose: Condition): DocumentFileConnection!
+
+  """
+  the entire contents of the container, including the contents of its children
+  """
+  entireContents: Node!
   everyonesPrivileges: Priv!
 
   """
@@ -4202,6 +4613,9 @@ interface TrashObjectInterface implements Node {
 
   """the index in the front-to-back ordering within its container"""
   index: Int!
+
+  """the information window for the item"""
+  informationWindow: Node!
   internetLocationFiles(after: ID, first: Int, whose: Condition): InternetLocationFileConnection!
   items(after: ID, first: Int, whose: Condition): ItemConnection!
 
@@ -7755,7 +8169,7 @@ interface NamedStyleInterface implements Node {
 }
 
 interface Node {
-  id: ID!
+  id: ID! @extractFromObjectDisplayName
 }
 
 type PageInfo {
