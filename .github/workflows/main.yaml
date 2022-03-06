@@ -2,13 +2,12 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -25,4 +24,5 @@ jobs:
         run: npm ci
       - run: npm run build
       - run: npm test
+      - run: npm run lint
       - uses: codecov/codecov-action@v2
