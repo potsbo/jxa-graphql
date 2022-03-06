@@ -103,7 +103,7 @@ const mustExtractStringArg = (
     if (defaultValue !== undefined) {
       return defaultValue;
     }
-    throw new Error(`argument "${key}" not found in ${c.fields.map((d) => d.name.value)}`);
+    throw new Error(`argument "${key}" not found in ${JSON.stringify(c.fields.map((d) => d.name.value))}`);
   }
   if (node.kind === Kind.VARIABLE) {
     const val = ctx.variableValues[node.name.value];
@@ -143,7 +143,7 @@ const extractConditionFromObjectValueNode = (
 
   const childrenNode = condition.fields.find((f) => f.name.value === OPERANDS_KEY)?.value;
   if (!childrenNode || childrenNode.kind !== Kind.LIST) {
-    throw new Error(`malformed conditions ${condition}`);
+    throw new Error(`malformed conditions ${JSON.stringify(condition)}`);
   }
 
   return {

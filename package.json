@@ -9,6 +9,9 @@
   "repository": "https://github.com/potsbo/jxa-graphql",
   "author": "Shimpei Otsubo <potsbo@gmail.com>",
   "license": "MIT",
+  "eslintIgnore": [
+    "/.eslintrc.js"
+  ],
   "dependencies": {
     "@graphql-tools/schema": "^8.3.2",
     "@graphql-tools/utils": "^8.6.1",
