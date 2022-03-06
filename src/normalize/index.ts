@@ -17,8 +17,12 @@ const isNonNull = <T>(t: T | null): t is T => {
   return t !== null;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type NamedWithFields = DefinitionNode & { fields?: any; name: NameNode };
+type FieldLike = FieldDefinitionNode | InputValueDefinitionNode;
+
+type NamedWithFields = {
+  fields?: readonly FieldDefinitionNode[] | readonly InputValueDefinitionNode[];
+  name: NameNode;
+};
 class Nomalizer {
   private readonly doc: DocumentNode;
   constructor(doc: DocumentNode) {
@@ -51,7 +55,9 @@ class Nomalizer {
             def,
             {
               kind: Kind.INTERFACE_TYPE_DEFINITION,
-              fields: this.collectExtendedFields(i.name.value),
+              fields: this.collectExtendedFields(i.name.value).filter(
+                (f): f is FieldDefinitionNode => f.kind === Kind.FIELD_DEFINITION
+              ),
               name: {
                 kind: Kind.NAME,
                 value: "",
@@ -89,12 +95,12 @@ class Nomalizer {
     return ret;
   };
 
-  private collectExtendedFields = (def: NamedWithFields | string): readonly FieldDefinitionNode[] => {
+  private collectExtendedFields = (def: NamedWithFields | string): readonly FieldLike[] => {
     const typeName = typeof def === "string" ? def : def.name.value;
     return this.doc.definitions
-      .filter((d): d is NamedWithFields => "name" in d && "fields" in d && d.name?.value === typeName)
+      .filter((d): d is DefinitionNode & NamedWithFields => "name" in d && "fields" in d && d.name?.value === typeName)
       .map((d) => d.fields ?? [])
-      .reduce((acum, cur) => [...acum, ...cur]);
+      .reduce((acum: FieldLike[], cur) => [...acum, ...cur], []);
   };
 
   private pruneFields = <T extends DefinitionNode>(def: T): T | null => {
@@ -122,8 +128,8 @@ class Nomalizer {
         }
         return true;
       })
-      .map(this.pruneArgs)
-      .reduce((acum: FieldDefinitionNode[], cur: FieldDefinitionNode) => {
+      .map((d) => ("arguments" in d ? this.pruneArgs(d) : d))
+      .reduce((acum: FieldLike[], cur: FieldLike) => {
         if (acum.some((f) => f.name.value == cur.name.value)) {
           return acum;
         }
