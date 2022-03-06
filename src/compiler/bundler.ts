@@ -68,6 +68,7 @@ export const join = <FK extends string>(results: RenderResult<FK>[]): RenderResu
     variables: results.map((r) => r.dependencies.variables).reduce((acum, cur) => new Set([...acum, ...cur])),
     functions: results.map((r) => r.dependencies.functions).reduce((acum, cur) => new Set([...acum, ...cur])),
   };
+
   return {
     kind: "RenderResult",
     body: results

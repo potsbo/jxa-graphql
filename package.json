@@ -9,6 +9,10 @@
   "repository": "https://github.com/potsbo/jxa-graphql",
   "author": "Shimpei Otsubo <potsbo@gmail.com>",
   "license": "MIT",
+  "eslintIgnore": [
+    "/.eslintrc.js",
+    "/jest.config.js"
+  ],
   "dependencies": {
     "@graphql-tools/schema": "^8.3.2",
     "@graphql-tools/utils": "^8.6.1",
@@ -29,6 +33,7 @@
     "@typescript-eslint/eslint-plugin": "^5.13.0",
     "@typescript-eslint/parser": "^5.13.0",
     "axios": "^0.26.0",
+    "better-typescript-lib": "^2.0.0",
     "eslint": "^8.10.0",
     "jest": "^27.5.1",
     "jest-serializer-graphql-schema": "^4.10.0",

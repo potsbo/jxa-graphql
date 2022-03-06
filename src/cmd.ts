@@ -2,4 +2,4 @@
 
 import { run } from "./run";
 
-run(process);
+run(process).catch((err) => console.error(err));

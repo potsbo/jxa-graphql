@@ -36,10 +36,16 @@ export const run = (process: NodeJS.Process) => {
               description: "port number of the GraphQL server",
             });
         },
-        async (argv) => {
-          const info = await startServer(argv);
-          process.stdout.write(`🚀  Server ready at ${info.url}`);
-          resolve(info);
+        (argv) => {
+          startServer(argv)
+            .then((info) => {
+              process.stdout.write(`🚀  Server ready at ${info.url}`);
+              resolve(info);
+            })
+            .catch((err) => {
+              /* istanbul ignore next */
+              console.error(err);
+            });
         }
       )
       .command(
@@ -52,10 +58,16 @@ export const run = (process: NodeJS.Process) => {
             type: "string",
           });
         },
-        async (argv) => {
-          const schema = await build(argv.appPath);
-          process.stdout.write(printSchema(schema));
-          resolve({});
+        (argv) => {
+          build(argv.appPath)
+            .then((schema) => {
+              process.stdout.write(printSchema(schema));
+              resolve({});
+            })
+            .catch((err) => {
+              /* istanbul ignore next */
+              console.error(err);
+            });
         }
       )
       .demandCommand(1)
