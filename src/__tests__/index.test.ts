@@ -32,7 +32,15 @@ const rootValue = buildRootValue("Calendar", (code) => {
     },
   };
 
-  return new Promise((resolve) => resolve(JSON.parse(eval(code)).result));
+  const resp = eval(code);
+  if (typeof resp !== "string") {
+    throw Error("eval result is not a string");
+  }
+  const obj = JSON.parse(resp);
+  if (typeof obj !== "object" || obj === null || !("result" in obj)) {
+    throw Error("malformed output");
+  }
+  return new Promise((resolve) => resolve(obj.result));
 });
 
 test("Integration Test - Calendar", async () => {
